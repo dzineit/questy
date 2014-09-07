@@ -1,7 +1,7 @@
 Questy
 ======
 
-A straightforward questing system, with scripting support, written in Java. Questy is licensed under MIT. See the LICENSE file for more details.
+A straightforward questing system, with scripting support, written in Java. Questy is licensed under the Mozilla Public License, version 2.0. See the LICENSE file for more details.
 
 ##The Team:
 <table>
