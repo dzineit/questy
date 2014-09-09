@@ -24,7 +24,13 @@
 package com.volumetricpixels.questy;
 
 import com.volumetricpixels.questy.event.QuestyEventManager;
+import com.volumetricpixels.questy.event.quest.QuestAbandonEvent;
+import com.volumetricpixels.questy.event.quest.QuestCompleteEvent;
+import com.volumetricpixels.questy.event.quest.QuestStartEvent;
 import com.volumetricpixels.questy.loading.QuestLoader;
+import com.volumetricpixels.questy.quest.Quest;
+import com.volumetricpixels.questy.quest.QuestInstance;
+import com.volumetricpixels.questy.store.QuestStore;
 
 import java.io.File;
 import java.util.HashMap;
@@ -34,7 +40,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 /**
- * Manages and tracks all active {@link Quest}s and {@link QuestLoader}s.
+ * Manages and tracks all active {@link com.volumetricpixels.questy.quest.Quest}s and {@link QuestLoader}s.
  */
 public class QuestManager {
     /**
@@ -46,11 +52,11 @@ public class QuestManager {
      */
     private final Set<QuestLoader> loaders;
     /**
-     * All currently loaded {@link Quest}s.
+     * All currently loaded {@link com.volumetricpixels.questy.quest.Quest}s.
      */
     private final Set<Quest> loaded;
     /**
-     * All current {@link QuestInstance}s.
+     * All current {@link com.volumetricpixels.questy.quest.QuestInstance}s.
      */
     private final Set<QuestInstance> current;
     /**
@@ -59,7 +65,7 @@ public class QuestManager {
     private final Set<QuestInstance> completed;
 
     /**
-     * The {@link QuestStore} used for progression data storage.
+     * The {@link com.volumetricpixels.questy.store.QuestStore} used for progression data storage.
      */
     private QuestStore store;
 
@@ -134,8 +140,9 @@ public class QuestManager {
 
     /**
      * Loads quest progression data from this {@link QuestManager}'s {@link
-     * QuestStore}. Will throw a {@link NullPointerException} if there is no
-     * {@link QuestStore} set.
+     * QuestStore}.
+     *
+     * @throws NullPointerException if the store is null
      */
     public void loadProgression() {
         if (store == null) {
@@ -147,7 +154,9 @@ public class QuestManager {
     }
 
     /**
-     * Stores all currently loaded quest progression.
+     * Stores all currently loaded quest progression to the {@link QuestStore}.
+     *
+     * @throws NullPointerException if the store is null
      */
     public void storeProgression() {
         if (store == null) {
@@ -186,6 +195,22 @@ public class QuestManager {
         }
 
         return result;
+    }
+
+    public void startQuest(QuestInstance instance) {
+        current.add(instance);
+        eventManager.fire(new QuestStartEvent(instance));
+    }
+
+    public void abandonQuest(QuestInstance instance) {
+        current.remove(instance);
+        eventManager.fire(new QuestAbandonEvent(instance));
+    }
+
+    public void completeQuest(QuestInstance instance) {
+        current.remove(instance);
+        completed.add(instance);
+        eventManager.fire(new QuestCompleteEvent(instance));
     }
 
     /**

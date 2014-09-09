@@ -26,7 +26,7 @@ package com.volumetricpixels.questy.test;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.volumetricpixels.questy.Quest;
+import com.volumetricpixels.questy.quest.Quest;
 import com.volumetricpixels.questy.QuestManager;
 import com.volumetricpixels.questy.event.QuestyEventManager;
 import com.volumetricpixels.questy.event.listener.GenericQuestListener;

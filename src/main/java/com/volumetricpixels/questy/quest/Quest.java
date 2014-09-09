@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.volumetricpixels.questy;
+package com.volumetricpixels.questy.quest;
 
 /**
  * Represents the 'outline' of a quest. There is a single {@link Quest} object

@@ -21,11 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.volumetricpixels.questy;
+package com.volumetricpixels.questy.quest;
 
 /**
- * Represents an 'instance' of a {@link Quest}. A {@link QuestInstance} holds
- * the {@link Quest} object it is an instance of, but also holds the player
+ * Represents an 'instance' of a {@link com.volumetricpixels.questy.quest.Quest}. A {@link QuestInstance} holds
+ * the {@link com.volumetricpixels.questy.quest.Quest} object it is an instance of, but also holds the player
  * doing the quest and data about said player's progression through the quest.
  */
 public final class QuestInstance {

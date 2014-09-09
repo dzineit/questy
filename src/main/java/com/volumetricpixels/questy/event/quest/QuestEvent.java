@@ -23,8 +23,8 @@
  */
 package com.volumetricpixels.questy.event.quest;
 
-import com.volumetricpixels.questy.Quest;
-import com.volumetricpixels.questy.QuestInstance;
+import com.volumetricpixels.questy.quest.Quest;
+import com.volumetricpixels.questy.quest.QuestInstance;
 import com.volumetricpixels.questy.event.QuestyEvent;
 
 /**

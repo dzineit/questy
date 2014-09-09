@@ -23,7 +23,7 @@
  */
 package com.volumetricpixels.questy.loading;
 
-import com.volumetricpixels.questy.Quest;
+import com.volumetricpixels.questy.quest.Quest;
 
 import java.io.File;
 import java.util.Set;

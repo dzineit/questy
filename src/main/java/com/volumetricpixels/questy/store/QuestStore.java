@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.volumetricpixels.questy;
+package com.volumetricpixels.questy.store;
 
 import java.util.Map;
 
@@ -31,7 +31,7 @@ import java.util.Map;
 public abstract class QuestStore {
     /**
      * Stores the given quest progression {@code data} for the given {@code
-     * player}. The {@code data} parameter is a {@link Map} of {@link Quest}
+     * player}. The {@code data} parameter is a {@link Map} of {@link com.volumetricpixels.questy.quest.Quest}
      * names to serialized progression data for the quest.
      *
      * @param data the data to store
@@ -40,7 +40,7 @@ public abstract class QuestStore {
             Map<String, Map<String, String>> data);
 
     /**
-     * Loads all stored {@link Quest} progression data from the data store.
+     * Loads all stored {@link com.volumetricpixels.questy.quest.Quest} progression data from the data store.
      *
      * @return a {@link Map} of player names to stored quest progression data
      */
@@ -48,7 +48,7 @@ public abstract class QuestStore {
 
     /**
      * Stores the given quest progression {@code data} for the given {@code
-     * player}. The {@code data} parameter is a {@link Map} of {@link Quest}
+     * player}. The {@code data} parameter is a {@link Map} of {@link com.volumetricpixels.questy.quest.Quest}
      * names to serialized progression data for the quest.
      *
      * @param data the data to store
@@ -57,7 +57,7 @@ public abstract class QuestStore {
             Map<String, Map<String, String>> data);
 
     /**
-     * Loads all stored {@link Quest} progression data from the data store.
+     * Loads all stored {@link com.volumetricpixels.questy.quest.Quest} progression data from the data store.
      *
      * @return a {@link Map} of player names to stored quest progression data
      */
