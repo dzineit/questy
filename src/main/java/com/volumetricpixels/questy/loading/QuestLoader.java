@@ -21,43 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.volumetricpixels.questy;
+package com.volumetricpixels.questy.loading;
+
+import com.volumetricpixels.questy.Quest;
+
+import java.io.File;
+import java.util.Set;
 
 /**
- * Represents an 'instance' of a {@link Quest}. A {@link QuestInstance} holds
- * the {@link Quest} object it is an instance of, but also holds the player
- * doing the quest and data about said player's progression through the quest.
+ * Loads scripted / configured quests. Quests can be defined in any format, but
+ * there must be a registered {@link QuestLoader} implementation for the format
+ * for it to be loaded.
  */
-public class QuestInstance {
-    private final Quest quest;
-    private final String quester;
-
-    // TODO: Progression data
-
-    public QuestInstance(Quest quest, String quester) {
-        this.quest = quest;
-        this.quester = quester;
-    }
-
-    public Quest getQuest() {
-        return quest;
-    }
-
-    public String getQuester() {
-        return quester;
-    }
-
-    // TODO: progression data based methods
-
-    public String serializeProgression() {
-        // TODO
-        return null;
-    }
-
-    public static QuestInstance deserialize(Quest quest, String quester,
-            String progression) {
-        QuestInstance inst = new QuestInstance(quest, quester);
-        // TODO: set progression data fields based on serialized data
-        return inst;
-    }
+public interface QuestLoader {
+    /**
+     * Loads all of the {@link Quest}s that this {@link QuestLoader} can handle
+     * which are located in the given {@link File}, which should be a directory,
+     * and should exist. Note that this method should <em>NOT</em> throw an
+     * exception if there is a file in the given directory of a format which
+     * this {@link QuestLoader} cannot load.
+     *
+     * @param directory the directory to load {@link Quest}s from
+     * @return all {@link Quest}s loaded from the given directory
+     */
+    Set<Quest> loadQuests(File directory);
 }

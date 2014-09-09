@@ -21,12 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.volumetricpixels.questy.loader;
+package com.volumetricpixels.questy.event.quest.objective;
 
-/**
- * Loads scripted / configured quests. Quests can be defined in any format, but
- * there must be a registered {@link QuestLoader} implementation for the format
- * for it to be loaded.
- */
-public interface QuestLoader {
+import com.volumetricpixels.questy.QuestInstance;
+import com.volumetricpixels.questy.event.quest.QuestEvent;
+
+public class ObjectiveStartEvent extends QuestObjectiveEvent {
+    // should be an instance of either ObjectiveCompleteEvent or QuestStartEvent
+    // in most cases
+    private final QuestEvent cause;
+
+    public ObjectiveStartEvent(QuestInstance quest, QuestEvent cause) {
+        super(quest);
+        this.cause = cause;
+    }
+
+    public QuestEvent getCause() {
+        return cause;
+    }
 }

@@ -28,4 +28,24 @@ package com.volumetricpixels.questy;
  * created for each scripted / configured quest which is loaded.
  */
 public class Quest {
+    private final String name;
+    private final String description;
+    // TODO: More (should all be final - Quests are immutable)
+
+    public Quest(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public QuestInstance createInstance(String quester) {
+        return new QuestInstance(this, quester);
+    }
 }

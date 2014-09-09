@@ -21,43 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.volumetricpixels.questy;
+package com.volumetricpixels.questy.event.quest;
 
-/**
- * Represents an 'instance' of a {@link Quest}. A {@link QuestInstance} holds
- * the {@link Quest} object it is an instance of, but also holds the player
- * doing the quest and data about said player's progression through the quest.
- */
-public class QuestInstance {
-    private final Quest quest;
-    private final String quester;
+import com.volumetricpixels.questy.QuestInstance;
 
-    // TODO: Progression data
-
-    public QuestInstance(Quest quest, String quester) {
-        this.quest = quest;
-        this.quester = quester;
-    }
-
-    public Quest getQuest() {
-        return quest;
-    }
-
-    public String getQuester() {
-        return quester;
-    }
-
-    // TODO: progression data based methods
-
-    public String serializeProgression() {
-        // TODO
-        return null;
-    }
-
-    public static QuestInstance deserialize(Quest quest, String quester,
-            String progression) {
-        QuestInstance inst = new QuestInstance(quest, quester);
-        // TODO: set progression data fields based on serialized data
-        return inst;
+public class QuestAbandonEvent extends QuestEvent {
+    public QuestAbandonEvent(QuestInstance quest) {
+        super(quest);
     }
 }
