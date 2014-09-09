@@ -38,36 +38,28 @@ import java.lang.invoke.MethodType;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 /**
- * The event manager used for {@link QuestListener}s in Questy. To be honest, I
- * have no idea why I decided to use this new {@link MethodHandle} system, and
- * I'm even less convinced that it will work.
+ * The event manager used for {@link QuestListener}s in Questy.
  */
 public class QuestyEventManager {
-    private static final Map<Class<? extends QuestyEvent>, MethodHandle> lookup;
+    private static final Map<Class, MethodHandle> lookup = new HashMap<>();
     private static final Class<QuestListener> listenerCls = QuestListener.class;
 
     static {
-        Map<Class, String> temp = new HashMap<>();
-        temp.put(QuestStartEvent.class, "questStarted");
-        temp.put(QuestCompleteEvent.class, "questCompleted");
-        temp.put(QuestAbandonEvent.class, "questAbandoned");
-        temp.put(ObjectiveFailEvent.class, "objectiveFailed");
-        temp.put(ObjectiveCompleteEvent.class, "objectiveCompleted");
-        temp.put(ObjectiveStartEvent.class, "objectiveStarted");
+        register(QuestStartEvent.class, "questStarted");
+        register(QuestCompleteEvent.class, "questCompleted");
+        register(QuestAbandonEvent.class, "questAbandoned");
+        register(ObjectiveFailEvent.class, "objectiveFailed");
+        register(ObjectiveCompleteEvent.class, "objectiveCompleted");
+        register(ObjectiveStartEvent.class, "objectiveStarted");
+    }
 
-        lookup = new HashMap<>();
-
+    private static void register(Class cls, String meth) {
         try {
-            for (Entry<Class, String> entry : temp.entrySet()) {
-                Class cls = entry.getKey();
-                String meth = entry.getValue();
-                lookup.put(cls, MethodHandles.lookup().findVirtual(listenerCls,
-                        meth, MethodType.methodType(void.class, cls)));
-            }
+            lookup.put(cls, MethodHandles.lookup().findVirtual(listenerCls,
+                    meth, MethodType.methodType(void.class, cls)));
         } catch (Exception e) {
             e.printStackTrace();
         }
