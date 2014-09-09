@@ -51,7 +51,7 @@ public class QuestyEventManager {
     private static final Class<QuestListener> listenerCls = QuestListener.class;
 
     static {
-        Map<Class<? extends QuestyEvent>, String> temp = new HashMap<>();
+        Map<Class, String> temp = new HashMap<>();
         temp.put(QuestStartEvent.class, "questStarted");
         temp.put(QuestCompleteEvent.class, "questCompleted");
         temp.put(QuestAbandonEvent.class, "questAbandoned");
@@ -62,9 +62,8 @@ public class QuestyEventManager {
         lookup = new HashMap<>();
 
         try {
-            for (Entry<Class<? extends QuestyEvent>, String> entry : temp
-                    .entrySet()) {
-                Class<? extends QuestyEvent> cls = entry.getKey();
+            for (Entry<Class, String> entry : temp.entrySet()) {
+                Class cls = entry.getKey();
                 String meth = entry.getValue();
                 lookup.put(cls, MethodHandles.lookup().findVirtual(listenerCls,
                         meth, MethodType.methodType(void.class, cls)));
@@ -97,7 +96,7 @@ public class QuestyEventManager {
     public <T extends QuestyEvent> T fire(T event) {
         for (QuestListener listener : listeners) {
             try {
-                lookup.get(event.getClass()).invokeExact(listener, event);
+                lookup.get(event.getClass()).invoke(listener, event);
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
             }
