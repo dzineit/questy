@@ -40,7 +40,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 /**
- * Manages and tracks all active {@link com.volumetricpixels.questy.quest.Quest}s and {@link QuestLoader}s.
+ * Manages and tracks all active {@link Quest}s and {@link QuestLoader}s.
  */
 public class QuestManager {
     /**
@@ -52,11 +52,11 @@ public class QuestManager {
      */
     private final Set<QuestLoader> loaders;
     /**
-     * All currently loaded {@link com.volumetricpixels.questy.quest.Quest}s.
+     * All currently loaded {@link Quest}s.
      */
     private final Set<Quest> loaded;
     /**
-     * All current {@link com.volumetricpixels.questy.quest.QuestInstance}s.
+     * All current {@link QuestInstance}s.
      */
     private final Set<QuestInstance> current;
     /**
@@ -65,7 +65,7 @@ public class QuestManager {
     private final Set<QuestInstance> completed;
 
     /**
-     * The {@link com.volumetricpixels.questy.store.QuestStore} used for progression data storage.
+     * The {@link QuestStore} used for progression data storage.
      */
     private QuestStore store;
 

@@ -31,8 +31,8 @@ import java.util.Map;
 public abstract class QuestStore {
     /**
      * Stores the given quest progression {@code data} for the given {@code
-     * player}. The {@code data} parameter is a {@link Map} of {@link com.volumetricpixels.questy.quest.Quest}
-     * names to serialized progression data for the quest.
+     * player}. The {@code data} parameter is a {@link Map} of quest names to
+     * serialized progression data for the quest.
      *
      * @param data the data to store
      */
@@ -40,7 +40,7 @@ public abstract class QuestStore {
             Map<String, Map<String, String>> data);
 
     /**
-     * Loads all stored {@link com.volumetricpixels.questy.quest.Quest} progression data from the data store.
+     * Loads all stored quest progression data from the data store.
      *
      * @return a {@link Map} of player names to stored quest progression data
      */
@@ -48,8 +48,8 @@ public abstract class QuestStore {
 
     /**
      * Stores the given quest progression {@code data} for the given {@code
-     * player}. The {@code data} parameter is a {@link Map} of {@link com.volumetricpixels.questy.quest.Quest}
-     * names to serialized progression data for the quest.
+     * player}. The {@code data} parameter is a {@link Map} of quest names to
+     * serialized progression data for the quest.
      *
      * @param data the data to store
      */
@@ -57,7 +57,7 @@ public abstract class QuestStore {
             Map<String, Map<String, String>> data);
 
     /**
-     * Loads all stored {@link com.volumetricpixels.questy.quest.Quest} progression data from the data store.
+     * Loads all stored quest progression data from the data store.
      *
      * @return a {@link Map} of player names to stored quest progression data
      */

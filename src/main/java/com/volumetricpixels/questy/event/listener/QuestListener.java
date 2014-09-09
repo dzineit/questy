@@ -36,7 +36,7 @@ import com.volumetricpixels.questy.event.quest.objective.ObjectiveStartEvent;
  * interface requires a method for each and every {@link QuestEvent} - if you
  * only want one or to you should instead use {@link BaseQuestListener}, or
  * {@link GenericQuestListener} if you want to listen for every type of {@link
- * com.volumetricpixels.questy.event.quest.QuestEvent} from one method.
+ * QuestEvent} from one method.
  */
 public interface QuestListener {
     // TODO: JavaDoc
