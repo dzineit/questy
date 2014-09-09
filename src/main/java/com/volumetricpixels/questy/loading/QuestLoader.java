@@ -45,4 +45,13 @@ public interface QuestLoader {
      * @return all {@link Quest}s loaded from the given directory
      */
     Set<Quest> loadQuests(File directory);
+
+    /**
+     * Gets the name of the format this {@link QuestLoader} loads {@link Quest}s
+     * in. For example, in a JavaScript {@link QuestLoader} this method would
+     * return "JavaScript".
+     *
+     * @return the name of the format this loader loads {@link Quest}s of
+     */
+    String getQuestFormat();
 }

@@ -28,7 +28,7 @@ package com.volumetricpixels.questy;
  * the {@link Quest} object it is an instance of, but also holds the player
  * doing the quest and data about said player's progression through the quest.
  */
-public class QuestInstance {
+public final class QuestInstance {
     private final Quest quest;
     private final String quester;
 

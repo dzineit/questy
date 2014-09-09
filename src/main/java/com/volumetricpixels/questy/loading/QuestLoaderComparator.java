@@ -21,31 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.volumetricpixels.questy;
+package com.volumetricpixels.questy.loading;
+
+import java.util.Comparator;
 
 /**
- * Represents the 'outline' of a quest. There is a single {@link Quest} object
- * created for each scripted / configured quest which is loaded.
+ * Compares {@link QuestLoader}s based on their format.
  */
-public final class Quest {
-    private final String name;
-    private final String description;
-    // TODO: More (should all be final - Quests are immutable)
-
-    public Quest(String name, String description) {
-        this.name = name;
-        this.description = description;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public QuestInstance createInstance(String quester) {
-        return new QuestInstance(this, quester);
+public class QuestLoaderComparator implements Comparator<QuestLoader> {
+    @Override
+    public int compare(QuestLoader o1, QuestLoader o2) {
+        return o1.getQuestFormat().compareTo(o2.getQuestFormat());
     }
 }
