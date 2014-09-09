@@ -23,18 +23,18 @@
  */
 package com.volumetricpixels.questy.event.listener;
 
-import com.volumetricpixels.questy.event.listener.QuestListener;
 import com.volumetricpixels.questy.event.quest.QuestAbandonEvent;
 import com.volumetricpixels.questy.event.quest.QuestCompleteEvent;
+import com.volumetricpixels.questy.event.quest.QuestEvent;
 import com.volumetricpixels.questy.event.quest.QuestStartEvent;
 import com.volumetricpixels.questy.event.quest.objective.ObjectiveCompleteEvent;
 import com.volumetricpixels.questy.event.quest.objective.ObjectiveFailEvent;
 import com.volumetricpixels.questy.event.quest.objective.ObjectiveStartEvent;
 
 /**
- * A {@link com.volumetricpixels.questy.event.listener.QuestListener} which contains no implementation but instead
+ * A {@link QuestListener} which contains no implementation but instead
  * overrides all of the listener methods to allow for people to only listen for
- * select {@link com.volumetricpixels.questy.event.quest.QuestEvent}s.
+ * select {@link QuestEvent}s.
  */
 public abstract class BaseQuestListener implements QuestListener {
     @Override

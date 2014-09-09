@@ -48,6 +48,7 @@ import java.util.Set;
  */
 public class QuestyEventManager {
     private static final Map<Class<? extends QuestyEvent>, MethodHandle> lookup;
+    private static final Class<QuestListener> listenerCls = QuestListener.class;
 
     static {
         Map<Class<? extends QuestyEvent>, String> temp = new HashMap<>();
@@ -65,7 +66,7 @@ public class QuestyEventManager {
                     .entrySet()) {
                 Class<? extends QuestyEvent> cls = entry.getKey();
                 String meth = entry.getValue();
-                lookup.put(cls, MethodHandles.lookup().findVirtual(cls,
+                lookup.put(cls, MethodHandles.lookup().findVirtual(listenerCls,
                         meth, MethodType.methodType(void.class, cls)));
             }
         } catch (Exception e) {
@@ -81,16 +82,16 @@ public class QuestyEventManager {
         this.listeners = new HashSet<>();
     }
 
+    public QuestManager getQuestManager() {
+        return questManager;
+    }
+
     public boolean subscribe(QuestListener listener) {
         return listeners.add(listener);
     }
 
     public boolean unsubscribe(QuestListener listener) {
         return listeners.remove(listener);
-    }
-
-    public QuestManager getQuestManager() {
-        return questManager;
     }
 
     public <T extends QuestyEvent> T fire(T event) {

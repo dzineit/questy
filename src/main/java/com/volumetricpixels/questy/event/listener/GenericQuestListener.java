@@ -23,7 +23,6 @@
  */
 package com.volumetricpixels.questy.event.listener;
 
-import com.volumetricpixels.questy.event.listener.QuestListener;
 import com.volumetricpixels.questy.event.quest.QuestAbandonEvent;
 import com.volumetricpixels.questy.event.quest.QuestCompleteEvent;
 import com.volumetricpixels.questy.event.quest.QuestEvent;
