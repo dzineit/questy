@@ -27,7 +27,10 @@ import com.volumetricpixels.questy.event.QuestyEventManager;
 import com.volumetricpixels.questy.loading.QuestLoader;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 /**
@@ -46,6 +49,19 @@ public class QuestManager {
      * All currently loaded {@link Quest}s.
      */
     private final Set<Quest> loaded;
+    /**
+     * All current {@link QuestInstance}s.
+     */
+    private final Set<QuestInstance> current;
+    /**
+     * All completed {@link QuestInstance}s.
+     */
+    private final Set<QuestInstance> completed;
+
+    /**
+     * The {@link QuestStore} used for progression data storage.
+     */
+    private QuestStore store;
 
     /**
      * Constructs a blank {@link QuestManager} with no registered {@link
@@ -55,6 +71,26 @@ public class QuestManager {
         this.eventManager = new QuestyEventManager(this);
         this.loaders = new HashSet<>();
         this.loaded = new HashSet<>();
+        this.current = new HashSet<>();
+        this.completed = new HashSet<>();
+    }
+
+    /**
+     * Constructs a blank {@link QuestManager} with no registered {@link
+     * QuestLoader}s or loaded {@link Quest}s, with the given {@link QuestStore}
+     * being used for saving / loading progression.
+     */
+    public QuestManager(QuestStore store) {
+        this();
+        this.store = store;
+    }
+
+    public QuestyEventManager getEventManager() {
+        return eventManager;
+    }
+
+    public QuestStore getStore() {
+        return store;
     }
 
     public Set<Quest> getLoadedQuests() {
@@ -65,8 +101,91 @@ public class QuestManager {
         return new HashSet<>(loaders);
     }
 
-    public QuestyEventManager getEventManager() {
-        return eventManager;
+    public void setStore(QuestStore store) {
+        this.store = store;
+    }
+
+    /**
+     * Gets the {@link Quest} with the given {@code name}. May return {@code
+     * null} if there isn't a {@link Quest} with the given {@code name}.
+     *
+     * @param name the name of the {@link Quest} to get
+     * @return the {@link Quest} with the given name, or {@code null} if there
+     *         isn't one
+     */
+    public Quest getQuest(String name) {
+        for (Quest quest : getLoadedQuests()) {
+            if (quest.getName().equalsIgnoreCase(name)) {
+                return quest;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Loads all of the {@link Quest}s in the given {@link File} directory which
+     * can be loaded by the registered {@link QuestLoader}.
+     *
+     * @param directory the directory to load {@link Quest}s from
+     */
+    public void loadQuests(File directory) {
+        loaders.forEach((ql) -> loaded.addAll(ql.loadQuests(directory)));
+    }
+
+    /**
+     * Loads quest progression data from this {@link QuestManager}'s {@link
+     * QuestStore}. Will throw a {@link NullPointerException} if there is no
+     * {@link QuestStore} set.
+     */
+    public void loadProgression() {
+        if (store == null) {
+            throw new NullPointerException("store mustn't be null");
+        }
+
+        doLoadProgression(store.loadCurrentQuestData(), current);
+        doLoadProgression(store.loadCompletedQuestData(), completed);
+    }
+
+    /**
+     * Stores all currently loaded quest progression.
+     */
+    public void storeProgression() {
+        if (store == null) {
+            throw new NullPointerException("store mustn't be null");
+        }
+
+        store.saveCurrentQuestData(serialize(current));
+        store.saveCompletedQuestData(serialize(completed));
+    }
+
+    private void doLoadProgression(Map<String, Map<String, String>> map,
+            Set<QuestInstance> set) {
+        for (Entry<String, Map<String, String>> ply : map.entrySet()) {
+            String quester = ply.getKey();
+            Map<String, String> quests = ply.getValue();
+            for (Entry<String, String> quest : quests.entrySet()) {
+                Quest qst = getQuest(quest.getKey());
+                String serial = quest.getValue();
+                set.add(QuestInstance.deserialize(qst, quester, serial));
+            }
+        }
+    }
+
+    private Map<String, Map<String, String>> serialize(Set<QuestInstance> set) {
+        Map<String, Map<String, String>> result = new HashMap<>();
+        for (QuestInstance questInstance : set) {
+            String quester = questInstance.getQuester();
+            Map<String, String> map = result.get(quester);
+            if (map == null) {
+                map = new HashMap<>();
+                result.put(quester, map);
+            }
+
+            map.put(questInstance.getQuest().getName(),
+                    questInstance.serializeProgression());
+        }
+
+        return result;
     }
 
     /**
@@ -111,32 +230,5 @@ public class QuestManager {
      */
     public boolean removeQuestLoader(QuestLoader loader) {
         return loaders.remove(loader);
-    }
-
-    /**
-     * Gets the {@link Quest} with the given {@code name}. May return {@code
-     * null} if there isn't a {@link Quest} with the given {@code name}.
-     *
-     * @param name the name of the {@link Quest} to get
-     * @return the {@link Quest} with the given name, or {@code null} if there
-     *         isn't one
-     */
-    public Quest getQuest(String name) {
-        for (Quest quest : getLoadedQuests()) {
-            if (quest.getName().equalsIgnoreCase(name)) {
-                return quest;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Loads all of the {@link Quest}s in the given {@link File} directory which
-     * can be loaded by the registered {@link QuestLoader}.
-     *
-     * @param directory the directory to load {@link Quest}s from
-     */
-    public void loadQuests(File directory) {
-        loaders.forEach((ql) -> loaded.addAll(ql.loadQuests(directory)));
     }
 }
