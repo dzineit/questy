@@ -21,43 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.volumetricpixels.questy.quest;
+package com.volumetricpixels.questy.quest.objective;
+
+import com.volumetricpixels.questy.quest.Quest;
 
 /**
- * Represents an 'instance' of a {@link Quest}. A {@link QuestInstance} holds
- * the {@link Quest} object it is an instance of, but also holds the player
- * doing the quest and data about said player's progression through the quest.
+ * Represents a single objective in a {@link Quest}.
  */
-public final class QuestInstance {
-    private final Quest quest;
-    private final String quester;
+public class Objective {
+    private final String name;
+    private final String description;
+    private final Outcome[] outcomes;
 
-    // TODO: Progression data
-
-    public QuestInstance(Quest quest, String quester) {
-        this.quest = quest;
-        this.quester = quester;
+    public Objective(String name, String description, Outcome[] outcomes) {
+        this.name = name;
+        this.description = description;
+        this.outcomes = outcomes;
     }
 
-    public Quest getQuest() {
-        return quest;
+    public String getName() {
+        return name;
     }
 
-    public String getQuester() {
-        return quester;
+    public String getDescription() {
+        return description;
     }
 
-    // TODO: progression data based methods
-
-    public String serializeProgression() {
-        // TODO
-        return "";
-    }
-
-    public static QuestInstance deserialize(Quest quest, String quester,
-            String progression) {
-        QuestInstance inst = new QuestInstance(quest, quester);
-        // TODO: set progression data fields based on serialized data
-        return inst;
+    public Outcome[] getOutcomes() {
+        return outcomes;
     }
 }

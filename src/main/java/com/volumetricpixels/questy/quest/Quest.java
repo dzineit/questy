@@ -23,6 +23,8 @@
  */
 package com.volumetricpixels.questy.quest;
 
+import com.volumetricpixels.questy.quest.objective.Objective;
+
 /**
  * Represents the 'outline' of a quest. There is a single {@link Quest} object
  * created for each scripted / configured quest which is loaded.
@@ -30,11 +32,12 @@ package com.volumetricpixels.questy.quest;
 public final class Quest {
     private final String name;
     private final String description;
-    // TODO: More (should all be final - Quests are immutable)
+    private final Objective[] objectives;
 
-    public Quest(String name, String description) {
+    public Quest(String name, String description, Objective[] objectives) {
         this.name = name;
         this.description = description;
+        this.objectives = objectives;
     }
 
     public String getName() {
@@ -43,6 +46,10 @@ public final class Quest {
 
     public String getDescription() {
         return description;
+    }
+
+    public Objective[] getObjectives() {
+        return objectives;
     }
 
     public QuestInstance createInstance(String quester) {
