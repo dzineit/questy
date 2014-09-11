@@ -5,6 +5,8 @@
  */
 package com.volumetricpixels.questy.quest;
 
+import com.volumetricpixels.questy.quest.objective.ObjectiveProgress;
+
 /**
  * Represents an 'instance' of a {@link Quest}. A {@link QuestInstance} holds
  * the {@link Quest} object it is an instance of, but also holds the player
@@ -14,7 +16,7 @@ public final class QuestInstance {
     private final Quest quest;
     private final String quester;
 
-    // TODO: Progression data
+    private ObjectiveProgress[] objectiveProgresses;
 
     public QuestInstance(Quest quest, String quester) {
         this.quest = quest;
@@ -39,7 +41,7 @@ public final class QuestInstance {
     public static QuestInstance deserialize(Quest quest, String quester,
             String progression) {
         QuestInstance inst = new QuestInstance(quest, quester);
-        // TODO: set progression data fields based on serialized data
+        inst.objectiveProgresses = null; // TODO: deserialize this
         return inst;
     }
 }
