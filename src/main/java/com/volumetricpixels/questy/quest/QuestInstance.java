@@ -23,6 +23,11 @@ public final class QuestInstance {
         this.quester = quester;
     }
 
+    private QuestInstance(Quest quest, String quester, String serialized) {
+        this(quest, quester);
+        // TODO: deserialize
+    }
+
     public Quest getQuest() {
         return quest;
     }
@@ -40,8 +45,6 @@ public final class QuestInstance {
 
     public static QuestInstance deserialize(Quest quest, String quester,
             String progression) {
-        QuestInstance inst = new QuestInstance(quest, quester);
-        inst.objectiveProgresses = null; // TODO: deserialize this
-        return inst;
+        return new QuestInstance(quest, quester, progression);
     }
 }

@@ -17,11 +17,27 @@ public class ObjectiveProgress {
         this.objective = objective;
     }
 
+    private ObjectiveProgress(QuestInstance quest, Objective objective,
+            String serialized) {
+        this(quest, objective);
+        // TODO: deserialize
+    }
+
     public QuestInstance getQuest() {
         return quest;
     }
 
     public Objective getObjective() {
         return objective;
+    }
+
+    public String serialize() {
+        // TODO
+        return "";
+    }
+
+    public static ObjectiveProgress deserialize(QuestInstance instance,
+            Objective objective, String serialized) {
+        return new ObjectiveProgress(instance, objective, serialized);
     }
 }
