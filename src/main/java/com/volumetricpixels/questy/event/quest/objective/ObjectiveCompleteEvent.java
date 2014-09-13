@@ -6,11 +6,19 @@
 package com.volumetricpixels.questy.event.quest.objective;
 
 import com.volumetricpixels.questy.quest.QuestInstance;
+import com.volumetricpixels.questy.quest.objective.ObjectiveProgress;
+import com.volumetricpixels.questy.quest.objective.OutcomeProgress;
 
 public class ObjectiveCompleteEvent extends QuestObjectiveEvent {
-    // TODO: add the completion method - for example some objectives could have
-    // multiple different ways of completing them
-    public ObjectiveCompleteEvent(QuestInstance quest) {
-        super(quest);
+    private final OutcomeProgress outcome;
+
+    public ObjectiveCompleteEvent(QuestInstance quest,
+            ObjectiveProgress objective, OutcomeProgress outcome) {
+        super(quest, objective);
+        this.outcome = outcome;
+    }
+
+    public OutcomeProgress getOutcome() {
+        return outcome;
     }
 }

@@ -5,12 +5,20 @@
  */
 package com.volumetricpixels.questy.event.quest.objective;
 
-import com.volumetricpixels.questy.quest.QuestInstance;
 import com.volumetricpixels.questy.event.quest.QuestEvent;
+import com.volumetricpixels.questy.quest.QuestInstance;
+import com.volumetricpixels.questy.quest.objective.ObjectiveProgress;
 
 public abstract class QuestObjectiveEvent extends QuestEvent {
-    // TODO: add objectives
-    protected QuestObjectiveEvent(QuestInstance quest) {
+    private final ObjectiveProgress objective;
+
+    protected QuestObjectiveEvent(QuestInstance quest,
+            ObjectiveProgress objective) {
         super(quest);
+        this.objective = objective;
+    }
+
+    public ObjectiveProgress getObjective() {
+        return objective;
     }
 }

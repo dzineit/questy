@@ -6,9 +6,11 @@
 package com.volumetricpixels.questy.event.quest.objective;
 
 import com.volumetricpixels.questy.quest.QuestInstance;
+import com.volumetricpixels.questy.quest.objective.ObjectiveProgress;
 
 public class ObjectiveFailEvent extends QuestObjectiveEvent {
-    public ObjectiveFailEvent(QuestInstance quest) {
-        super(quest);
+    public ObjectiveFailEvent(QuestInstance quest,
+            ObjectiveProgress objective) {
+        super(quest, objective);
     }
 }
