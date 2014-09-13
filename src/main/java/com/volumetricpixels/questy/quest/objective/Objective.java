@@ -30,6 +30,15 @@ public class Objective {
     }
 
     public Outcome[] getOutcomes() {
-        return outcomes;
+        return outcomes.clone();
+    }
+
+    public Outcome getOutcome(String outcome) {
+        for (Outcome curOutcome : outcomes) {
+            if (curOutcome.getName().equals(outcome)) {
+                return curOutcome;
+            }
+        }
+        return null;
     }
 }

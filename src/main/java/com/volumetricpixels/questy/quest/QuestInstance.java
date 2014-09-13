@@ -5,6 +5,7 @@
  */
 package com.volumetricpixels.questy.quest;
 
+import com.volumetricpixels.questy.QuestManager;
 import com.volumetricpixels.questy.quest.objective.ObjectiveProgress;
 
 /**
@@ -21,11 +22,23 @@ public final class QuestInstance {
     public QuestInstance(Quest quest, String quester) {
         this.quest = quest;
         this.quester = quester;
+
+        objectiveProgresses = new ObjectiveProgress[quest.getAmtObjectives()];
+        quest.populateObjectiveProgresses(this, objectiveProgresses);
     }
 
-    private QuestInstance(Quest quest, String quester, String serialized) {
-        this(quest, quester);
-        // TODO: deserialize
+    private QuestInstance(QuestManager questManager, String quester,
+            String serialized) {
+        this.quester = quester;
+
+        String[] split = serialized.split("_");
+        this.quest = questManager.getQuest(split[0]);
+        String[] progressions = split[1].split("|||");
+        objectiveProgresses = new ObjectiveProgress[progressions.length];
+        for (int i = 0; i < progressions.length; i++) {
+            objectiveProgresses[i] = ObjectiveProgress
+                    .deserialize(this, progressions[i]);
+        }
     }
 
     public Quest getQuest() {
@@ -36,15 +49,21 @@ public final class QuestInstance {
         return quester;
     }
 
-    // TODO: progression data based methods
-
-    public String serializeProgression() {
-        // TODO
-        return "";
+    public ObjectiveProgress[] getObjectiveProgresses() {
+        return objectiveProgresses.clone();
     }
 
-    public static QuestInstance deserialize(Quest quest, String quester,
-            String progression) {
-        return new QuestInstance(quest, quester, progression);
+    public String serializeProgression() {
+        StringBuilder result = new StringBuilder(quest.getName()).append("_");
+        for (ObjectiveProgress progress : objectiveProgresses) {
+            result.append(progress.serialize()).append("|||");
+        }
+        result.setLength(result.length() - 3);
+        return result.toString();
+    }
+
+    public static QuestInstance deserialize(QuestManager manager,
+            String quester, String progression) {
+        return new QuestInstance(manager, quester, progression);
     }
 }

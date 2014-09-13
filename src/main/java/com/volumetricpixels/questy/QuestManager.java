@@ -157,7 +157,7 @@ public class QuestManager {
             for (Entry<String, String> quest : quests.entrySet()) {
                 Quest qst = getQuest(quest.getKey());
                 String serial = quest.getValue();
-                set.add(QuestInstance.deserialize(qst, quester, serial));
+                set.add(QuestInstance.deserialize(this, quester, serial));
             }
         }
     }

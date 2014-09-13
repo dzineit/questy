@@ -6,6 +6,7 @@
 package com.volumetricpixels.questy.quest;
 
 import com.volumetricpixels.questy.quest.objective.Objective;
+import com.volumetricpixels.questy.quest.objective.ObjectiveProgress;
 
 /**
  * Represents the 'outline' of a quest. There is a single {@link Quest} object
@@ -31,7 +32,28 @@ public final class Quest {
     }
 
     public Objective[] getObjectives() {
-        return objectives;
+        return objectives.clone();
+    }
+
+    // here to avoid call to objectives.clone() for simple length check
+    public int getAmtObjectives() {
+        return objectives.length;
+    }
+
+    public Objective getObjective(String name) {
+        for (Objective objective : objectives) {
+            if (objective.getName().equals(name)) {
+                return objective;
+            }
+        }
+        return null;
+    }
+
+    void populateObjectiveProgresses(QuestInstance instance,
+            ObjectiveProgress[] progresses) {
+        for (int i = 0; i < objectives.length; i++) {
+            progresses[i] = new ObjectiveProgress(instance, objectives[i]);
+        }
     }
 
     public QuestInstance createInstance(String quester) {
