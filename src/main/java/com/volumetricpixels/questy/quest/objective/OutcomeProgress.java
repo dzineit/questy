@@ -5,8 +5,9 @@
  */
 package com.volumetricpixels.questy.quest.objective;
 
-import com.volumetricpixels.questy.store.DeserializeUtils;
+import com.volumetricpixels.questy.event.quest.progress.ProgressUpdateEvent;
 import com.volumetricpixels.questy.quest.QuestInstance;
+import com.volumetricpixels.questy.store.DeserializeUtils;
 
 public class OutcomeProgress {
     private final QuestInstance quest;
@@ -24,7 +25,8 @@ public class OutcomeProgress {
         this.quest = quest;
         String[] split = serialized.split("_");
         this.outcome = objective.getOutcome(split[0]);
-        setProgress(DeserializeUtils.handleCommonTypes(split[1]));
+
+        setProgressSilent(DeserializeUtils.handleCommonTypes(split[1]));
     }
 
     public Outcome getOutcome() {
@@ -36,6 +38,13 @@ public class OutcomeProgress {
     }
 
     public void setProgress(Object progress) {
+        setProgressSilent(progress);
+
+        quest.getQuest().getQuestManager().getEventManager()
+                .fire(new ProgressUpdateEvent(quest, this));
+    }
+
+    private void setProgressSilent(Object progress) {
         this.progress = progress;
     }
 

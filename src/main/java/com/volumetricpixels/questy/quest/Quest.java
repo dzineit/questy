@@ -5,6 +5,7 @@
  */
 package com.volumetricpixels.questy.quest;
 
+import com.volumetricpixels.questy.QuestManager;
 import com.volumetricpixels.questy.quest.objective.Objective;
 import com.volumetricpixels.questy.quest.objective.ObjectiveProgress;
 
@@ -13,14 +14,21 @@ import com.volumetricpixels.questy.quest.objective.ObjectiveProgress;
  * created for each scripted / configured quest which is loaded.
  */
 public final class Quest {
+    private final QuestManager questManager;
     private final String name;
     private final String description;
     private final Objective[] objectives;
 
-    public Quest(String name, String description, Objective[] objectives) {
+    public Quest(QuestManager questManager, String name, String description,
+            Objective[] objectives) {
+        this.questManager = questManager;
         this.name = name;
         this.description = description;
         this.objectives = objectives;
+    }
+
+    public QuestManager getQuestManager() {
+        return questManager;
     }
 
     public String getName() {
