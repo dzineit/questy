@@ -185,8 +185,11 @@ public class QuestManager {
     }
 
     public void abandonQuest(QuestInstance instance) {
-        current.remove(instance);
-        eventManager.fire(new QuestAbandonEvent(instance));
+        QuestAbandonEvent event = eventManager
+                .fire(new QuestAbandonEvent(instance));
+        if (!event.isCancelled()) {
+            current.remove(instance);
+        }
     }
 
     public void completeQuest(QuestInstance instance) {

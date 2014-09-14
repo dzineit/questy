@@ -5,7 +5,7 @@
  */
 package com.volumetricpixels.questy.quest.objective;
 
-import com.volumetricpixels.questy.DeserializeUtils;
+import com.volumetricpixels.questy.store.DeserializeUtils;
 import com.volumetricpixels.questy.quest.QuestInstance;
 
 public class OutcomeProgress {

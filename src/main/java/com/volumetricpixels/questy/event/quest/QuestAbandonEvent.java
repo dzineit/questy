@@ -11,4 +11,9 @@ public class QuestAbandonEvent extends QuestEvent {
     public QuestAbandonEvent(QuestInstance quest) {
         super(quest);
     }
+
+    @Override
+    public void setCancelled(boolean cancelled) {
+        super.setCancelled(cancelled);
+    }
 }
