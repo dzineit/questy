@@ -12,10 +12,23 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Loads JavaScript quests.
+ */
 public class JSQuestLoader implements QuestLoader {
     @Override
     public Set<Quest> loadQuests(File directory) {
-        return new HashSet<>();
+        if (directory == null || !directory.isDirectory()) {
+            return null;
+        }
+
+        Set<Quest> result = new HashSet<>();
+        // iterate through all files in the directory which end with .js
+        for (File file : directory.listFiles(fl -> endsWith(fl, ".js"))) {
+            // TODO
+        }
+
+        return result;
     }
 
     @Override

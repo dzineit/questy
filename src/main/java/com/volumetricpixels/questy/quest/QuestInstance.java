@@ -16,8 +16,7 @@ import com.volumetricpixels.questy.quest.objective.ObjectiveProgress;
 public final class QuestInstance {
     private final Quest quest;
     private final String quester;
-
-    private ObjectiveProgress[] objectiveProgresses;
+    private final ObjectiveProgress[] objectiveProgresses;
 
     public QuestInstance(Quest quest, String quester) {
         this.quest = quest;

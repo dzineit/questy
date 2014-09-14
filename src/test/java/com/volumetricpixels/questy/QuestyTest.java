@@ -8,7 +8,7 @@ package com.volumetricpixels.questy;
 import org.junit.Test;
 
 public class QuestyTest {
-    private final QuestManager questManager = new QuestManager();
+    private final QuestManager questManager = new QuestManager(null);
 
     @Test
     public void testEvents() {

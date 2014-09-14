@@ -21,5 +21,5 @@ package com.volumetricpixels.questy.event.listener;
  * com.volumetricpixels.questy.event.EventManager#register(Listener)} if they
  * want to receive events.
  */
-public interface Listener {
+@SuppressWarnings("JavaDoc") public interface Listener {
 }

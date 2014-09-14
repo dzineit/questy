@@ -36,4 +36,19 @@ public interface QuestLoader {
      * @return the name of the format this loader loads {@link Quest}s of
      */
     String getQuestFormat();
+
+    // utility methods for implementations
+
+    /**
+     * Utility method to check if the name of the given {@link File} ends with
+     * the given {@link String}, ignoring case.
+     *
+     * @param file the {@link File} to check the extension of
+     * @param content the {@link String} to check the extension for
+     * @return {@code true} if the given file's name ends with the given string,
+     *         ignoring case, otherwise {@code false}
+     */
+    default boolean endsWith(File file, String content) {
+        return file.getName().toLowerCase().endsWith(content.toLowerCase());
+    }
 }

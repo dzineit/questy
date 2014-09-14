@@ -10,21 +10,30 @@ import com.volumetricpixels.questy.event.quest.QuestAbandonEvent;
 import com.volumetricpixels.questy.event.quest.QuestCompleteEvent;
 import com.volumetricpixels.questy.event.quest.QuestStartEvent;
 import com.volumetricpixels.questy.loading.QuestLoader;
+import com.volumetricpixels.questy.loading.loaders.JSQuestLoader;
+import com.volumetricpixels.questy.loading.loaders.XMLQuestLoader;
+import com.volumetricpixels.questy.loading.loaders.YMLQuestLoader;
 import com.volumetricpixels.questy.quest.Quest;
 import com.volumetricpixels.questy.quest.QuestInstance;
 import com.volumetricpixels.questy.store.QuestStore;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Manages and tracks all active {@link Quest}s and {@link QuestLoader}s.
  */
 public class QuestManager {
+    /**
+     * The {@link QuestStore} used for progression data storage.
+     */
+    private final QuestStore store;
     /**
      * Questy's {@link EventManager}.
      */
@@ -47,15 +56,12 @@ public class QuestManager {
     private final Set<QuestInstance> completed;
 
     /**
-     * The {@link QuestStore} used for progression data storage.
-     */
-    private QuestStore store;
-
-    /**
      * Constructs a blank {@link QuestManager} with no registered {@link
-     * QuestLoader}s or loaded {@link Quest}s.
+     * QuestLoader}s or loaded {@link Quest}s, with the given {@link QuestStore}
+     * being used for saving / loading progression.
      */
-    public QuestManager() {
+    public QuestManager(QuestStore store) {
+        this.store = store;
         this.eventManager = new EventManager();
         this.loaders = new HashSet<>();
         this.loaded = new HashSet<>();
@@ -63,34 +69,12 @@ public class QuestManager {
         this.completed = new HashSet<>();
     }
 
-    /**
-     * Constructs a blank {@link QuestManager} with no registered {@link
-     * QuestLoader}s or loaded {@link Quest}s, with the given {@link QuestStore}
-     * being used for saving / loading progression.
-     */
-    public QuestManager(QuestStore store) {
-        this();
-        this.store = store;
-    }
-
     public EventManager getEventManager() {
         return eventManager;
     }
 
-    public QuestStore getStore() {
-        return store;
-    }
-
     public Set<Quest> getLoadedQuests() {
         return new HashSet<>(loaded);
-    }
-
-    public Set<QuestLoader> getQuestLoaders() {
-        return new HashSet<>(loaders);
-    }
-
-    public void setStore(QuestStore store) {
-        this.store = store;
     }
 
     /**
@@ -102,7 +86,7 @@ public class QuestManager {
      *         isn't one
      */
     public Quest getQuest(String name) {
-        for (Quest quest : getLoadedQuests()) {
+        for (Quest quest : loaded) {
             if (quest.getName().equalsIgnoreCase(name)) {
                 return quest;
             }
@@ -149,53 +133,25 @@ public class QuestManager {
         store.saveCompletedQuestData(serialize(completed));
     }
 
-    private void doLoadProgression(Map<String, Map<String, String>> map,
-            Set<QuestInstance> set) {
-        for (Entry<String, Map<String, String>> ply : map.entrySet()) {
-            String quester = ply.getKey();
-            Map<String, String> quests = ply.getValue();
-            for (Entry<String, String> quest : quests.entrySet()) {
-                Quest qst = getQuest(quest.getKey());
-                String serial = quest.getValue();
-                set.add(QuestInstance.deserialize(this, quester, serial));
-            }
+    public boolean startQuest(QuestInstance instance) {
+        boolean val = current.add(instance);
+        if (val) {
+            eventManager.fire(new QuestStartEvent(instance));
         }
+        return val;
     }
 
-    private Map<String, Map<String, String>> serialize(Set<QuestInstance> set) {
-        Map<String, Map<String, String>> result = new HashMap<>();
-        for (QuestInstance questInstance : set) {
-            String quester = questInstance.getQuester();
-            Map<String, String> map = result.get(quester);
-            if (map == null) {
-                map = new HashMap<>();
-                result.put(quester, map);
-            }
+    public boolean abandonQuest(QuestInstance instance) {
+        return !eventManager.fire(new QuestAbandonEvent(instance)).isCancelled()
+                && current.remove(instance);
+    }
 
-            map.put(questInstance.getQuest().getName(),
-                    questInstance.serializeProgression());
+    public boolean completeQuest(QuestInstance instance) {
+        boolean val = current.remove(instance) && completed.add(instance);
+        if (val) {
+            eventManager.fire(new QuestCompleteEvent(instance));
         }
-
-        return result;
-    }
-
-    public void startQuest(QuestInstance instance) {
-        current.add(instance);
-        eventManager.fire(new QuestStartEvent(instance));
-    }
-
-    public void abandonQuest(QuestInstance instance) {
-        QuestAbandonEvent event = eventManager
-                .fire(new QuestAbandonEvent(instance));
-        if (!event.isCancelled()) {
-            current.remove(instance);
-        }
-    }
-
-    public void completeQuest(QuestInstance instance) {
-        current.remove(instance);
-        completed.add(instance);
-        eventManager.fire(new QuestCompleteEvent(instance));
+        return val;
     }
 
     /**
@@ -221,6 +177,17 @@ public class QuestManager {
     }
 
     /**
+     * Adds all default {@link QuestLoader} implementations.
+     *
+     * @see {@link #addQuestLoader(QuestLoader)}
+     */
+    public void addDefaultLoaders() {
+        addQuestLoader(new JSQuestLoader());
+        addQuestLoader(new YMLQuestLoader());
+        addQuestLoader(new XMLQuestLoader());
+    }
+
+    /**
      * Adds the given {@link QuestLoader} to this {@link QuestManager}'s loaded
      * {@link QuestLoader} {@link Set}.
      *
@@ -240,5 +207,33 @@ public class QuestManager {
      */
     public boolean removeQuestLoader(QuestLoader loader) {
         return loaders.remove(loader);
+    }
+
+    // internal
+
+    private void doLoadProgression(Map<String, Map<String, String>> map,
+            Set<QuestInstance> set) {
+        for (Entry<String, Map<String, String>> ply : map.entrySet()) {
+            Collection<String> serials = ply.getValue().values();
+            set.addAll(serials.stream().map(serial -> QuestInstance.deserialize(
+                    this, ply.getKey(), serial)).collect(Collectors.toList()));
+        }
+    }
+
+    private Map<String, Map<String, String>> serialize(Set<QuestInstance> set) {
+        Map<String, Map<String, String>> result = new HashMap<>();
+        for (QuestInstance questInstance : set) {
+            String quester = questInstance.getQuester();
+            Map<String, String> map = result.get(quester);
+            if (map == null) {
+                map = new HashMap<>();
+                result.put(quester, map);
+            }
+
+            map.put(questInstance.getQuest().getName(),
+                    questInstance.serializeProgression());
+        }
+
+        return result;
     }
 }

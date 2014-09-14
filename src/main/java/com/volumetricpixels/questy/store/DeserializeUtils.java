@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.function.Function;
 
 public class DeserializeUtils {
-    private static List<Function<String, Object>> common = new ArrayList<>();
+    private static final List<Function<String, Object>> common = new ArrayList<>();
 
     static {
         common.add((str) -> {

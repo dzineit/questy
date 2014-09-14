@@ -12,10 +12,23 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Loads XML quests.
+ */
 public class XMLQuestLoader implements QuestLoader {
     @Override
     public Set<Quest> loadQuests(File directory) {
-        return new HashSet<>();
+        if (directory == null || !directory.isDirectory()) {
+            return null;
+        }
+
+        Set<Quest> result = new HashSet<>();
+        // iterate through all files in the directory which end with .xml
+        for (File file : directory.listFiles(fl -> endsWith(fl, ".xml"))) {
+            // TODO
+        }
+
+        return result;
     }
 
     @Override
