@@ -10,9 +10,19 @@ import com.volumetricpixels.questy.quest.QuestInstance;
 import com.volumetricpixels.questy.store.DeserializeUtils;
 
 public class OutcomeProgress {
+    /**
+     * The {@link QuestInstance} this quest is for.
+     */
     private final QuestInstance quest;
     private final Outcome outcome;
 
+    /**
+     * An {@link Object} representing the actual progress towards the Outcome
+     * for it's {@link ObjectiveProgress}. Only immutable types should be used
+     * for this object, as the {@link ProgressUpdateEvent} system depends on
+     * {@link #setProgress(Object)} being called whenever the progress is
+     * updated.
+     */
     private Object progress;
 
     public OutcomeProgress(QuestInstance quest, Outcome outcome) {
