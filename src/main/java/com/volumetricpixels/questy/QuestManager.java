@@ -5,7 +5,7 @@
  */
 package com.volumetricpixels.questy;
 
-import com.volumetricpixels.questy.event.QuestyEventManager;
+import com.volumetricpixels.questy.event.EventManager;
 import com.volumetricpixels.questy.event.quest.QuestAbandonEvent;
 import com.volumetricpixels.questy.event.quest.QuestCompleteEvent;
 import com.volumetricpixels.questy.event.quest.QuestStartEvent;
@@ -26,9 +26,9 @@ import java.util.Set;
  */
 public class QuestManager {
     /**
-     * The Questy {@link QuestyEventManager}.
+     * Questy's {@link EventManager}.
      */
-    private final QuestyEventManager eventManager;
+    private final EventManager eventManager;
     /**
      * All current {@link QuestLoader}s in use.
      */
@@ -56,7 +56,7 @@ public class QuestManager {
      * QuestLoader}s or loaded {@link Quest}s.
      */
     public QuestManager() {
-        this.eventManager = new QuestyEventManager(this);
+        this.eventManager = new EventManager();
         this.loaders = new HashSet<>();
         this.loaded = new HashSet<>();
         this.current = new HashSet<>();
@@ -73,7 +73,7 @@ public class QuestManager {
         this.store = store;
     }
 
-    public QuestyEventManager getEventManager() {
+    public EventManager getEventManager() {
         return eventManager;
     }
 
