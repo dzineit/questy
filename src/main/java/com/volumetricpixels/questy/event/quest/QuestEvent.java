@@ -24,14 +24,34 @@ public abstract class QuestEvent extends Event {
         this.quest = quest;
     }
 
+    /**
+     * Gets the {@link QuestInstance} this event is related to.
+     *
+     * @return this event's relevant {@link QuestInstance}
+     */
     public QuestInstance getQuest() {
         return quest;
     }
 
-    public Quest getBaseQuest() {
+    /**
+     * Gets the {@link Quest} information which is relevant to the {@link
+     * QuestInstance} this event is related to. This is equivalent to calling
+     * {@code questEvent.getQuest().getQuest()}.
+     *
+     * @return the {@link Quest} information for the relevent
+     *         {@link QuestInstance}
+     * @see {@link QuestInstance#getQuest()}
+     */
+    public Quest getQuestInfo() {
         return getQuest().getQuest();
     }
 
+    /**
+     * Gets the player doing the quest. This method is equivalent to calling
+     * {@code questEvent.getQuest().getQuester()}.
+     *
+     * @return the player doing the {@link QuestInstance} relevant to this event
+     */
     public String getQuester() {
         return getQuest().getQuester();
     }

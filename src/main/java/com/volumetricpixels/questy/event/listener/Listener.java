@@ -6,7 +6,20 @@
 package com.volumetricpixels.questy.event.listener;
 
 /**
- * Listens for events.
+ * Listens for events. In implementations each listener method should be
+ * declared {@code public}, and should follow the following syntax. There should
+ * always be only one parameter for the method, and it should be something which
+ * extends Event (i.e QuestStartEvent).
+ *
+ * <code>
+ *     @EventHandler
+ *     public void anyMethodName(ListenedEvent anyFieldName) {
+ *     }
+ * </code>
+ *
+ * Listener implementations should be registered via {@link
+ * com.volumetricpixels.questy.event.EventManager#register(Listener)} if they
+ * want to receive events.
  */
 public interface Listener {
 }

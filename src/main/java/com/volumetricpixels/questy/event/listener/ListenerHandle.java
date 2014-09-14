@@ -10,9 +10,12 @@ import com.volumetricpixels.questy.event.Event;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -33,47 +36,72 @@ public final class ListenerHandle {
         this.listener = listener;
         this.eventHandlers = new HashMap<>();
 
+        // check every method in the given Listener
         for (Method meth : listener.getClass().getDeclaredMethods()) {
             EventHandler eh = meth.getAnnotation(EventHandler.class);
+            // if it isn't an EventHandler or it doesn't have one parameter
+            // (which should be the event being listened for)
             if (eh == null || meth.getParameterCount() != 1) {
                 continue;
             }
 
             Class<?> parameter = meth.getParameterTypes()[0];
+            // if the parameter isn't Event or an extension of it
             if (!Event.class.isAssignableFrom(parameter)) {
                 continue;
             }
 
             Class<? extends Event> evtClass = parameter.asSubclass(Event.class);
             try {
+                // use MethodHandle over Method for actual calls as it is faster
                 MethodHandle handle = MethodHandles.lookup().unreflect(meth);
                 Set<MethodHandle> handlers = eventHandlers.get(evtClass);
                 if (handlers == null) {
+                    // this is the first handler for that event type - in
+                    // practice this will be most of the time
                     handlers = new HashSet<>();
                     eventHandlers.put(evtClass, handlers);
                 }
 
+                // add the MethodHandle to the Set of them
                 handlers.add(handle);
             } catch (IllegalAccessException e) {
+                // in theory shouldn't happen unless someone is dumb enough to
+                // implement Listener really badly
                 e.printStackTrace();
             }
         }
     }
 
-    public void handle(Event event) {
-        Class<? extends Event> clazz = event.getClass();
-        Set<MethodHandle> handles = eventHandlers.get(clazz);
+    /**
+     * Handles the given {@link Event}, directing it to each registered {@link
+     * Listener} which has an {@link EventHandler}-annotated method which
+     * handles the given {@link Event}'s type.
+     *
+     * The {@link List} contained by the returned {@link Optional} will contain
+     * all {@link Throwable}s thrown by {@link MethodHandle#invoke(Object...)}.
+     * In most cases, this will simply be {@link Optional#empty()}, unless a
+     * {@link Throwable}(s) is actually thrown.
+     *
+     * @param event the {@link Event} to call
+     * @return all {@link Throwable}s thrown while calling the {@link Event}
+     */
+    public Optional<List<Throwable>> handle(Event event) {
+        Set<MethodHandle> handles = eventHandlers.get(event.getClass());
         if (handles == null || handles.isEmpty()) {
-            return;
+            return Optional.empty();
         }
 
+        List<Throwable> problems = new ArrayList<>();
         for (MethodHandle handle : handles) {
             try {
                 handle.invoke(listener, event);
             } catch (Throwable throwable) {
-                throwable.printStackTrace();
+                problems.add(throwable);
             }
         }
+
+        return problems.isEmpty() ? Optional.empty() : Optional.of(problems);
     }
 
     public Listener getListener() {
