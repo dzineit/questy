@@ -9,12 +9,14 @@ import com.volumetricpixels.questy.event.EventManager;
 import com.volumetricpixels.questy.event.quest.QuestAbandonEvent;
 import com.volumetricpixels.questy.event.quest.QuestCompleteEvent;
 import com.volumetricpixels.questy.event.quest.QuestStartEvent;
+import com.volumetricpixels.questy.event.quest.objective.ObjectiveStartEvent;
 import com.volumetricpixels.questy.loading.QuestLoader;
 import com.volumetricpixels.questy.loading.loaders.JSQuestLoader;
 import com.volumetricpixels.questy.loading.loaders.XMLQuestLoader;
 import com.volumetricpixels.questy.loading.loaders.YMLQuestLoader;
 import com.volumetricpixels.questy.quest.Quest;
 import com.volumetricpixels.questy.quest.QuestInstance;
+import com.volumetricpixels.questy.quest.objective.OutcomeProgress;
 import com.volumetricpixels.questy.store.QuestStore;
 
 import java.io.File;
@@ -69,6 +71,13 @@ public class QuestManager {
         this.completed = new HashSet<>();
     }
 
+    /**
+     * Gets the Questy {@link EventManager}. In most cases (outside of custom
+     * events), the {@link EventManager} doesn't need to be used outside of the
+     * Questy code.
+     *
+     * @return the Questy {@link EventManager}
+     */
     public EventManager getEventManager() {
         return eventManager;
     }
@@ -136,7 +145,10 @@ public class QuestManager {
     public boolean startQuest(QuestInstance instance) {
         boolean val = current.add(instance);
         if (val) {
-            eventManager.fire(new QuestStartEvent(instance));
+            QuestStartEvent event = eventManager
+                    .fire(new QuestStartEvent(instance));
+            eventManager.fire(new ObjectiveStartEvent(instance,
+                    instance.getCurrentObjective(), event));
         }
         return val;
     }
@@ -146,10 +158,11 @@ public class QuestManager {
                 && current.remove(instance);
     }
 
-    public boolean completeQuest(QuestInstance instance) {
+    public boolean completeQuest(QuestInstance instance,
+            OutcomeProgress outcome) {
         boolean val = current.remove(instance) && completed.add(instance);
         if (val) {
-            eventManager.fire(new QuestCompleteEvent(instance));
+            eventManager.fire(new QuestCompleteEvent(instance, outcome));
         }
         return val;
     }

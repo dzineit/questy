@@ -9,15 +9,18 @@ package com.volumetricpixels.questy.quest.objective;
  * Represents a single possible outcome for an {@link Objective}.
  */
 public class Outcome {
-    // TODO: what the outcome leads to (quest end, different objective, etc)
     // TODO: rewards for the outcome / w/e
     // TODO: the requirement for the outcome - i.e kill two cows
     private final String name;
     private final String description;
+    private final String type;
+    private final Objective next;
 
-    public Outcome(String name, String description) {
+    public Outcome(String name, String description, String type, Objective next) {
         this.name = name;
         this.description = description;
+        this.type = type;
+        this.next = next;
     }
 
     public String getName() {
@@ -26,5 +29,13 @@ public class Outcome {
 
     public String getDescription() {
         return description;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public Objective getNext() {
+        return next;
     }
 }

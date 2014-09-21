@@ -59,6 +59,8 @@ public final class Quest {
 
     void populateObjectiveProgresses(QuestInstance instance,
             ObjectiveProgress[] progresses) {
+        assert progresses.length == objectives.length;
+
         for (int i = 0; i < objectives.length; i++) {
             progresses[i] = new ObjectiveProgress(instance, objectives[i]);
         }

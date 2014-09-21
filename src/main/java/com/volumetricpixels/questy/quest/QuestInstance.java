@@ -6,7 +6,11 @@
 package com.volumetricpixels.questy.quest;
 
 import com.volumetricpixels.questy.QuestManager;
+import com.volumetricpixels.questy.event.quest.objective.ObjectiveCompleteEvent;
+import com.volumetricpixels.questy.event.quest.objective.ObjectiveStartEvent;
+import com.volumetricpixels.questy.quest.objective.Objective;
 import com.volumetricpixels.questy.quest.objective.ObjectiveProgress;
+import com.volumetricpixels.questy.quest.objective.OutcomeProgress;
 
 /**
  * Represents an 'instance' of a {@link Quest}. A {@link QuestInstance} holds
@@ -18,12 +22,15 @@ public final class QuestInstance {
     private final String quester;
     private final ObjectiveProgress[] objectiveProgresses;
 
+    private int current;
+
     public QuestInstance(Quest quest, String quester) {
         this.quest = quest;
         this.quester = quester;
 
         objectiveProgresses = new ObjectiveProgress[quest.getAmtObjectives()];
         quest.populateObjectiveProgresses(this, objectiveProgresses);
+        current = 0;
     }
 
     private QuestInstance(QuestManager questManager, String quester,
@@ -35,8 +42,46 @@ public final class QuestInstance {
         String[] progressions = split[1].split("|||");
         objectiveProgresses = new ObjectiveProgress[progressions.length];
         for (int i = 0; i < progressions.length; i++) {
+            String serial = progressions[i];
             objectiveProgresses[i] = ObjectiveProgress
-                    .deserialize(this, progressions[i]);
+                    .deserialize(this, serial);
+            if (serial.endsWith("<c>")) {
+                current = i;
+            }
+        }
+    }
+
+    public void objectiveComplete(ObjectiveProgress objective,
+            OutcomeProgress outcome) {
+        Objective next = outcome.getOutcome().getNext();
+        if (next == null) {
+            quest.getQuestManager().completeQuest(this, outcome);
+            return;
+        }
+
+        ObjectiveProgress temp = getProgress(next);
+        if (temp == null) {
+            return;
+        }
+
+        ObjectiveCompleteEvent e = quest.getQuestManager().getEventManager()
+                .fire(new ObjectiveCompleteEvent(this, objective, outcome));
+        current = getIndex(temp);
+        quest.getQuestManager().getEventManager()
+                .fire(new ObjectiveStartEvent(this, temp, e));
+    }
+
+    public void objectiveFailed(ObjectiveProgress objective, boolean endQuest) {
+        if (endQuest) {
+            quest.getQuestManager().abandonQuest(this);
+            return;
+        }
+
+        for (int i = 0; i < objectiveProgresses.length; i++) {
+            if (objectiveProgresses[i] == objective) {
+                objectiveProgresses[i] = new ObjectiveProgress(this,
+                        objective.getObjective());
+            }
         }
     }
 
@@ -52,10 +97,24 @@ public final class QuestInstance {
         return objectiveProgresses.clone();
     }
 
+    public ObjectiveProgress getProgress(Objective objective) {
+        for (ObjectiveProgress cur : objectiveProgresses) {
+            if (cur.getObjective() == objective) {
+                return cur;
+            }
+        }
+        return null;
+    }
+
+    public ObjectiveProgress getCurrentObjective() {
+        return objectiveProgresses[current];
+    }
+
     public String serializeProgression() {
         StringBuilder result = new StringBuilder(quest.getName()).append("_");
         for (ObjectiveProgress progress : objectiveProgresses) {
-            result.append(progress.serialize()).append("|||");
+            appendIf(getIndex(progress) == current, result.append(
+                    progress.serialize()), "<c>").append("|||");
         }
         result.setLength(result.length() - 3);
         return result.toString();
@@ -64,5 +123,22 @@ public final class QuestInstance {
     public static QuestInstance deserialize(QuestManager manager,
             String quester, String progression) {
         return new QuestInstance(manager, quester, progression);
+    }
+
+    private int getIndex(ObjectiveProgress progress) {
+        for (int i = 0; i < objectiveProgresses.length; i++) {
+            if (objectiveProgresses[i] == progress) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private StringBuilder appendIf(boolean check, StringBuilder builder,
+            String append) {
+        if (check) {
+            return builder.append(append);
+        }
+        return builder;
     }
 }

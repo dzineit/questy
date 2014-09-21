@@ -6,9 +6,25 @@
 package com.volumetricpixels.questy.event.quest;
 
 import com.volumetricpixels.questy.quest.QuestInstance;
+import com.volumetricpixels.questy.quest.objective.Outcome;
+import com.volumetricpixels.questy.quest.objective.OutcomeProgress;
 
+/**
+ * Called when a {@link QuestInstance} is completed.
+ */
 public class QuestCompleteEvent extends QuestEvent {
-    public QuestCompleteEvent(QuestInstance quest) {
+    private final OutcomeProgress outcome;
+
+    public QuestCompleteEvent(QuestInstance quest, OutcomeProgress outcome) {
         super(quest);
+        this.outcome = outcome;
+    }
+
+    public OutcomeProgress getOutcome() {
+        return outcome;
+    }
+
+    public Outcome getOutcomeInfo() {
+        return getOutcome().getOutcome();
     }
 }
