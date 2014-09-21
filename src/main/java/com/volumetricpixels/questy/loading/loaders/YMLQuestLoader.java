@@ -18,7 +18,6 @@ import com.volumetricpixels.questy.quest.Quest;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -47,7 +46,7 @@ public class YMLQuestLoader implements QuestLoader {
         // iterate through all files in the directory which end with .yml
         for (File file : directory.listFiles(fl -> endsWith(fl, ".yml"))) {
             try {
-                result.add(doLoadQuest(yaml, new FileInputStream(file)));
+                result.add(loadQuest(yaml, new FileInputStream(file)));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -56,8 +55,8 @@ public class YMLQuestLoader implements QuestLoader {
         return result;
     }
 
-    public Quest doLoadQuest(Yaml yaml, InputStream stream) {
-        Map<?, ?> map = convert((Map<?, ?>) yaml.load(stream));
+    public Quest loadQuest(Yaml yaml, InputStream stream) {
+        Map<?, ?> map = (Map<?, ?>) yaml.load(stream);
 
         QuestBuilder builder = QuestLoading
                 .quest(questManager, map.get("name").toString());
@@ -70,7 +69,7 @@ public class YMLQuestLoader implements QuestLoader {
             Map<?, ?> objMap = (Map) objEntry.getValue();
             obj.description(objMap.get("description").toString());
 
-            Map<?, ?> outcomes = (Map) map.get("outcomes");
+            Map<?, ?> outcomes = (Map) objMap.get("outcomes");
             for (Entry<?, ?> ocEntry : outcomes.entrySet()) {
                 OutcomeBuilder oc = obj
                         .outcome(ocEntry.getKey().toString());
