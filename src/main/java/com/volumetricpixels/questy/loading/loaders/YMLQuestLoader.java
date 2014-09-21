@@ -87,21 +87,6 @@ public class YMLQuestLoader implements QuestLoader {
         return builder.build();
     }
 
-    private Map convert(Map<?, ?> map) {
-        Map<Object, Object> result = new HashMap<>();
-        for (Entry<?, ?> entry : map.entrySet()) {
-            String key = entry.getKey().toString();
-            Object value = entry.getValue();
-
-            if (value instanceof Map) {
-                result.put(key, convert((Map<?, ?>) value));
-            } else {
-                result.put(key, value);
-            }
-        }
-        return result;
-    }
-
     @Override
     public String getQuestFormat() {
         return "YAML";
