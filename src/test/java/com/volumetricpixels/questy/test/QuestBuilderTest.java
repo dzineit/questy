@@ -11,8 +11,6 @@ import org.junit.Test;
 import com.volumetricpixels.questy.QuestManager;
 import com.volumetricpixels.questy.loading.QuestLoading;
 import com.volumetricpixels.questy.loading.QuestLoading.QuestBuilder;
-import com.volumetricpixels.questy.loading.QuestLoading.QuestBuilder.ObjectiveBuilder;
-import com.volumetricpixels.questy.loading.QuestLoading.QuestBuilder.ObjectiveBuilder.OutcomeBuilder;
 import com.volumetricpixels.questy.quest.Quest;
 import com.volumetricpixels.questy.quest.objective.Objective;
 import com.volumetricpixels.questy.quest.objective.Outcome;
@@ -27,14 +25,14 @@ public class QuestBuilderTest {
 
         builder.description("My first quest!");
 
-        ObjectiveBuilder objOne = builder.objective("Tree");
+        QuestLoading.ObjectiveBuilder objOne = builder.objective("Tree");
         // assert that ObjectiveBuilder caching works
         Assert.assertEquals(objOne, builder.objective("Tree"));
 
         objOne.description("The first objective!");
 
-        OutcomeBuilder outcome1 = objOne.outcome("Nope");
-        OutcomeBuilder outcome2 = objOne.outcome("Yep");
+        QuestLoading.OutcomeBuilder outcome1 = objOne.outcome("Nope");
+        QuestLoading.OutcomeBuilder outcome2 = objOne.outcome("Yep");
 
         Quest result = builder.build();
         Assert.assertEquals(result.getAmtObjectives(), 1);

@@ -5,6 +5,7 @@
  */
 package com.volumetricpixels.questy.loading.loaders;
 
+import com.volumetricpixels.questy.QuestManager;
 import com.volumetricpixels.questy.loading.QuestLoader;
 import com.volumetricpixels.questy.quest.Quest;
 
@@ -16,6 +17,12 @@ import java.util.Set;
  * Loads JavaScript quests.
  */
 public class JSQuestLoader implements QuestLoader {
+    private final QuestManager questManager;
+
+    public JSQuestLoader(QuestManager questManager) {
+        this.questManager = questManager;
+    }
+
     @Override
     public Set<Quest> loadQuests(File directory) {
         if (directory == null || !directory.isDirectory()) {

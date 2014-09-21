@@ -147,212 +147,212 @@ public final class QuestLoading {
             questManager.addQuest(built);
             return built;
         }
+    }
+
+    /**
+     * Used to build {@link Objective} objects and their {@link Outcome}s
+     * (which are built using {@link OutcomeBuilder}).
+     */
+    public static final class ObjectiveBuilder {
+        /**
+         * A cache of already created {@link OutcomeBuilder}s for {@link
+         * Outcome}s for this quest, where the keys are the names of the
+         * {@link Outcome}s.
+         */
+        private final Map<String, OutcomeBuilder> cache = new HashMap<>();
+        /**
+         * A {@link List} of the {@link OutcomeBuilder}s for the possible
+         * {@link Outcome}s for the {@link Objective} being built from this
+         * {@link ObjectiveBuilder}.
+         */
+        private final List<OutcomeBuilder> outcomes = new ArrayList<>();
 
         /**
-         * Used to build {@link Objective} objects and their {@link Outcome}s
-         * (which are built using {@link OutcomeBuilder}).
+         * The name of the {@link Objective} being built.
          */
-        public final class ObjectiveBuilder {
-            /**
-             * A cache of already created {@link OutcomeBuilder}s for {@link
-             * Outcome}s for this quest, where the keys are the names of the
-             * {@link Outcome}s.
-             */
-            private final Map<String, OutcomeBuilder> cache = new HashMap<>();
-            /**
-             * A {@link List} of the {@link OutcomeBuilder}s for the possible
-             * {@link Outcome}s for the {@link Objective} being built from this
-             * {@link ObjectiveBuilder}.
-             */
-            private final List<OutcomeBuilder> outcomes = new ArrayList<>();
+        private String name;
+        /**
+         * The description of the {@link Objective} being built.
+         */
+        private String description;
+        /**
+         * Only holds a non-null value if {@link #build()} has been invoked.
+         * Used to allow the same {@link Objective} to be used in multiple
+         * places without creating a new {@link Objective} instance.
+         */
+        private Objective built;
 
-            /**
-             * The name of the {@link Objective} being built.
-             */
-            private String name;
-            /**
-             * The description of the {@link Objective} being built.
-             */
-            private String description;
-            /**
-             * Only holds a non-null value if {@link #build()} has been invoked.
-             * Used to allow the same {@link Objective} to be used in multiple
-             * places without creating a new {@link Objective} instance.
-             */
-            private Objective built;
+        /**
+         * Do not call. Obtain instances from {@link
+         * QuestBuilder#objective(String)}.
+         */
+        private ObjectiveBuilder() {
+        }
 
-            /**
-             * Do not call. Obtain instances from {@link
-             * QuestBuilder#objective(String)}.
-             */
-            private ObjectiveBuilder() {
-            }
+        /**
+         * Sets the name of the {@link Objective} being built to the given
+         * {@code name} parameter.
+         *
+         * @param name the name for the {@link Objective}
+         * @return this {@link ObjectiveBuilder} object
+         */
+        public ObjectiveBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
 
-            /**
-             * Sets the name of the {@link Objective} being built to the given
-             * {@code name} parameter.
-             *
-             * @param name the name for the {@link Objective}
-             * @return this {@link ObjectiveBuilder} object
-             */
-            public ObjectiveBuilder name(String name) {
-                this.name = name;
-                return this;
-            }
+        /**
+         * Sets the description of the {@link Objective} being built to the
+         * given {@code description} parameter.
+         *
+         * @param description the description for the {@link Objective}
+         * @return this {@link ObjectiveBuilder} object
+         */
+        public ObjectiveBuilder description(String description) {
+            this.description = description;
+            return this;
+        }
 
-            /**
-             * Sets the description of the {@link Objective} being built to the
-             * given {@code description} parameter.
-             *
-             * @param description the description for the {@link Objective}
-             * @return this {@link ObjectiveBuilder} object
-             */
-            public ObjectiveBuilder description(String description) {
-                this.description = description;
-                return this;
-            }
-
-            /**
-             * Obtains an {@link OutcomeBuilder} for an {@link Outcome} with the
-             * given {@code name}. A new {@link OutcomeBuilder} is created if
-             * there isn't already one with the given name, otherwise the old
-             * one is reused.
-             *
-             * The {@link OutcomeBuilder} returned is added to this {@link
-             * ObjectiveBuilder}'s {@link #outcomes} {@link List} if a new one
-             * is created.
-             *
-             * @param name the name of the outcome to get a builder for
-             * @return an {@link OutcomeBuilder} for an outcome with the given
-             *         name
-             */
-            public OutcomeBuilder outcome(String name) {
-                OutcomeBuilder temp = cache.get(name);
-                if (temp != null) {
-                    return temp;
-                }
-                temp = new OutcomeBuilder().name(name);
-                cache.put(name, temp);
-                outcomes.add(temp);
+        /**
+         * Obtains an {@link OutcomeBuilder} for an {@link Outcome} with the
+         * given {@code name}. A new {@link OutcomeBuilder} is created if
+         * there isn't already one with the given name, otherwise the old
+         * one is reused.
+         *
+         * The {@link OutcomeBuilder} returned is added to this {@link
+         * ObjectiveBuilder}'s {@link #outcomes} {@link List} if a new one
+         * is created.
+         *
+         * @param name the name of the outcome to get a builder for
+         * @return an {@link OutcomeBuilder} for an outcome with the given
+         *         name
+         */
+        public OutcomeBuilder outcome(String name) {
+            OutcomeBuilder temp = cache.get(name);
+            if (temp != null) {
                 return temp;
             }
+            temp = new OutcomeBuilder().name(name);
+            cache.put(name, temp);
+            outcomes.add(temp);
+            return temp;
+        }
 
-            /**
-             * Builds an {@link Objective} object from the details submitted to
-             * this {@link ObjectiveBuilder}. If this method has already been
-             * invoked, the same object will be returned.
-             *
-             * @return an {@link Objective} built from the details submitted to
-             *         this builder
-             */
-            private Objective build() {
-                if (built != null) {
-                    // we already built the Objective
-                    return built;
-                }
-                Outcome[] array = new Outcome[outcomes.size()];
-                // build all of the associated OutcomeBuilders
-                for (int i = 0; i < array.length; i++) {
-                    array[i] = outcomes.get(i).build();
-                }
-                return built = new Objective(name, description, array);
+        /**
+         * Builds an {@link Objective} object from the details submitted to
+         * this {@link ObjectiveBuilder}. If this method has already been
+         * invoked, the same object will be returned.
+         *
+         * @return an {@link Objective} built from the details submitted to
+         *         this builder
+         */
+        private Objective build() {
+            if (built != null) {
+                // we already built the Objective
+                return built;
             }
-
-            /**
-             * Used to build {@link Outcome} objects.
-             */
-            public final class OutcomeBuilder {
-                /**
-                 * The name of the {@link Outcome} being built.
-                 */
-                private String name;
-                /**
-                 * The description of the {@link Outcome} being built.
-                 */
-                private String description;
-                /**
-                 * The type of the {@link Outcome} being built.
-                 */
-                private String type;
-                /**
-                 * The {@link ObjectiveBuilder} for the {@link Objective} which
-                 * the {@link Outcome} built from this {@link OutcomeBuilder}
-                 * leads to.
-                 */
-                private ObjectiveBuilder next;
-                /**
-                 * Only holds a non-null value if {@link #build()} has been
-                 * invoked. Used to allow the same {@link Outcome} to be used
-                 * in multiple places without creating a new {@link Outcome}
-                 * instance.
-                 */
-                private Outcome built;
-
-                /**
-                 * Do not call. Obtain instances from {@link
-                 * ObjectiveBuilder#outcome(String)}.
-                 */
-                private OutcomeBuilder() {
-                }
-
-                /**
-                 * Sets the name of the {@link Outcome} being built to the given
-                 * {@code name} parameter.
-                 *
-                 * @param name the name for the {@link Outcome}
-                 * @return this {@link Outcome} object
-                 */
-                public OutcomeBuilder name(String name) {
-                    this.name = name;
-                    return this;
-                }
-
-                /**
-                 * Sets the description of the {@link Outcome} being built to
-                 * the given {@code description} parameter.
-                 *
-                 * @param description the description for the {@link Outcome}
-                 * @return this {@link OutcomeBuilder} object
-                 */
-                public OutcomeBuilder description(String description) {
-                    this.description = description;
-                    return this;
-                }
-
-                /**
-                 * Sets the type of the {@link Outcome} being built to the given
-                 * {@code type} parameter.
-                 *
-                 * @param type the type for the {@link Outcome}
-                 * @return this {@link OutcomeBuilder} object
-                 */
-                public OutcomeBuilder type(String type) {
-                    this.type = type;
-                    return this;
-                }
-
-                public OutcomeBuilder next(ObjectiveBuilder next) {
-                    this.next = next;
-                    return this;
-                }
-
-                /**
-                 * Builds an {@link Outcome} object from the details submitted
-                 * to this {@link OutcomeBuilder}. If this method has already
-                 * been invoked, the same object will be returned.
-                 *
-                 * @return an {@link Outcome} built from the details submitted
-                 *         to this builder
-                 */
-                private Outcome build() {
-                    if (built != null) {
-                        // we already built the Outcome
-                        return built;
-                    }
-                    return built = new Outcome(name, description, type,
-                            next == null ? null : next.build());
-                }
+            Outcome[] array = new Outcome[outcomes.size()];
+            // build all of the associated OutcomeBuilders
+            for (int i = 0; i < array.length; i++) {
+                array[i] = outcomes.get(i).build();
             }
+            return built = new Objective(name, description, array);
+        }
+    }
+
+    /**
+     * Used to build {@link Outcome} objects.
+     */
+    public static final class OutcomeBuilder {
+        /**
+         * The name of the {@link Outcome} being built.
+         */
+        private String name;
+        /**
+         * The description of the {@link Outcome} being built.
+         */
+        private String description;
+        /**
+         * The type of the {@link Outcome} being built.
+         */
+        private String type;
+        /**
+         * The {@link ObjectiveBuilder} for the {@link Objective} which
+         * the {@link Outcome} built from this {@link OutcomeBuilder}
+         * leads to.
+         */
+        private ObjectiveBuilder next;
+        /**
+         * Only holds a non-null value if {@link #build()} has been
+         * invoked. Used to allow the same {@link Outcome} to be used
+         * in multiple places without creating a new {@link Outcome}
+         * instance.
+         */
+        private Outcome built;
+
+        /**
+         * Do not call. Obtain instances from {@link
+         * ObjectiveBuilder#outcome(String)}.
+         */
+        private OutcomeBuilder() {
+        }
+
+        /**
+         * Sets the name of the {@link Outcome} being built to the given
+         * {@code name} parameter.
+         *
+         * @param name the name for the {@link Outcome}
+         * @return this {@link Outcome} object
+         */
+        public OutcomeBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        /**
+         * Sets the description of the {@link Outcome} being built to
+         * the given {@code description} parameter.
+         *
+         * @param description the description for the {@link Outcome}
+         * @return this {@link OutcomeBuilder} object
+         */
+        public OutcomeBuilder description(String description) {
+            this.description = description;
+            return this;
+        }
+
+        /**
+         * Sets the type of the {@link Outcome} being built to the given
+         * {@code type} parameter.
+         *
+         * @param type the type for the {@link Outcome}
+         * @return this {@link OutcomeBuilder} object
+         */
+        public OutcomeBuilder type(String type) {
+            this.type = type;
+            return this;
+        }
+
+        public OutcomeBuilder next(ObjectiveBuilder next) {
+            this.next = next;
+            return this;
+        }
+
+        /**
+         * Builds an {@link Outcome} object from the details submitted
+         * to this {@link OutcomeBuilder}. If this method has already
+         * been invoked, the same object will be returned.
+         *
+         * @return an {@link Outcome} built from the details submitted
+         *         to this builder
+         */
+        private Outcome build() {
+            if (built != null) {
+                // we already built the Outcome
+                return built;
+            }
+            return built = new Outcome(name, description, type,
+                    next == null ? null : next.build());
         }
     }
 

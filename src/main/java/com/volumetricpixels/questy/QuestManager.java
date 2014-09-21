@@ -195,9 +195,9 @@ public class QuestManager {
      * @see {@link #addQuestLoader(QuestLoader)}
      */
     public void addDefaultLoaders() {
-        addQuestLoader(new JSQuestLoader());
-        addQuestLoader(new YMLQuestLoader());
-        addQuestLoader(new XMLQuestLoader());
+        addQuestLoader(new JSQuestLoader(this));
+        addQuestLoader(new YMLQuestLoader(this));
+        addQuestLoader(new XMLQuestLoader(this));
     }
 
     /**
