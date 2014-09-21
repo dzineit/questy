@@ -11,8 +11,10 @@ import java.util.Comparator;
  * Compares {@link QuestLoader}s based on their format.
  */
 public class QuestLoaderComparator implements Comparator<QuestLoader> {
+    public static final QuestLoaderComparator INSTANCE = new QuestLoaderComparator();
+
     @Override
     public int compare(QuestLoader o1, QuestLoader o2) {
-        return o1.getQuestFormat().compareTo(o2.getQuestFormat());
+        return o1.compareTo(o2);
     }
 }

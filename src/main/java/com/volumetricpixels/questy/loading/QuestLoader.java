@@ -15,7 +15,7 @@ import java.util.Set;
  * there must be a registered {@link QuestLoader} implementation for the format
  * for it to be loaded.
  */
-public interface QuestLoader {
+public interface QuestLoader extends Comparable<QuestLoader> {
     /**
      * Loads all of the {@link Quest}s that this {@link QuestLoader} can handle
      * which are located in the given {@link File}, which should be a directory,
@@ -50,5 +50,10 @@ public interface QuestLoader {
      */
     default boolean endsWith(File file, String content) {
         return file.getName().toLowerCase().endsWith(content.toLowerCase());
+    }
+
+    @Override
+    default int compareTo(QuestLoader other) {
+        return getQuestFormat().compareTo(other.getQuestFormat());
     }
 }

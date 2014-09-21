@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-public class DeserializeUtils {
+public final class DeserializeUtils {
     private static final List<Function<String, Object>> common = new ArrayList<>();
 
     static {
-        common.add((str) -> {
+        addCommonTypeHandler((str) -> {
             try {
                 return Integer.parseInt(str);
             } catch (Exception e) {
@@ -21,7 +21,7 @@ public class DeserializeUtils {
             }
         });
 
-        common.add((str) -> {
+        addCommonTypeHandler((str) -> {
             try {
                 return Double.parseDouble(str);
             } catch (Exception e) {
@@ -29,7 +29,7 @@ public class DeserializeUtils {
             }
         });
 
-        common.add((str) -> {
+        addCommonTypeHandler((str) -> {
             if (str.length() == 1) {
                 return str.charAt(0);
             }
@@ -57,5 +57,13 @@ public class DeserializeUtils {
             }
         }
         return serialized;
+    }
+
+    /**
+     * @deprecated do not call
+     */
+    @Deprecated
+    private DeserializeUtils() {
+        throw new UnsupportedOperationException();
     }
 }
