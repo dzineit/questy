@@ -33,6 +33,10 @@ public class Objective {
         return outcomes.clone();
     }
 
+    public int getAmtOutcomes() {
+        return outcomes.length;
+    }
+
     public Outcome getOutcome(String outcome) {
         for (Outcome curOutcome : outcomes) {
             if (curOutcome.getName().equals(outcome)) {

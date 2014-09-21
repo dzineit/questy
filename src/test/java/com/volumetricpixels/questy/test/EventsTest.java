@@ -3,10 +3,12 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package com.volumetricpixels.questy;
+package com.volumetricpixels.questy.test;
 
 import org.junit.Assert;
+import org.junit.Test;
 
+import com.volumetricpixels.questy.QuestManager;
 import com.volumetricpixels.questy.event.EventManager;
 import com.volumetricpixels.questy.event.listener.EventHandler;
 import com.volumetricpixels.questy.event.listener.Listener;
@@ -14,8 +16,9 @@ import com.volumetricpixels.questy.event.quest.QuestAbandonEvent;
 import com.volumetricpixels.questy.event.quest.QuestStartEvent;
 
 public class EventsTest {
-    public void testEvents(QuestManager questMgr) {
-        EventManager evtMgr = questMgr.getEventManager();
+    @Test
+    public void testEvents() {
+        EventManager evtMgr = new QuestManager(null).getEventManager();
 
         TestListener test = new TestListener();
         Assert.assertTrue(evtMgr.register(test));
