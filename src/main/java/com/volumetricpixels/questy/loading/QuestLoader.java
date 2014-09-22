@@ -5,9 +5,10 @@
  */
 package com.volumetricpixels.questy.loading;
 
-import com.volumetricpixels.questy.quest.Quest;
+import com.volumetricpixels.questy.Quest;
 
 import java.io.File;
+import java.util.Comparator;
 import java.util.Set;
 
 /**
@@ -55,5 +56,17 @@ public interface QuestLoader extends Comparable<QuestLoader> {
     @Override
     default int compareTo(QuestLoader other) {
         return getQuestFormat().compareTo(other.getQuestFormat());
+    }
+
+    /**
+     * Compares {@link QuestLoader}s based on their format.
+     */
+    public class QuestLoaderComparator implements Comparator<QuestLoader> {
+        public static final QuestLoaderComparator INSTANCE = new QuestLoaderComparator();
+
+        @Override
+        public int compare(QuestLoader o1, QuestLoader o2) {
+            return o1.compareTo(o2);
+        }
     }
 }

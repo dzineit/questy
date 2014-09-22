@@ -5,9 +5,9 @@
  */
 package com.volumetricpixels.questy.event.quest;
 
-import com.volumetricpixels.questy.quest.QuestInstance;
-import com.volumetricpixels.questy.quest.objective.Outcome;
-import com.volumetricpixels.questy.quest.objective.OutcomeProgress;
+import com.volumetricpixels.questy.QuestInstance;
+import com.volumetricpixels.questy.objective.Outcome;
+import com.volumetricpixels.questy.objective.OutcomeProgress;
 
 /**
  * Called when a {@link QuestInstance} is completed.

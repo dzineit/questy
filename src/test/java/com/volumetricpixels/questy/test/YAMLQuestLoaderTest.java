@@ -10,10 +10,10 @@ import org.junit.Test;
 import org.yaml.snakeyaml.Yaml;
 
 import com.volumetricpixels.questy.QuestManager;
-import com.volumetricpixels.questy.loading.loaders.YMLQuestLoader;
-import com.volumetricpixels.questy.quest.Quest;
-import com.volumetricpixels.questy.quest.objective.Objective;
-import com.volumetricpixels.questy.quest.objective.Outcome;
+import com.volumetricpixels.questy.loading.impl.YMLQuestLoader;
+import com.volumetricpixels.questy.Quest;
+import com.volumetricpixels.questy.objective.Objective;
+import com.volumetricpixels.questy.objective.Outcome;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;

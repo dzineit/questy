@@ -3,9 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package com.volumetricpixels.questy.event.listener;
-
-import com.volumetricpixels.questy.event.Event;
+package com.volumetricpixels.questy.event;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -19,26 +17,26 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * Wraps a {@link Listener} to direct {@link Event}s its way.
+ * Wraps a listener Object to direct {@link Event}s its way.
  */
 public final class ListenerHandle {
     /**
-     * The actual {@link Listener}.
+     * The actual listener {@link Object}.
      */
-    private final Listener listener;
+    private final Object listener;
     /**
      * A {@link Map} of {@link Event} subclasses to {@link Set}s of methods
      * which listen for the event type they are mapped from.
      */
     private final Map<Class<? extends Event>, Set<MethodHandle>> eventHandlers;
 
-    public ListenerHandle(Listener listener) {
+    public ListenerHandle(Object listener) {
         this.listener = listener;
         this.eventHandlers = new HashMap<>();
 
         // check every method in the given Listener
         for (Method meth : listener.getClass().getDeclaredMethods()) {
-            EventHandler eh = meth.getAnnotation(EventHandler.class);
+            Listen eh = meth.getAnnotation(Listen.class);
             // if it isn't an EventHandler or it doesn't have one parameter
             // (which should be the event being listened for)
             if (eh == null || meth.getParameterCount() != 1) {
@@ -75,8 +73,8 @@ public final class ListenerHandle {
 
     /**
      * Handles the given {@link Event}, directing it to each registered {@link
-     * Listener} which has an {@link EventHandler}-annotated method which
-     * handles the given {@link Event}'s type.
+     * Object} which has an {@link Listen}-annotated method which handles the
+     * given {@link Event}'s type.
      *
      * The {@link List} contained by the returned {@link Optional} will contain
      * all {@link Throwable}s thrown by {@link MethodHandle#invoke(Object...)}.
@@ -104,7 +102,7 @@ public final class ListenerHandle {
         return problems.isEmpty() ? Optional.empty() : Optional.of(problems);
     }
 
-    public Listener getListener() {
+    public Object getListener() {
         return listener;
     }
 

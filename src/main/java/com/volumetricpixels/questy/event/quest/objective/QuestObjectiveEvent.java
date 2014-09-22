@@ -6,9 +6,9 @@
 package com.volumetricpixels.questy.event.quest.objective;
 
 import com.volumetricpixels.questy.event.quest.QuestEvent;
-import com.volumetricpixels.questy.quest.QuestInstance;
-import com.volumetricpixels.questy.quest.objective.Objective;
-import com.volumetricpixels.questy.quest.objective.ObjectiveProgress;
+import com.volumetricpixels.questy.QuestInstance;
+import com.volumetricpixels.questy.objective.Objective;
+import com.volumetricpixels.questy.objective.ObjectiveProgress;
 
 /**
  * Represents an event related to a specific {@link Objective} within a single

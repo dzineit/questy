@@ -5,9 +5,6 @@
  */
 package com.volumetricpixels.questy.event;
 
-import com.volumetricpixels.questy.event.listener.Listener;
-import com.volumetricpixels.questy.event.listener.ListenerHandle;
-
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -19,37 +16,37 @@ import java.util.Set;
  */
 public class EventManager {
     /**
-     * All registered {@link Listener}s, each contained within a {@link
+     * All registered {@link Object}s, each contained within a {@link
      * ListenerHandle} object.
      */
     private final Set<ListenerHandle> listeners;
 
     /**
-     * Constructs a new EventManager with no registered {@link Listener}s.
+     * Constructs a new EventManager with no registered {@link Object}s.
      */
     public EventManager() {
         listeners = new HashSet<>();
     }
 
     /**
-     * Registers the given {@link Listener} to this {@link EventManager}. Logic
+     * Registers the given {@link Object} to this {@link EventManager}. Logic
      * for registration of {@code @EventHandler} methods can be found in {@link
-     * ListenerHandle#ListenerHandle(Listener)}.
+     * ListenerHandle#ListenerHandle(Object)}.
      *
-     * @param listener the {@link Listener} to register
-     * @return whether the given {@link Listener} was successfully registered
+     * @param listener the {@link Object} to register
+     * @return whether the given {@link Object} was successfully registered
      */
-    public boolean register(Listener listener) {
+    public boolean register(Object listener) {
         return listeners.add(new ListenerHandle(listener));
     }
 
     /**
      * Unregisters all {@link ListenerHandle}s which wrap the given {@link
-     * Listener}.
+     * Object}.
      *
-     * @param listener the {@link Listener} to unregister
+     * @param listener the {@link Object} to unregister
      */
-    public void unregister(Listener listener) {
+    public void unregister(Object listener) {
         Iterator<ListenerHandle> it = listeners.iterator();
         while (it.hasNext()) {
             ListenerHandle handle = it.next();
@@ -61,7 +58,7 @@ public class EventManager {
 
     /**
      * Fires the given {@link Event}, directing it to all registered {@link
-     * Listener}s which are subscribed to the given event type.
+     * Object}s which are subscribed to the given event type.
      *
      * @param event the {@link Event} to fire
      * @param <T> the type of {@link Event} to fire, and therefore return

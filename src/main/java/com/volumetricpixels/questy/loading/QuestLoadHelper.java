@@ -9,9 +9,9 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 
 import com.volumetricpixels.questy.QuestManager;
-import com.volumetricpixels.questy.quest.Quest;
-import com.volumetricpixels.questy.quest.objective.Objective;
-import com.volumetricpixels.questy.quest.objective.Outcome;
+import com.volumetricpixels.questy.Quest;
+import com.volumetricpixels.questy.objective.Objective;
+import com.volumetricpixels.questy.objective.Outcome;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +22,7 @@ import java.util.Map;
  * Contains builders to make loading {@link Quest}s infinitely easier than it
  * otherwise would be, as well as utility methods for the loading of quests.
  */
-public final class QuestLoading {
+public final class QuestLoadHelper {
     /**
      * Used for building {@link Quest}s. Objectives are cached to make it easy
      * to manage the same {@link Objective} instance being required in multiple
@@ -63,7 +63,7 @@ public final class QuestLoading {
 
         /**
          * Do not call. Obtain instances from {@link
-         * QuestLoading#quest(QuestManager, String)}.
+         * QuestLoadHelper#quest(QuestManager, String)}.
          *
          * @param questManager the {@link QuestManager} to use in building
          */
@@ -127,7 +127,7 @@ public final class QuestLoading {
          * If this method has already been invoked, the same object is returned
          * as the last time it was invoked. This method automatically registers
          * the {@link Quest} which is built to the {@link QuestManager} which
-         * was provided in {@link QuestLoading#quest(QuestManager, String)}.
+         * was provided in {@link QuestLoadHelper#quest(QuestManager, String)}.
          *
          * @return a newly built {@link Quest} object created from the details
          *         submitted to this {@link QuestBuilder}
@@ -395,7 +395,7 @@ public final class QuestLoading {
      * @deprecated do not call
      */
     @Deprecated
-    private QuestLoading() {
+    private QuestLoadHelper() {
         throw new UnsupportedOperationException("ffs lads");
     }
 }

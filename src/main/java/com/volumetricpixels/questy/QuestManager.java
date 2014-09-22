@@ -11,13 +11,11 @@ import com.volumetricpixels.questy.event.quest.QuestCompleteEvent;
 import com.volumetricpixels.questy.event.quest.QuestStartEvent;
 import com.volumetricpixels.questy.event.quest.objective.ObjectiveStartEvent;
 import com.volumetricpixels.questy.loading.QuestLoader;
-import com.volumetricpixels.questy.loading.loaders.JSQuestLoader;
-import com.volumetricpixels.questy.loading.loaders.XMLQuestLoader;
-import com.volumetricpixels.questy.loading.loaders.YMLQuestLoader;
-import com.volumetricpixels.questy.quest.Quest;
-import com.volumetricpixels.questy.quest.QuestInstance;
-import com.volumetricpixels.questy.quest.objective.OutcomeProgress;
-import com.volumetricpixels.questy.store.QuestStore;
+import com.volumetricpixels.questy.loading.impl.JSQuestLoader;
+import com.volumetricpixels.questy.loading.impl.XMLQuestLoader;
+import com.volumetricpixels.questy.loading.impl.YMLQuestLoader;
+import com.volumetricpixels.questy.objective.OutcomeProgress;
+import com.volumetricpixels.questy.store.ProgressStore;
 
 import java.io.File;
 import java.util.Collection;
@@ -33,9 +31,9 @@ import java.util.stream.Collectors;
  */
 public class QuestManager {
     /**
-     * The {@link QuestStore} used for progression data storage.
+     * The {@link com.volumetricpixels.questy.store.ProgressStore} used for progression data storage.
      */
-    private final QuestStore store;
+    private final ProgressStore store;
     /**
      * Questy's {@link EventManager}.
      */
@@ -59,10 +57,10 @@ public class QuestManager {
 
     /**
      * Constructs a blank {@link QuestManager} with no registered {@link
-     * QuestLoader}s or loaded {@link Quest}s, with the given {@link QuestStore}
+     * QuestLoader}s or loaded {@link Quest}s, with the given {@link com.volumetricpixels.questy.store.ProgressStore}
      * being used for saving / loading progression.
      */
-    public QuestManager(QuestStore store) {
+    public QuestManager(ProgressStore store) {
         this.store = store;
         this.eventManager = new EventManager();
         this.loaders = new HashSet<>();
@@ -115,7 +113,7 @@ public class QuestManager {
 
     /**
      * Loads quest progression data from this {@link QuestManager}'s {@link
-     * QuestStore}.
+     * com.volumetricpixels.questy.store.ProgressStore}.
      *
      * @throws NullPointerException if the store is null
      */
@@ -129,7 +127,7 @@ public class QuestManager {
     }
 
     /**
-     * Stores all currently loaded quest progression to the {@link QuestStore}.
+     * Stores all currently loaded quest progression to the {@link com.volumetricpixels.questy.store.ProgressStore}.
      *
      * @throws NullPointerException if the store is null
      */

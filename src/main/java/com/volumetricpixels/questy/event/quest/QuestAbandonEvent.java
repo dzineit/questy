@@ -5,7 +5,7 @@
  */
 package com.volumetricpixels.questy.event.quest;
 
-import com.volumetricpixels.questy.quest.QuestInstance;
+import com.volumetricpixels.questy.QuestInstance;
 
 public class QuestAbandonEvent extends QuestEvent {
     public QuestAbandonEvent(QuestInstance quest) {

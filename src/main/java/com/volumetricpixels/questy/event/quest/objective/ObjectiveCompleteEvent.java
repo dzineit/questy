@@ -5,10 +5,10 @@
  */
 package com.volumetricpixels.questy.event.quest.objective;
 
-import com.volumetricpixels.questy.quest.QuestInstance;
-import com.volumetricpixels.questy.quest.objective.ObjectiveProgress;
-import com.volumetricpixels.questy.quest.objective.Outcome;
-import com.volumetricpixels.questy.quest.objective.OutcomeProgress;
+import com.volumetricpixels.questy.QuestInstance;
+import com.volumetricpixels.questy.objective.ObjectiveProgress;
+import com.volumetricpixels.questy.objective.Outcome;
+import com.volumetricpixels.questy.objective.OutcomeProgress;
 
 /**
  * Called when an {@link ObjectiveProgress} reached completed state.

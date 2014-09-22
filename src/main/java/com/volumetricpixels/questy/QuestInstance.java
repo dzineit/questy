@@ -3,14 +3,13 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package com.volumetricpixels.questy.quest;
+package com.volumetricpixels.questy;
 
-import com.volumetricpixels.questy.QuestManager;
 import com.volumetricpixels.questy.event.quest.objective.ObjectiveCompleteEvent;
 import com.volumetricpixels.questy.event.quest.objective.ObjectiveStartEvent;
-import com.volumetricpixels.questy.quest.objective.Objective;
-import com.volumetricpixels.questy.quest.objective.ObjectiveProgress;
-import com.volumetricpixels.questy.quest.objective.OutcomeProgress;
+import com.volumetricpixels.questy.objective.Objective;
+import com.volumetricpixels.questy.objective.ObjectiveProgress;
+import com.volumetricpixels.questy.objective.OutcomeProgress;
 
 /**
  * Represents an 'instance' of a {@link Quest}. A {@link QuestInstance} holds

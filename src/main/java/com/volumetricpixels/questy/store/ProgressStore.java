@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * Stores data about the progression of players into quests and quest chains.
  */
-public abstract class QuestStore {
+public abstract class ProgressStore {
     /**
      * Stores the given quest progression {@code data} for the given {@code
      * player}. The {@code data} parameter is a {@link Map} of quest names to

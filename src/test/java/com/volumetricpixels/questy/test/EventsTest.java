@@ -10,8 +10,7 @@ import org.junit.Test;
 
 import com.volumetricpixels.questy.QuestManager;
 import com.volumetricpixels.questy.event.EventManager;
-import com.volumetricpixels.questy.event.listener.EventHandler;
-import com.volumetricpixels.questy.event.listener.Listener;
+import com.volumetricpixels.questy.event.Listen;
 import com.volumetricpixels.questy.event.quest.QuestAbandonEvent;
 import com.volumetricpixels.questy.event.quest.QuestStartEvent;
 
@@ -37,8 +36,8 @@ public class EventsTest {
 
     private boolean testBool = false;
 
-    public class TestListener implements Listener {
-        @EventHandler
+    public class TestListener {
+        @Listen
         public void onQuestStart(QuestStartEvent event) {
             testBool = true;
         }

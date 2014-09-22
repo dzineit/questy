@@ -3,26 +3,25 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package com.volumetricpixels.questy.loading.loaders;
+package com.volumetricpixels.questy.loading.impl;
 
 import com.volumetricpixels.questy.QuestManager;
 import com.volumetricpixels.questy.loading.QuestLoader;
-import com.volumetricpixels.questy.quest.Quest;
+import com.volumetricpixels.questy.Quest;
 
 import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Loads XML quests.
+ * Loads JavaScript quests.
  */
-public class XMLQuestLoader implements QuestLoader {
+public class JSQuestLoader implements QuestLoader {
     private final QuestManager questManager;
 
-    public XMLQuestLoader(QuestManager questManager) {
+    public JSQuestLoader(QuestManager questManager) {
         this.questManager = questManager;
     }
-
 
     @Override
     public Set<Quest> loadQuests(File directory) {
@@ -31,8 +30,8 @@ public class XMLQuestLoader implements QuestLoader {
         }
 
         Set<Quest> result = new HashSet<>();
-        // iterate through all files in the directory which end with .xml
-        for (File file : directory.listFiles(fl -> endsWith(fl, ".xml"))) {
+        // iterate through all files in the directory which end with .js
+        for (File file : directory.listFiles(fl -> endsWith(fl, ".js"))) {
             // TODO
         }
 
@@ -41,6 +40,6 @@ public class XMLQuestLoader implements QuestLoader {
 
     @Override
     public String getQuestFormat() {
-        return "XML";
+        return "JavaScript";
     }
 }

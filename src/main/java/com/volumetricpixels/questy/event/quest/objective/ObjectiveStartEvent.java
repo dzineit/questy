@@ -6,8 +6,8 @@
 package com.volumetricpixels.questy.event.quest.objective;
 
 import com.volumetricpixels.questy.event.quest.QuestEvent;
-import com.volumetricpixels.questy.quest.QuestInstance;
-import com.volumetricpixels.questy.quest.objective.ObjectiveProgress;
+import com.volumetricpixels.questy.QuestInstance;
+import com.volumetricpixels.questy.objective.ObjectiveProgress;
 
 public class ObjectiveStartEvent extends QuestObjectiveEvent {
     // should be an instance of either ObjectiveCompleteEvent or QuestStartEvent
