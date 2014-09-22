@@ -5,11 +5,17 @@
  */
 package com.volumetricpixels.questy.loading.impl;
 
+import com.volumetricpixels.questy.Quest;
 import com.volumetricpixels.questy.QuestManager;
 import com.volumetricpixels.questy.loading.QuestLoader;
-import com.volumetricpixels.questy.Quest;
 
+import javax.script.Invocable;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.Reader;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,10 +38,29 @@ public class JSQuestLoader implements QuestLoader {
         Set<Quest> result = new HashSet<>();
         // iterate through all files in the directory which end with .js
         for (File file : directory.listFiles(fl -> endsWith(fl, ".js"))) {
-            // TODO
+            try {
+                Quest q = loadQuest(new FileReader(file));
+                if (q != null) {
+                    result.add(q);
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }
 
         return result;
+    }
+
+    public Quest loadQuest(Reader reader) {
+        ScriptEngine e = new ScriptEngineManager().getEngineByName("nashorn");
+        e.put("questManager", questManager);
+        try {
+            e.eval(reader);
+            return (Quest) ((Invocable) e).invokeFunction("quest");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
     }
 
     @Override
