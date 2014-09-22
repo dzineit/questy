@@ -12,7 +12,6 @@ import com.volumetricpixels.questy.event.quest.QuestStartEvent;
 import com.volumetricpixels.questy.event.quest.objective.ObjectiveStartEvent;
 import com.volumetricpixels.questy.loading.QuestLoader;
 import com.volumetricpixels.questy.loading.impl.JSQuestLoader;
-import com.volumetricpixels.questy.loading.impl.XMLQuestLoader;
 import com.volumetricpixels.questy.loading.impl.YMLQuestLoader;
 import com.volumetricpixels.questy.objective.OutcomeProgress;
 import com.volumetricpixels.questy.store.ProgressStore;
@@ -195,7 +194,6 @@ public class QuestManager {
     public void addDefaultLoaders() {
         addQuestLoader(new JSQuestLoader(this));
         addQuestLoader(new YMLQuestLoader(this));
-        addQuestLoader(new XMLQuestLoader(this));
     }
 
     /**
