@@ -23,7 +23,7 @@ public final class QuestInstance {
 
     private int current;
 
-    public QuestInstance(Quest quest, String quester) {
+    QuestInstance(Quest quest, String quester) {
         this.quest = quest;
         this.quester = quester;
 
