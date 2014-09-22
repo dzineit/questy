@@ -6,6 +6,7 @@
 package com.volumetricpixels.questy;
 
 import com.volumetricpixels.questy.event.quest.objective.ObjectiveCompleteEvent;
+import com.volumetricpixels.questy.event.quest.objective.ObjectiveFailEvent;
 import com.volumetricpixels.questy.event.quest.objective.ObjectiveStartEvent;
 import com.volumetricpixels.questy.objective.Objective;
 import com.volumetricpixels.questy.objective.ObjectiveProgress;
@@ -80,6 +81,9 @@ public final class QuestInstance {
             if (objectiveProgresses[i] == objective) {
                 objectiveProgresses[i] = new ObjectiveProgress(this,
                         objective.getObjective());
+                quest.getQuestManager().getEventManager()
+                        .fire(new ObjectiveFailEvent(this, objective));
+                break; // there are no duplicates
             }
         }
     }
