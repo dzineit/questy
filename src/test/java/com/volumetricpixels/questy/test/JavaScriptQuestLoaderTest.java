@@ -41,20 +41,16 @@ public class JavaScriptQuestLoaderTest {
 
     private String generateJS() {
         return "var quest = function genQuest() {" +
-                "    var qm = questManager;" +
-                "    var builder;" +
-                "    with(new JavaImporter(" +
-                "        Packages.com.volumetricpixels.questy.loading" +
-                "    )) {" +
-                "        builder = QuestLoadHelper.quest(qm, 'Test');" +
-                "        builder.description('Test Description');" +
-                "        " +
-                "        var obj = builder.objective('banter');" +
-                "        obj.description('Some great banter');" +
-                "        " +
-                "        var outcome = obj.outcome('lols');" +
-                "        outcome.description('lel').type('banter');" +
-                "    }" +
+                "    var builder = QuestLoadHelper.quest(questManager, 'Test');"
+                +
+                "    builder.description('Test Description');" +
+                "    " +
+                "    var obj = builder.objective('banter');" +
+                "    obj.description('Some great banter');" +
+                "    " +
+                "    var outcome = obj.outcome('lols');" +
+                "    outcome.description('lel').type('banter');" +
+                "    " +
                 "    return builder.build();" +
                 "}";
     }
