@@ -17,14 +17,12 @@ public class ObjectiveProgress {
         this.objective = objective;
 
         outcomeProgresses = new OutcomeProgress[objective.getAmtOutcomes()];
-        objective.populateOutcomeProgresses(quest ,outcomeProgresses);
+        objective.populateOutcomeProgresses(quest, outcomeProgresses);
     }
 
-    private ObjectiveProgress(QuestInstance quest,
-            String serialized) {
+    public ObjectiveProgress(QuestInstance quest, String serialized) {
         this.quest = quest;
 
-        System.out.println("splitting " + serialized + " by //");
         String[] split = serialized.split("//");
         Objective obj = quest.getQuest().getObjective(split[0]);
         this.objective = obj;
@@ -32,8 +30,8 @@ public class ObjectiveProgress {
         String[] progresses = split[1].split("&&");
         outcomeProgresses = new OutcomeProgress[progresses.length];
         for (int idx = 0; idx < progresses.length; idx++) {
-            outcomeProgresses[idx] = OutcomeProgress
-                    .deserialize(quest, obj, progresses[idx]);
+            outcomeProgresses[idx] = new OutcomeProgress(quest, obj,
+                    progresses[idx]);
         }
     }
 
@@ -53,10 +51,5 @@ public class ObjectiveProgress {
         // remove last &&
         res.setLength(res.length() - 2);
         return res.toString();
-    }
-
-    public static ObjectiveProgress deserialize(QuestInstance instance,
-            String serialized) {
-        return new ObjectiveProgress(instance, serialized);
     }
 }

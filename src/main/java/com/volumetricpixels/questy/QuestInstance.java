@@ -24,7 +24,7 @@ public final class QuestInstance {
 
     private int current;
 
-    QuestInstance(Quest quest, String quester) {
+    public QuestInstance(Quest quest, String quester) {
         this.quest = quest;
         this.quester = quester;
 
@@ -33,7 +33,7 @@ public final class QuestInstance {
         current = 0;
     }
 
-    private QuestInstance(QuestManager questManager, String quester,
+    public QuestInstance(QuestManager questManager, String quester,
             String serialized) {
         this.quester = quester;
 
@@ -43,8 +43,7 @@ public final class QuestInstance {
         objectiveProgresses = new ObjectiveProgress[progressions.length];
         for (int i = 0; i < progressions.length; i++) {
             String serial = progressions[i];
-            objectiveProgresses[i] = ObjectiveProgress
-                    .deserialize(this, serial);
+            objectiveProgresses[i] = new ObjectiveProgress(this, serial);
             if (serial.endsWith("<c>")) {
                 current = i;
             }
@@ -121,11 +120,6 @@ public final class QuestInstance {
         }
         result.setLength(result.length() - 1);
         return result.toString();
-    }
-
-    public static QuestInstance deserialize(QuestManager manager,
-            String quester, String progression) {
-        return new QuestInstance(manager, quester, progression);
     }
 
     private int getIndex(ObjectiveProgress progress) {

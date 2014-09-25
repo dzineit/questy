@@ -252,7 +252,7 @@ public class QuestManager {
             Set<QuestInstance> set) {
         for (Entry<String, Map<String, String>> ply : map.entrySet()) {
             Collection<String> serials = ply.getValue().values();
-            set.addAll(serials.stream().map(serial -> QuestInstance.deserialize(
+            set.addAll(serials.stream().map(serial -> new QuestInstance(
                     this, ply.getKey(), serial)).collect(Collectors.toList()));
         }
     }
