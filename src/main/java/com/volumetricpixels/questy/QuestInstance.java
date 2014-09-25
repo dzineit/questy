@@ -35,7 +35,6 @@ public final class QuestInstance {
 
     private QuestInstance(QuestManager questManager, String quester,
             String serialized) {
-        System.out.println(serialized);
         this.quester = quester;
 
         String[] split = serialized.split("_");
