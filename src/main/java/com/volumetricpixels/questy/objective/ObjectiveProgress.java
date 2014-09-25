@@ -15,13 +15,17 @@ public class ObjectiveProgress {
     public ObjectiveProgress(QuestInstance quest, Objective objective) {
         this.quest = quest;
         this.objective = objective;
+
+        outcomeProgresses = new OutcomeProgress[objective.getAmtOutcomes()];
+        objective.populateOutcomeProgresses(quest ,outcomeProgresses);
     }
 
     private ObjectiveProgress(QuestInstance quest,
             String serialized) {
         this.quest = quest;
 
-        String[] split = serialized.split("_");
+        System.out.println("splitting " + serialized + " by //");
+        String[] split = serialized.split("//");
         Objective obj = quest.getQuest().getObjective(split[0]);
         this.objective = obj;
 
@@ -42,7 +46,7 @@ public class ObjectiveProgress {
     }
 
     public String serialize() {
-        StringBuilder res = new StringBuilder(objective.getName() + "_");
+        StringBuilder res = new StringBuilder(objective.getName() + "//");
         for (OutcomeProgress progress : outcomeProgresses) {
             res.append(progress.serialize()).append("&&");
         }

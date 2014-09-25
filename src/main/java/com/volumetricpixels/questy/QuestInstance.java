@@ -35,11 +35,12 @@ public final class QuestInstance {
 
     private QuestInstance(QuestManager questManager, String quester,
             String serialized) {
+        System.out.println(serialized);
         this.quester = quester;
 
         String[] split = serialized.split("_");
         this.quest = questManager.getQuest(split[0]);
-        String[] progressions = split[1].split("|||");
+        String[] progressions = split[1].split("%");
         objectiveProgresses = new ObjectiveProgress[progressions.length];
         for (int i = 0; i < progressions.length; i++) {
             String serial = progressions[i];
@@ -117,9 +118,9 @@ public final class QuestInstance {
         StringBuilder result = new StringBuilder(quest.getName()).append("_");
         for (ObjectiveProgress progress : objectiveProgresses) {
             appendIf(getIndex(progress) == current, result.append(
-                    progress.serialize()), "<c>").append("|||");
+                    progress.serialize()), "<c>").append("%");
         }
-        result.setLength(result.length() - 3);
+        result.setLength(result.length() - 1);
         return result.toString();
     }
 

@@ -14,7 +14,7 @@ import com.volumetricpixels.questy.loading.QuestLoader;
 import com.volumetricpixels.questy.loading.impl.JSQuestLoader;
 import com.volumetricpixels.questy.loading.impl.YMLQuestLoader;
 import com.volumetricpixels.questy.objective.OutcomeProgress;
-import com.volumetricpixels.questy.store.ProgressStore;
+import com.volumetricpixels.questy.storage.ProgressStore;
 
 import java.io.File;
 import java.util.Collection;
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
  */
 public class QuestManager {
     /**
-     * The {@link com.volumetricpixels.questy.store.ProgressStore} used for progression data storage.
+     * The {@link com.volumetricpixels.questy.storage.ProgressStore} used for progression data storage.
      */
     private final ProgressStore store;
     /**
@@ -56,7 +56,7 @@ public class QuestManager {
 
     /**
      * Constructs a blank {@link QuestManager} with no registered {@link
-     * QuestLoader}s or loaded {@link Quest}s, with the given {@link com.volumetricpixels.questy.store.ProgressStore}
+     * QuestLoader}s or loaded {@link Quest}s, with the given {@link com.volumetricpixels.questy.storage.ProgressStore}
      * being used for saving / loading progression.
      */
     public QuestManager(ProgressStore store) {
@@ -100,6 +100,34 @@ public class QuestManager {
         return null;
     }
 
+    public QuestInstance getQuestInstance(Quest quest, String quester) {
+        for (QuestInstance inst : current) {
+            if (inst.getQuest().equals(quest) && inst.getQuester()
+                    .equals(quester)) {
+                return inst;
+            }
+        }
+        return null;
+    }
+
+    public QuestInstance getQuestInstance(String quest, String quester) {
+        return getQuestInstance(getQuest(quest), quester);
+    }
+
+    public QuestInstance getCompletedQuest(Quest quest, String quester) {
+        for (QuestInstance inst : completed) {
+            if (inst.getQuest().equals(quest) && inst.getQuester()
+                    .equals(quester)) {
+                return inst;
+            }
+        }
+        return null;
+    }
+
+    public QuestInstance getCompletedQuest(String quest, String quester) {
+        return getCompletedQuest(getQuest(quest), quester);
+    }
+
     /**
      * Loads all of the {@link Quest}s in the given {@link File} directory which
      * can be loaded by the registered {@link QuestLoader}.
@@ -112,7 +140,7 @@ public class QuestManager {
 
     /**
      * Loads quest progression data from this {@link QuestManager}'s {@link
-     * com.volumetricpixels.questy.store.ProgressStore}.
+     * com.volumetricpixels.questy.storage.ProgressStore}.
      *
      * @throws NullPointerException if the store is null
      */
@@ -126,7 +154,7 @@ public class QuestManager {
     }
 
     /**
-     * Stores all currently loaded quest progression to the {@link com.volumetricpixels.questy.store.ProgressStore}.
+     * Stores all currently loaded quest progression to the {@link com.volumetricpixels.questy.storage.ProgressStore}.
      *
      * @throws NullPointerException if the store is null
      */

@@ -6,6 +6,7 @@
 package com.volumetricpixels.questy.objective;
 
 import com.volumetricpixels.questy.Quest;
+import com.volumetricpixels.questy.QuestInstance;
 
 /**
  * Represents a single objective in a {@link Quest}.
@@ -44,5 +45,13 @@ public class Objective {
             }
         }
         return null;
+    }
+
+    void populateOutcomeProgresses(QuestInstance qst, OutcomeProgress[] array) {
+        assert array.length == outcomes.length;
+
+        for (int i = 0; i < array.length; i++) {
+            array[i] = new OutcomeProgress(qst, outcomes[i]);
+        }
     }
 }
