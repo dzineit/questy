@@ -22,19 +22,26 @@ public class SimpleProgressStoreTest {
         QuestManager qm = new QuestManager(new SimpleProgressStore(rootDir));
         File testDir = new File(rootDir, "test");
         boolean existed = rootDir.exists();
-        if (!existed) testDir.mkdirs();
+        if (!existed) {
+            testDir.mkdirs();
+        }
 
         Quest t = TEST.obtainTestQuest(qm);
         qm.addQuest(t);
         qm.startQuest(t.createInstance("bob"));
 
         qm.storeProgression();
+
+        qm = new QuestManager(new SimpleProgressStore(rootDir));
+        qm.addQuest(t);
         qm.loadProgression();
 
         QuestInstance i = qm.getQuestInstance(t, "bob");
         Assert.assertNotNull(i);
         Assert.assertNotNull(i.getCurrentObjective());
 
-        if (!existed) testDir.delete();
+        if (!existed) {
+            testDir.delete();
+        }
     }
 }
