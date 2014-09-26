@@ -19,8 +19,8 @@ public class SimpleProgressStoreTest {
     @Test
     public void runTest() {
         File rootDir = new File(".");
-        QuestManager qm = new QuestManager(new SimpleProgressStore(rootDir));
         File testDir = new File(rootDir, "test");
+        QuestManager qm = new QuestManager(new SimpleProgressStore(testDir));
         boolean existed = testDir.exists();
         if (!existed) {
             testDir.mkdirs();
