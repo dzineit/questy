@@ -5,9 +5,9 @@
  */
 package com.volumetricpixels.questy.event.quest;
 
-import com.volumetricpixels.questy.event.Event;
 import com.volumetricpixels.questy.Quest;
 import com.volumetricpixels.questy.QuestInstance;
+import com.volumetricpixels.questy.event.Event;
 
 /**
  * Represents a {@link Quest}-related event. Used for listening for many things

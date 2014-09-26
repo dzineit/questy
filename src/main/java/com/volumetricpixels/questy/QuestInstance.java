@@ -12,16 +12,30 @@ import com.volumetricpixels.questy.objective.Objective;
 import com.volumetricpixels.questy.objective.ObjectiveProgress;
 import com.volumetricpixels.questy.objective.OutcomeProgress;
 
+import static com.volumetricpixels.questy.storage.SerializationUtil.appendIf;
+
 /**
  * Represents an 'instance' of a {@link Quest}. A {@link QuestInstance} holds
  * the {@link Quest} object it is an instance of, but also holds the player
  * doing the quest and data about said player's progression through the quest.
  */
 public final class QuestInstance {
+    /**
+     * The {@link Quest} which this QuestInstance is an instance of.
+     */
     private final Quest quest;
+    /**
+     * The quester embarking on the quest.
+     */
     private final String quester;
+    /**
+     * The progress for all of the {@link Quest}'s {@link Objective}s.
+     */
     private final ObjectiveProgress[] objectiveProgresses;
 
+    /**
+     * The array index of the current {@link ObjectiveProgress}.
+     */
     private int current;
 
     public QuestInstance(Quest quest, String quester) {
@@ -112,9 +126,16 @@ public final class QuestInstance {
         return objectiveProgresses[current];
     }
 
+    /**
+     * Serializes the progression into the {@link Quest} which is contained by
+     * this QuestInstance.
+     *
+     * @return the serialized progression into the Quest for this QuestInstance
+     */
     public String serializeProgression() {
         StringBuilder result = new StringBuilder(quest.getName()).append("_");
         for (ObjectiveProgress progress : objectiveProgresses) {
+            // append <c> if it is the current objective
             appendIf(getIndex(progress) == current, result.append(
                     progress.serialize()), "<c>").append("%");
         }
@@ -129,13 +150,5 @@ public final class QuestInstance {
             }
         }
         return -1;
-    }
-
-    private StringBuilder appendIf(boolean check, StringBuilder builder,
-            String append) {
-        if (check) {
-            return builder.append(append);
-        }
-        return builder;
     }
 }

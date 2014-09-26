@@ -5,148 +5,154 @@
  */
 package com.volumetricpixels.questy.loading;
 
+import gnu.trove.map.hash.THashMap;
+import gnu.trove.set.hash.THashSet;
+
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 
-import com.volumetricpixels.questy.QuestManager;
 import com.volumetricpixels.questy.Quest;
+import com.volumetricpixels.questy.QuestManager;
 import com.volumetricpixels.questy.objective.Objective;
 import com.volumetricpixels.questy.objective.Outcome;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
- * Contains builders to make loading {@link Quest}s infinitely easier than it
- * otherwise would be, as well as utility methods for the loading of quests.
+ * Used for building {@link Quest}s. Objectives are cached to make it easy
+ * to manage the same {@link Objective} instance being required in multiple
+ * parts of the loading process.
  */
-public final class QuestLoadHelper {
+public final class QuestBuilder {
     /**
-     * Used for building {@link Quest}s. Objectives are cached to make it easy
-     * to manage the same {@link Objective} instance being required in multiple
-     * parts of the loading process.
+     * A cache of already created {@link ObjectiveBuilder}s for {@link
+     * Objective}s for this quest, where the keys are the names of the
+     * {@link Objective}s.
      */
-    public static final class QuestBuilder {
-        /**
-         * A cache of already created {@link ObjectiveBuilder}s for {@link
-         * Objective}s for this quest, where the keys are the names of the
-         * {@link Objective}s.
-         */
-        private final Map<String, ObjectiveBuilder> cache = new HashMap<>();
-        /**
-         * The Questy {@link QuestManager} which the {@link Quest} being built
-         * is to be assigned to.
-         */
-        private final QuestManager questManager;
-        /**
-         * A {@link List} of {@link ObjectiveBuilder}s for the {@link
-         * Objective}s for this quest.
-         */
-        private final List<ObjectiveBuilder> objectives = new ArrayList<>();
+    private final Map<String, ObjectiveBuilder> cache = new THashMap<>();
+    /**
+     * The Questy {@link QuestManager} which the {@link Quest} being built
+     * is to be assigned to.
+     */
+    private final QuestManager questManager;
+    /**
+     * A {@link List} of {@link ObjectiveBuilder}s for the {@link
+     * Objective}s for this quest.
+     */
+    private final List<ObjectiveBuilder> objectives = new ArrayList<>();
+    /**
+     * A {@link Set} of the names of {@link Quest}s which are required to start
+     * this {@link Quest}.
+     */
+    private final Set<String> prerequisites = new THashSet<>();
 
-        /**
-         * The name of the {@link Quest} to be built.
-         */
-        private String name;
-        /**
-         * The description of the {@link Quest} to be built.
-         */
-        private String description;
-        /**
-         * Only holds a non-null value if {@link #build()} has been invoked.
-         * Used to allow the same {@link Quest} to be used in multiple places
-         * without creating a new {@link Quest} instance.
-         */
-        private Quest built;
+    /**
+     * The name of the {@link Quest} to be built.
+     */
+    private String name;
+    /**
+     * The description of the {@link Quest} to be built.
+     */
+    private String description;
+    /**
+     * Only holds a non-null value if {@link #build()} has been invoked.
+     * Used to allow the same {@link Quest} to be used in multiple places
+     * without creating a new {@link Quest} instance.
+     */
+    private Quest built;
 
-        /**
-         * Do not call. Obtain instances from {@link
-         * QuestLoadHelper#quest(QuestManager, String)}.
-         *
-         * @param questManager the {@link QuestManager} to use in building
-         */
-        private QuestBuilder(QuestManager questManager) {
-            this.questManager = questManager;
-        }
+    /**
+     * Do not call. Obtain instances from {@link
+     * QuestBuilder#begin(QuestManager, String)}.
+     *
+     * @param questManager the {@link QuestManager} to use in building
+     */
+    private QuestBuilder(QuestManager questManager) {
+        this.questManager = questManager;
+    }
 
-        /**
-         * Sets the name of the {@link Quest} being built to the given {@code
-         * name} parameter.
-         *
-         * @param name the name for the {@link Quest}
-         * @return this {@link QuestBuilder} object
-         */
-        public QuestBuilder name(String name) {
-            this.name = name;
-            return this;
-        }
+    /**
+     * Sets the name of the {@link Quest} being built to the given {@code
+     * name} parameter.
+     *
+     * @param name the name for the {@link Quest}
+     * @return this {@link QuestBuilder} object
+     */
+    public QuestBuilder name(String name) {
+        this.name = name;
+        return this;
+    }
 
-        /**
-         * Sets the description of the {@link Quest} being built to the given
-         * {@code description} parameter.
-         *
-         * @param description the description for the {@link Quest}
-         * @return this {@link QuestBuilder} object
-         */
-        public QuestBuilder description(String description) {
-            this.description = description;
-            return this;
-        }
+    /**
+     * Sets the description of the {@link Quest} being built to the given
+     * {@code description} parameter.
+     *
+     * @param description the description for the {@link Quest}
+     * @return this {@link QuestBuilder} object
+     */
+    public QuestBuilder description(String description) {
+        this.description = description;
+        return this;
+    }
 
-        /**
-         * Obtains an {@link ObjectiveBuilder} for an {@link Objective} with the
-         * given {@code name}. A new {@link ObjectiveBuilder} is created if
-         * there isn't already one with the given name, otherwise the old one is
-         * reused.
-         *
-         * The {@link ObjectiveBuilder} returned is added to this {@link
-         * QuestBuilder}'s {@link #objectives} {@link List} if a new one is
-         * created.
-         *
-         * @param name the name of the objective to get a builder for
-         * @return a builder for an objective with the given name
-         */
-        public ObjectiveBuilder objective(String name) {
-            ObjectiveBuilder temp = cache.get(name);
-            if (temp != null) {
-                return temp;
-            }
-            temp = new ObjectiveBuilder().name(name);
-            cache.put(name, temp);
-            objectives.add(temp);
+    public QuestBuilder require(String prerequisite) {
+        prerequisites.add(prerequisite);
+        return this;
+    }
+
+    /**
+     * Obtains an {@link ObjectiveBuilder} for an {@link Objective} with the
+     * given {@code name}. A new {@link ObjectiveBuilder} is created if
+     * there isn't already one with the given name, otherwise the old one is
+     * reused.
+     *
+     * The {@link ObjectiveBuilder} returned is added to this {@link
+     * QuestBuilder}'s {@link #objectives} {@link List} if a new one is
+     * created.
+     *
+     * @param name the name of the objective to get a builder for
+     * @return a builder for an objective with the given name
+     */
+    public ObjectiveBuilder objective(String name) {
+        ObjectiveBuilder temp = cache.get(name);
+        if (temp != null) {
             return temp;
         }
+        temp = new ObjectiveBuilder().name(name);
+        cache.put(name, temp);
+        objectives.add(temp);
+        return temp;
+    }
 
-        /**
-         * Builds this {@link Quest}. All of the associated {@link
-         * ObjectiveBuilder}s are also built into {@link Objective}s, and
-         * therefore all of the associated {@link Outcome}s are built as well.
-         *
-         * If this method has already been invoked, the same object is returned
-         * as the last time it was invoked. This method automatically registers
-         * the {@link Quest} which is built to the {@link QuestManager} which
-         * was provided in {@link QuestLoadHelper#quest(QuestManager, String)}.
-         *
-         * @return a newly built {@link Quest} object created from the details
-         *         submitted to this {@link QuestBuilder}
-         */
-        public Quest build() {
-            if (built != null) {
-                // we already built the Quest
-                return built;
-            }
-            // build all of the associated ObjectiveBuilders
-            Objective[] objs = new Objective[objectives.size()];
-            for (int i = 0; i < objs.length; i++) {
-                objs[i] = objectives.get(i).build();
-            }
-            built = new Quest(questManager, name, description, objs);
-            // register the Quest to the QuestManager
-            questManager.addQuest(built);
+    /**
+     * Builds this {@link Quest}. All of the associated {@link
+     * ObjectiveBuilder}s are also built into {@link Objective}s, and
+     * therefore all of the associated {@link Outcome}s are built as well.
+     *
+     * If this method has already been invoked, the same object is returned
+     * as the last time it was invoked. This method automatically registers
+     * the {@link Quest} which is built to the {@link QuestManager} which
+     * was provided in {@link QuestBuilder#begin(QuestManager, String)}.
+     *
+     * @return a newly built {@link Quest} object created from the details
+     *         submitted to this {@link QuestBuilder}
+     */
+    public Quest build() {
+        if (built != null) {
+            // we already built the Quest
             return built;
         }
+        // build all of the associated ObjectiveBuilders
+        Objective[] objs = new Objective[objectives.size()];
+        for (int i = 0; i < objs.length; i++) {
+            objs[i] = objectives.get(i).build();
+        }
+        return built = new Quest(questManager, name, description, objs,
+                prerequisites.toArray(new String[prerequisites.size()]));
     }
 
     /**
@@ -159,7 +165,7 @@ public final class QuestLoadHelper {
          * Outcome}s for this quest, where the keys are the names of the
          * {@link Outcome}s.
          */
-        private final Map<String, OutcomeBuilder> cache = new HashMap<>();
+        private final Map<String, OutcomeBuilder> cache = new THashMap<>();
         /**
          * A {@link List} of the {@link OutcomeBuilder}s for the possible
          * {@link Outcome}s for the {@link Objective} being built from this
@@ -378,7 +384,7 @@ public final class QuestLoadHelper {
      * @return a {@link QuestBuilder} for the given {@link QuestManager} and the
      *         given {@code name}
      */
-    public static QuestBuilder quest(QuestManager manager, String name) {
+    public static QuestBuilder begin(QuestManager manager, String name) {
         QuestBuilder result = qsts.get(manager, name);
         if (result == null) {
             // create a new builder as there isn't one already
@@ -395,7 +401,7 @@ public final class QuestLoadHelper {
      * @deprecated do not call
      */
     @Deprecated
-    private QuestLoadHelper() {
-        throw new UnsupportedOperationException("ffs lads");
+    private QuestBuilder() {
+        throw new UnsupportedOperationException("FFS");
     }
 }

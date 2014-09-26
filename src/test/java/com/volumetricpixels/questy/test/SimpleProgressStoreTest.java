@@ -21,7 +21,7 @@ public class SimpleProgressStoreTest {
         File rootDir = new File(".");
         QuestManager qm = new QuestManager(new SimpleProgressStore(rootDir));
         File testDir = new File(rootDir, "test");
-        boolean existed = rootDir.exists();
+        boolean existed = testDir.exists();
         if (!existed) {
             testDir.mkdirs();
         }
@@ -34,6 +34,7 @@ public class SimpleProgressStoreTest {
 
         qm = new QuestManager(new SimpleProgressStore(rootDir));
         qm.addQuest(t);
+        qm.loadQuests(new File("."));
         qm.loadProgression();
 
         QuestInstance i = qm.getQuestInstance(t, "bob");

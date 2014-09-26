@@ -9,8 +9,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.volumetricpixels.questy.QuestManager;
-import com.volumetricpixels.questy.loading.QuestLoadHelper;
-import com.volumetricpixels.questy.loading.QuestLoadHelper.QuestBuilder;
+import com.volumetricpixels.questy.loading.QuestBuilder;
 import com.volumetricpixels.questy.Quest;
 import com.volumetricpixels.questy.objective.Objective;
 import com.volumetricpixels.questy.objective.Outcome;
@@ -19,20 +18,20 @@ public class QuestBuilderTest {
     @Test
     public void testQuestBuilding() {
         QuestManager mgr = new QuestManager(null);
-        QuestBuilder builder = QuestLoadHelper.quest(mgr, "One");
+        QuestBuilder builder = QuestBuilder.begin(mgr, "One");
         // assert that QuestBuilder caching works
-        Assert.assertEquals(builder, QuestLoadHelper.quest(mgr, "One"));
+        Assert.assertEquals(builder, QuestBuilder.begin(mgr, "One"));
 
         builder.description("My first quest!");
 
-        QuestLoadHelper.ObjectiveBuilder objOne = builder.objective("Tree");
+        QuestBuilder.ObjectiveBuilder objOne = builder.objective("Tree");
         // assert that ObjectiveBuilder caching works
         Assert.assertEquals(objOne, builder.objective("Tree"));
 
         objOne.description("The first objective!");
 
-        QuestLoadHelper.OutcomeBuilder outcome1 = objOne.outcome("Nope");
-        QuestLoadHelper.OutcomeBuilder outcome2 = objOne.outcome("Yep");
+        QuestBuilder.OutcomeBuilder outcome1 = objOne.outcome("Nope");
+        QuestBuilder.OutcomeBuilder outcome2 = objOne.outcome("Yep");
 
         Quest result = builder.build();
         Assert.assertEquals(result.getAmtObjectives(), 1);

@@ -7,17 +7,18 @@ package com.volumetricpixels.questy.storage;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 
-public final class DeserializeUtils {
+/**
+ * Various serialization and deserialization utilities used by Questy.
+ */
+public final class SerializationUtil {
     private static final List<Function<String, Object>> common = new ArrayList<>();
 
     static {
@@ -97,7 +98,15 @@ public final class DeserializeUtils {
      * @deprecated do not call
      */
     @Deprecated
-    private DeserializeUtils() {
+    private SerializationUtil() {
         throw new UnsupportedOperationException();
+    }
+
+    public static StringBuilder appendIf(boolean check, StringBuilder builder,
+            String append) {
+        if (check) {
+            return builder.append(append);
+        }
+        return builder;
     }
 }

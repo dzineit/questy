@@ -5,24 +5,22 @@
  */
 package com.volumetricpixels.questy.loading.impl;
 
+import gnu.trove.map.hash.THashMap;
 import org.yaml.snakeyaml.Yaml;
 
-import com.volumetricpixels.questy.QuestManager;
-import com.volumetricpixels.questy.loading.QuestLoadHelper;
-import com.volumetricpixels.questy.loading.QuestLoader;
-import com.volumetricpixels.questy.loading.QuestLoadHelper.ObjectiveBuilder;
-import com.volumetricpixels.questy.loading.QuestLoadHelper.OutcomeBuilder;
-import com.volumetricpixels.questy.loading.QuestLoadHelper.QuestBuilder;
 import com.volumetricpixels.questy.Quest;
+import com.volumetricpixels.questy.QuestManager;
+import com.volumetricpixels.questy.loading.QuestBuilder;
+import com.volumetricpixels.questy.loading.QuestBuilder.ObjectiveBuilder;
+import com.volumetricpixels.questy.loading.QuestBuilder.OutcomeBuilder;
+import com.volumetricpixels.questy.loading.QuestLoader;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 /**
  * Loads YML quests.
@@ -35,17 +33,20 @@ public class YMLQuestLoader implements QuestLoader {
     }
 
     @Override
-    public Set<Quest> loadQuests(File directory) {
+    public Map<String, Quest> loadQuests(File directory) {
         if (directory == null || !directory.isDirectory()) {
             return null;
         }
 
         Yaml yaml = new Yaml();
-        Set<Quest> result = new HashSet<>();
+        Map<String, Quest> result = new THashMap<>();
         // iterate through all files in the directory which end with .yml
         for (File file : directory.listFiles(fl -> endsWith(fl, ".yml"))) {
             try {
-                result.add(loadQuest(yaml, new FileInputStream(file)));
+                Quest loaded = loadQuest(yaml, new FileInputStream(file));
+                if (loaded != null) {
+                    result.put(loaded.getName(), loaded);
+                }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -57,8 +58,8 @@ public class YMLQuestLoader implements QuestLoader {
     public Quest loadQuest(Yaml yaml, InputStream stream) {
         Map<?, ?> map = (Map<?, ?>) yaml.load(stream);
 
-        QuestBuilder builder = QuestLoadHelper
-                .quest(questManager, map.get("name").toString());
+        QuestBuilder builder = QuestBuilder.begin(questManager, map.get("name")
+                .toString());
         builder.description(map.get("description").toString());
 
         Map<?, ?> objectives = (Map) map.get("objectives");

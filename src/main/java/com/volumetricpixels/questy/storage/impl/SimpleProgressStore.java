@@ -5,14 +5,14 @@
  */
 package com.volumetricpixels.questy.storage.impl;
 
-import com.volumetricpixels.questy.storage.DeserializeUtils;
 import com.volumetricpixels.questy.storage.ProgressStore;
+import com.volumetricpixels.questy.storage.SerializationUtil;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
-public class SimpleProgressStore extends ProgressStore {
+public class SimpleProgressStore implements ProgressStore {
     private final File currentStore;
     private final File completedStore;
 
@@ -51,7 +51,7 @@ public class SimpleProgressStore extends ProgressStore {
             file.getParentFile().mkdirs();
             file.delete();
             file.createNewFile();
-            DeserializeUtils.writeObject(file, data);
+            SerializationUtil.writeObject(file, data);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -59,7 +59,7 @@ public class SimpleProgressStore extends ProgressStore {
 
     private Map<String, Map<String, String>> doLoadData(File file) {
         try {
-            return (Map) DeserializeUtils.readObject(file);
+            return (Map) SerializationUtil.readObject(file);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

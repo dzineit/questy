@@ -16,7 +16,8 @@ public class Outcome {
     private final String type;
     private final Objective next;
 
-    public Outcome(String name, String description, String type, Objective next) {
+    public Outcome(String name, String description, String type,
+            Objective next) {
         this.name = name;
         this.description = description;
         this.type = type;

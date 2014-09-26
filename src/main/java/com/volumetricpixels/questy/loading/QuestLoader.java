@@ -9,7 +9,7 @@ import com.volumetricpixels.questy.Quest;
 
 import java.io.File;
 import java.util.Comparator;
-import java.util.Set;
+import java.util.Map;
 
 /**
  * Loads scripted / configured quests. Quests can be defined in any format, but
@@ -25,9 +25,10 @@ public interface QuestLoader extends Comparable<QuestLoader> {
      * this {@link QuestLoader} cannot load.
      *
      * @param directory the directory to load {@link Quest}s from
-     * @return all {@link Quest}s loaded from the given directory
+     * @return all {@link Quest}s loaded from the given directory, mapped by
+     *         their (unique) names
      */
-    Set<Quest> loadQuests(File directory);
+    Map<String, Quest> loadQuests(File directory);
 
     /**
      * Gets the name of the format this {@link QuestLoader} loads {@link Quest}s

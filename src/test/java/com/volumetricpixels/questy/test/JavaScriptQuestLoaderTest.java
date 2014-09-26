@@ -41,8 +41,7 @@ public class JavaScriptQuestLoaderTest {
 
     private String generateJS() {
         return "var quest = function genQuest() {" +
-                "    var builder = QuestLoadHelper.quest(questManager, 'Test');"
-                +
+                "    var builder = QuestBuilder.begin(questManager, 'Test');" +
                 "    builder.description('Test Description');" +
                 "    " +
                 "    var obj = builder.objective('banter');" +

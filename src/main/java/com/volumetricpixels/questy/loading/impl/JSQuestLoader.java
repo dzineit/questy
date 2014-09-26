@@ -5,6 +5,8 @@
  */
 package com.volumetricpixels.questy.loading.impl;
 
+import gnu.trove.map.hash.THashMap;
+
 import com.volumetricpixels.questy.Quest;
 import com.volumetricpixels.questy.QuestManager;
 import com.volumetricpixels.questy.loading.QuestLoader;
@@ -18,8 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Map;
 
 /**
  * Loads JavaScript quests.
@@ -42,18 +43,18 @@ public class JSQuestLoader implements QuestLoader {
     }
 
     @Override
-    public Set<Quest> loadQuests(File directory) {
+    public Map<String, Quest> loadQuests(File directory) {
         if (directory == null || !directory.isDirectory()) {
             return null;
         }
 
-        Set<Quest> result = new HashSet<>();
+        Map<String, Quest> result = new THashMap<>();
         // iterate through all files in the directory which end with .js
         for (File file : directory.listFiles(fl -> endsWith(fl, ".js"))) {
             try {
-                Quest q = loadQuest(new FileReader(file));
-                if (q != null) {
-                    result.add(q);
+                Quest loaded = loadQuest(new FileReader(file));
+                if (loaded != null) {
+                    result.put(loaded.getName(), loaded);
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();

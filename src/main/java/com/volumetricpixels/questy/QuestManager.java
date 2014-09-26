@@ -5,6 +5,9 @@
  */
 package com.volumetricpixels.questy;
 
+import gnu.trove.map.hash.THashMap;
+import gnu.trove.set.hash.THashSet;
+
 import com.volumetricpixels.questy.event.EventManager;
 import com.volumetricpixels.questy.event.quest.QuestAbandonEvent;
 import com.volumetricpixels.questy.event.quest.QuestCompleteEvent;
@@ -18,10 +21,7 @@ import com.volumetricpixels.questy.storage.ProgressStore;
 
 import java.io.File;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
  */
 public class QuestManager {
     /**
-     * The {@link com.volumetricpixels.questy.storage.ProgressStore} used for progression data storage.
+     * The {@link ProgressStore} used for progression data storage.
      */
     private final ProgressStore store;
     /**
@@ -44,7 +44,7 @@ public class QuestManager {
     /**
      * All currently loaded {@link Quest}s.
      */
-    private final Set<Quest> loaded;
+    private final Map<String, Quest> loaded;
     /**
      * All current {@link QuestInstance}s.
      */
@@ -56,16 +56,16 @@ public class QuestManager {
 
     /**
      * Constructs a blank {@link QuestManager} with no registered {@link
-     * QuestLoader}s or loaded {@link Quest}s, with the given {@link com.volumetricpixels.questy.storage.ProgressStore}
-     * being used for saving / loading progression.
+     * QuestLoader}s or loaded {@link Quest}s, with the given {@link
+     * ProgressStore} being used for saving / loading progression.
      */
     public QuestManager(ProgressStore store) {
         this.store = store;
         this.eventManager = new EventManager();
-        this.loaders = new HashSet<>();
-        this.loaded = new HashSet<>();
-        this.current = new HashSet<>();
-        this.completed = new HashSet<>();
+        this.loaders = new THashSet<>();
+        this.loaded = new THashMap<>();
+        this.current = new THashSet<>();
+        this.completed = new THashSet<>();
     }
 
     /**
@@ -79,8 +79,8 @@ public class QuestManager {
         return eventManager;
     }
 
-    public Set<Quest> getLoadedQuests() {
-        return new HashSet<>(loaded);
+    public Map<String, Quest> getLoadedQuests() {
+        return new THashMap<>(loaded);
     }
 
     /**
@@ -92,12 +92,7 @@ public class QuestManager {
      *         isn't one
      */
     public Quest getQuest(String name) {
-        for (Quest quest : loaded) {
-            if (quest.getName().equalsIgnoreCase(name)) {
-                return quest;
-            }
-        }
-        return null;
+        return loaded.get(name);
     }
 
     public QuestInstance getQuestInstance(Quest quest, String quester) {
@@ -128,6 +123,14 @@ public class QuestManager {
         return getCompletedQuest(getQuest(quest), quester);
     }
 
+    public boolean hasCompleted(Quest quest, String quester) {
+        return getCompletedQuest(quest, quester) != null;
+    }
+
+    public boolean hasCompleted(String quest, String quester) {
+        return getCompletedQuest(quest, quester) != null;
+    }
+
     /**
      * Loads all of the {@link Quest}s in the given {@link File} directory which
      * can be loaded by the registered {@link QuestLoader}.
@@ -135,14 +138,18 @@ public class QuestManager {
      * @param directory the directory to load {@link Quest}s from
      */
     public void loadQuests(File directory) {
-        loaders.forEach((ql) -> loaded.addAll(ql.loadQuests(directory)));
+        if (loaders.isEmpty()) {
+            return;
+        }
+
+        loaders.forEach((ql) -> loaded.putAll(ql.loadQuests(directory)));
     }
 
     /**
      * Loads quest progression data from this {@link QuestManager}'s {@link
-     * com.volumetricpixels.questy.storage.ProgressStore}.
+     * ProgressStore}.
      *
-     * @throws NullPointerException if the store is null
+     * @throws NullPointerException if the store is {@code null}
      */
     public void loadProgression() {
         if (store == null) {
@@ -154,7 +161,8 @@ public class QuestManager {
     }
 
     /**
-     * Stores all currently loaded quest progression to the {@link com.volumetricpixels.questy.storage.ProgressStore}.
+     * Stores all currently loaded quest progression to the {@link
+     * ProgressStore}.
      *
      * @throws NullPointerException if the store is null
      */
@@ -197,10 +205,9 @@ public class QuestManager {
      * {@link Quest} {@link Set}.
      *
      * @param quest the {@link Quest} to add
-     * @return whether the operation was successful
      */
-    public boolean addQuest(Quest quest) {
-        return loaded.add(quest);
+    public void addQuest(Quest quest) {
+        loaded.put(quest.getName(), quest);
     }
 
     /**
@@ -211,7 +218,7 @@ public class QuestManager {
      * @return whether the operation was successful
      */
     public boolean removeQuest(Quest quest) {
-        return loaded.remove(quest);
+        return loaded.remove(quest.getName()) != null;
     }
 
     /**
@@ -250,20 +257,20 @@ public class QuestManager {
 
     private void doLoadProgression(Map<String, Map<String, String>> map,
             Set<QuestInstance> set) {
-        for (Entry<String, Map<String, String>> ply : map.entrySet()) {
-            Collection<String> serials = ply.getValue().values();
-            set.addAll(serials.stream().map(serial -> new QuestInstance(
-                    this, ply.getKey(), serial)).collect(Collectors.toList()));
+        for (String key : map.keySet()) {
+            Collection<String> serialized = map.get(key).values();
+            set.addAll(serialized.stream().map(serial -> new QuestInstance(
+                    this, key, serial)).collect(Collectors.toList()));
         }
     }
 
     private Map<String, Map<String, String>> serialize(Set<QuestInstance> set) {
-        Map<String, Map<String, String>> result = new HashMap<>();
+        Map<String, Map<String, String>> result = new THashMap<>();
         for (QuestInstance questInstance : set) {
             String quester = questInstance.getQuester();
             Map<String, String> map = result.get(quester);
             if (map == null) {
-                map = new HashMap<>();
+                map = new THashMap<>();
                 result.put(quester, map);
             }
 

@@ -5,6 +5,8 @@
  */
 package com.volumetricpixels.questy.event;
 
+import gnu.trove.set.hash.THashSet;
+
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -25,7 +27,7 @@ public class EventManager {
      * Constructs a new EventManager with no registered {@link Object}s.
      */
     public EventManager() {
-        listeners = new HashSet<>();
+        listeners = new THashSet<>();
     }
 
     /**

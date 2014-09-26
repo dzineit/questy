@@ -5,11 +5,13 @@
  */
 package com.volumetricpixels.questy.event;
 
+import gnu.trove.map.hash.THashMap;
+import gnu.trove.set.hash.THashSet;
+
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +34,7 @@ public final class ListenerHandle {
 
     public ListenerHandle(Object listener) {
         this.listener = listener;
-        this.eventHandlers = new HashMap<>();
+        this.eventHandlers = new THashMap<>();
 
         // check every method in the given Listener
         for (Method meth : listener.getClass().getDeclaredMethods()) {
@@ -57,7 +59,7 @@ public final class ListenerHandle {
                 if (handlers == null) {
                     // this is the first handler for that event type - in
                     // practice this will be most of the time
-                    handlers = new HashSet<>();
+                    handlers = new THashSet<>();
                     eventHandlers.put(evtClass, handlers);
                 }
 
