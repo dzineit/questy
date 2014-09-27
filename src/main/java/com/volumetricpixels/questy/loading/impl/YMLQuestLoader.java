@@ -45,7 +45,7 @@ public class YMLQuestLoader implements QuestLoader {
             try {
                 Quest loaded = loadQuest(yaml, new FileInputStream(file));
                 if (loaded != null) {
-                    result.put(loaded.getName(), loaded);
+                    result[loaded.getName()] = loaded;
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -58,26 +58,26 @@ public class YMLQuestLoader implements QuestLoader {
     public Quest loadQuest(Yaml yaml, InputStream stream) {
         Map<?, ?> map = (Map<?, ?>) yaml.load(stream);
 
-        QuestBuilder builder = QuestBuilder.begin(questManager, map.get("name")
+        QuestBuilder builder = QuestBuilder.begin(questManager, map["name"]
                 .toString());
-        builder.description(map.get("description").toString());
+        builder.description(map["description"].toString());
 
-        Map<?, ?> objectives = (Map) map.get("objectives");
+        Map<?, ?> objectives = (Map) map["objectives"];
         for (Entry<?, ?> objEntry : objectives.entrySet()) {
             ObjectiveBuilder obj = builder
                     .objective(objEntry.getKey().toString());
             Map<?, ?> objMap = (Map) objEntry.getValue();
-            obj.description(objMap.get("description").toString());
+            obj.description(objMap["description"].toString());
 
-            Map<?, ?> outcomes = (Map) objMap.get("outcomes");
+            Map<?, ?> outcomes = (Map) objMap["outcomes"];
             for (Entry<?, ?> ocEntry : outcomes.entrySet()) {
                 OutcomeBuilder oc = obj
                         .outcome(ocEntry.getKey().toString());
                 Map<?, ?> ocMap = (Map) ocEntry.getValue();
-                oc.description(ocMap.get("description").toString());
-                oc.type(ocMap.get("type").toString());
+                oc.description(ocMap["description"].toString());
+                oc.type(ocMap["type"].toString());
 
-                Object next = ocMap.get("next");
+                Object next = ocMap["next"];
                 if (next != null) {
                     oc.next(builder.objective(next.toString()));
                 }
