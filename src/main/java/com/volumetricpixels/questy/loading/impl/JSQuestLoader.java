@@ -54,7 +54,7 @@ public class JSQuestLoader implements QuestLoader {
             try {
                 Quest loaded = loadQuest(new FileReader(file));
                 if (loaded != null) {
-                    result[loaded.getName()] = loaded;
+                    result.put(loaded.getName(), loaded);
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();

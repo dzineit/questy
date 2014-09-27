@@ -92,7 +92,7 @@ public class QuestManager {
      *         isn't one
      */
     public Quest getQuest(String name) {
-        return loaded[name];
+        return loaded.get(name);
     }
 
     public QuestInstance getQuestInstance(Quest quest, String quester) {
@@ -207,7 +207,7 @@ public class QuestManager {
      * @param quest the {@link Quest} to add
      */
     public void addQuest(Quest quest) {
-        loaded[quest.getName()] = quest;
+        loaded.put(quest.getName(), quest);
     }
 
     /**
@@ -258,7 +258,7 @@ public class QuestManager {
     private void doLoadProgression(Map<String, Map<String, String>> map,
             Set<QuestInstance> set) {
         for (String key : map.keySet()) {
-            Collection<String> serialized = map[key].values();
+            Collection<String> serialized = map.get(key).values();
             set.addAll(serialized.stream().map(serial -> new QuestInstance(
                     this, key, serial)).collect(Collectors.toList()));
         }
@@ -268,10 +268,10 @@ public class QuestManager {
         Map<String, Map<String, String>> result = new THashMap<>();
         for (QuestInstance questInstance : set) {
             String quester = questInstance.getQuester();
-            Map<String, String> map = result[quester];
+            Map<String, String> map = result.get(quester);
             if (map == null) {
                 map = new THashMap<>();
-                result[quester] = map;
+                result.put(quester, map);
             }
 
             map.put(questInstance.getQuest().getName(),
