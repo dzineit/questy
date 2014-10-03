@@ -86,9 +86,4 @@ public class YMLQuestLoader implements QuestLoader {
 
         return builder.build();
     }
-
-    @Override
-    public String getQuestFormat() {
-        return "YAML";
-    }
 }

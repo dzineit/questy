@@ -17,7 +17,6 @@ import com.volumetricpixels.questy.objective.Objective;
 import com.volumetricpixels.questy.objective.Outcome;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -33,7 +32,7 @@ public final class QuestBuilder {
      * Objective}s for this quest, where the keys are the names of the
      * {@link Objective}s.
      */
-    private final Map<String, ObjectiveBuilder> cache = new THashMap<>();
+    private final Map<String, ObjectiveBuilder> objectiveBuilders = new THashMap<>();
     /**
      * The Questy {@link QuestManager} which the {@link Quest} being built
      * is to be assigned to.
@@ -99,6 +98,13 @@ public final class QuestBuilder {
         return this;
     }
 
+    /**
+     * Adds the {@link Quest} with the given name as a prerequisite in order to
+     * begin the {@link Quest} being built.
+     *
+     * @param prerequisite the name of the quest to pre-require completion of
+     * @return this {@link QuestBuilder} object
+     */
     public QuestBuilder require(String prerequisite) {
         prerequisites.add(prerequisite);
         return this;
@@ -118,12 +124,12 @@ public final class QuestBuilder {
      * @return a builder for an objective with the given name
      */
     public ObjectiveBuilder objective(String name) {
-        ObjectiveBuilder temp = cache.get(name);
+        ObjectiveBuilder temp = objectiveBuilders.get(name);
         if (temp != null) {
             return temp;
         }
         temp = new ObjectiveBuilder().name(name);
-        cache.put(name, temp);
+        objectiveBuilders.put(name, temp);
         objectives.add(temp);
         return temp;
     }
@@ -165,7 +171,7 @@ public final class QuestBuilder {
          * Outcome}s for this quest, where the keys are the names of the
          * {@link Outcome}s.
          */
-        private final Map<String, OutcomeBuilder> cache = new THashMap<>();
+        private final Map<String, OutcomeBuilder> outcomeBuilders = new THashMap<>();
         /**
          * A {@link List} of the {@link OutcomeBuilder}s for the possible
          * {@link Outcome}s for the {@link Objective} being built from this
@@ -234,12 +240,12 @@ public final class QuestBuilder {
          *         name
          */
         public OutcomeBuilder outcome(String name) {
-            OutcomeBuilder temp = cache.get(name);
+            OutcomeBuilder temp = outcomeBuilders.get(name);
             if (temp != null) {
                 return temp;
             }
             temp = new OutcomeBuilder().name(name);
-            cache.put(name, temp);
+            outcomeBuilders.put(name, temp);
             outcomes.add(temp);
             return temp;
         }
@@ -339,6 +345,13 @@ public final class QuestBuilder {
             return this;
         }
 
+        /**
+         * Sets the {@link Objective} which the {@link Outcome} built by this
+         * builder will lead to.
+         *
+         * @param next the next {@link Objective} when this Outcome is completed
+         * @return this {@link OutcomeBuilder} object
+         */
         public OutcomeBuilder next(ObjectiveBuilder next) {
             this.next = next;
             return this;

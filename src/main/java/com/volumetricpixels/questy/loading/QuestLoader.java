@@ -8,7 +8,6 @@ package com.volumetricpixels.questy.loading;
 import com.volumetricpixels.questy.Quest;
 
 import java.io.File;
-import java.util.Comparator;
 import java.util.Map;
 
 /**
@@ -16,7 +15,7 @@ import java.util.Map;
  * there must be a registered {@link QuestLoader} implementation for the format
  * for it to be loaded.
  */
-public interface QuestLoader extends Comparable<QuestLoader> {
+public interface QuestLoader {
     /**
      * Loads all of the {@link Quest}s that this {@link QuestLoader} can handle
      * which are located in the given {@link File}, which should be a directory,
@@ -29,15 +28,6 @@ public interface QuestLoader extends Comparable<QuestLoader> {
      *         their (unique) names
      */
     Map<String, Quest> loadQuests(File directory);
-
-    /**
-     * Gets the name of the format this {@link QuestLoader} loads {@link Quest}s
-     * in. For example, in a JavaScript {@link QuestLoader} this method would
-     * return "JavaScript".
-     *
-     * @return the name of the format this loader loads {@link Quest}s of
-     */
-    String getQuestFormat();
 
     // utility methods for implementations
 
@@ -52,22 +42,5 @@ public interface QuestLoader extends Comparable<QuestLoader> {
      */
     default boolean endsWith(File file, String content) {
         return file.getName().toLowerCase().endsWith(content.toLowerCase());
-    }
-
-    @Override
-    default int compareTo(QuestLoader other) {
-        return getQuestFormat().compareTo(other.getQuestFormat());
-    }
-
-    /**
-     * Compares {@link QuestLoader}s based on their format.
-     */
-    public class QuestLoaderComparator implements Comparator<QuestLoader> {
-        public static final QuestLoaderComparator INSTANCE = new QuestLoaderComparator();
-
-        @Override
-        public int compare(QuestLoader o1, QuestLoader o2) {
-            return o1.compareTo(o2);
-        }
     }
 }

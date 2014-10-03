@@ -94,9 +94,4 @@ public class JSQuestLoader implements QuestLoader {
             return null;
         }
     }
-
-    @Override
-    public String getQuestFormat() {
-        return "JavaScript";
-    }
 }
