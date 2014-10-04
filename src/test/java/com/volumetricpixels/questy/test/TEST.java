@@ -6,7 +6,7 @@
 package com.volumetricpixels.questy.test;
 
 import com.volumetricpixels.questy.Quest;
-import com.volumetricpixels.questy.QuestManager;
+import com.volumetricpixels.questy.impl.SimpleQuestManager;
 import com.volumetricpixels.questy.loading.QuestBuilder;
 import com.volumetricpixels.questy.loading.QuestBuilder.ObjectiveBuilder;
 
@@ -15,7 +15,7 @@ import java.util.Random;
 public class TEST {
     public static final Random r = new Random();
 
-    public static Quest obtainTestQuest(QuestManager m) {
+    public static Quest obtainTestQuest(SimpleQuestManager m) {
         QuestBuilder b = QuestBuilder.begin(m, "test" + r.nextInt());
         ObjectiveBuilder ob = b.description("Test").objective("test1");
         ob.description("test2").outcome("lel").description("lel").type("lel");

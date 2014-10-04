@@ -8,7 +8,7 @@ package com.volumetricpixels.questy.test;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.volumetricpixels.questy.QuestManager;
+import com.volumetricpixels.questy.impl.SimpleQuestManager;
 import com.volumetricpixels.questy.loading.QuestBuilder;
 import com.volumetricpixels.questy.Quest;
 import com.volumetricpixels.questy.objective.Objective;
@@ -17,7 +17,7 @@ import com.volumetricpixels.questy.objective.Outcome;
 public class QuestBuilderTest {
     @Test
     public void testQuestBuilding() {
-        QuestManager mgr = new QuestManager(null);
+        SimpleQuestManager mgr = new SimpleQuestManager(null);
         QuestBuilder builder = QuestBuilder.begin(mgr, "One");
         // assert that QuestBuilder caching works
         Assert.assertEquals(builder, QuestBuilder.begin(mgr, "One"));

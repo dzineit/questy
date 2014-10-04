@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import com.volumetricpixels.questy.Quest;
 import com.volumetricpixels.questy.QuestInstance;
-import com.volumetricpixels.questy.QuestManager;
+import com.volumetricpixels.questy.impl.SimpleQuestManager;
 import com.volumetricpixels.questy.storage.impl.SimpleProgressStore;
 
 import java.io.File;
@@ -20,7 +20,7 @@ public class SimpleProgressStoreTest {
     public void runTest() {
         File rootDir = new File(".");
         File testDir = new File(rootDir, "test");
-        QuestManager qm = new QuestManager(new SimpleProgressStore(testDir));
+        SimpleQuestManager qm = new SimpleQuestManager(new SimpleProgressStore(testDir));
         boolean existed = testDir.exists();
         if (!existed) {
             testDir.mkdirs();
@@ -30,9 +30,9 @@ public class SimpleProgressStoreTest {
         qm.addQuest(t);
         qm.startQuest(t.createInstance("bob"));
 
-        qm.storeProgression();
+        qm.saveProgression();
 
-        qm = new QuestManager(new SimpleProgressStore(rootDir));
+        qm = new SimpleQuestManager(new SimpleProgressStore(rootDir));
         qm.addQuest(t);
         qm.loadQuests(new File("."));
         qm.loadProgression();

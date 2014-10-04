@@ -8,7 +8,7 @@ package com.volumetricpixels.questy.test;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.volumetricpixels.questy.QuestManager;
+import com.volumetricpixels.questy.impl.SimpleQuestManager;
 import com.volumetricpixels.questy.event.EventManager;
 import com.volumetricpixels.questy.event.Listen;
 import com.volumetricpixels.questy.event.quest.QuestAbandonEvent;
@@ -17,7 +17,7 @@ import com.volumetricpixels.questy.event.quest.QuestStartEvent;
 public class EventsTest {
     @Test
     public void testEvents() {
-        EventManager evtMgr = new QuestManager(null).getEventManager();
+        EventManager evtMgr = new SimpleQuestManager(null).getEventManager();
 
         TestListener test = new TestListener();
         Assert.assertTrue(evtMgr.register(test));

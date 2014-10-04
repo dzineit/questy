@@ -9,7 +9,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.volumetricpixels.questy.Quest;
-import com.volumetricpixels.questy.QuestManager;
+import com.volumetricpixels.questy.impl.SimpleQuestManager;
 import com.volumetricpixels.questy.loading.impl.JSQuestLoader;
 import com.volumetricpixels.questy.objective.Objective;
 import com.volumetricpixels.questy.objective.Outcome;
@@ -19,7 +19,7 @@ import java.io.StringReader;
 public class JavaScriptQuestLoaderTest {
     @Test
     public void runTest() {
-        QuestManager qm = new QuestManager(null);
+        SimpleQuestManager qm = new SimpleQuestManager(null);
         JSQuestLoader loader = new JSQuestLoader(qm);
 
         Quest quest = loader.loadQuest(new StringReader(generateJS()));

@@ -62,7 +62,8 @@ public final class Quest {
         predicate = quester -> {
             if (prerequisites != null && prerequisites.length > 0) {
                 for (String qst : prerequisites) {
-                    if (!questManager.hasCompleted(qst, quester)) {
+                    if (!questManager.hasCompleted(questManager.getQuest(qst),
+                            quester)) {
                         return false;
                     }
                 }
@@ -112,6 +113,15 @@ public final class Quest {
         return objectives.clone();
     }
 
+    /**
+     * Checks whether the given {@code quester} satisfies the prerequisites for
+     * starting this {@link Quest}.
+     *
+     * @param quester the person to check
+     * @return whether the given quester satisfies this Quest's prerequisites
+     * @see {@link #predicate}
+     * @see {@link Predicate#test(Object)}
+     */
     public boolean satisfiesPrerequisites(String quester) {
         return predicate.test(quester);
     }

@@ -64,6 +64,20 @@ public final class QuestInstance {
         }
     }
 
+    /**
+     * Should be called whenever it is detected that an {@link Objective} has
+     * been completed.
+     *
+     * This method handles advancing the {@link Objective} of this {@link
+     * QuestInstance} to the next one (or completing it if there are no more
+     * {@link Objective}s) and fires {@link ObjectiveCompleteEvent}, {@link
+     * ObjectiveStartEvent} as necessary. This method also invokes {@link
+     * QuestManager#completeQuest(QuestInstance, OutcomeProgress)} if necessary,
+     * and thus that method doesn't need to be called manually.
+     *
+     * @param objective the {@link ObjectiveProgress} of the completed Objective
+     * @param outcome the {@link OutcomeProgress} which was the Objective result
+     */
     public void objectiveComplete(ObjectiveProgress objective,
             OutcomeProgress outcome) {
         Objective next = outcome.getOutcome().getNext();
@@ -84,8 +98,21 @@ public final class QuestInstance {
                 .fire(new ObjectiveStartEvent(this, temp, e));
     }
 
+    /**
+     * Should be called when it is detected that an {@link Objective} has been
+     * failed.
+     *
+     * This method automatically resets the {@link Objective} and abandons the
+     * {@link Quest} if {@code endQuest == true}. Events for abandoning the
+     * objective and failing the quest if applicable are fired.
+     *
+     * @param objective the {@link ObjectiveProgress} for the failed objective
+     * @param endQuest whether the failure ends the Quest
+     */
     public void objectiveFailed(ObjectiveProgress objective, boolean endQuest) {
         if (endQuest) {
+            quest.getQuestManager().getEventManager().fire(
+                    new ObjectiveFailEvent(this, objective));
             quest.getQuestManager().abandonQuest(this);
             return;
         }
@@ -94,13 +121,19 @@ public final class QuestInstance {
             if (objectiveProgresses[i] == objective) {
                 objectiveProgresses[i] = new ObjectiveProgress(this,
                         objective.getObjective());
-                quest.getQuestManager().getEventManager()
-                        .fire(new ObjectiveFailEvent(this, objective));
+                quest.getQuestManager().getEventManager().fire(
+                        new ObjectiveFailEvent(this, objective));
                 break; // there are no duplicates
             }
         }
     }
 
+    /**
+     * Gets the {@link Quest} for this {@link QuestInstance}, which contains the
+     * basic information about the Quest.
+     *
+     * @return the {@link Quest} this object represents an instance of
+     */
     public Quest getQuest() {
         return quest;
     }

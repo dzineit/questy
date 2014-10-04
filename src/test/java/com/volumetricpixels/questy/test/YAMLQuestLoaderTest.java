@@ -9,7 +9,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.yaml.snakeyaml.Yaml;
 
-import com.volumetricpixels.questy.QuestManager;
+import com.volumetricpixels.questy.impl.SimpleQuestManager;
 import com.volumetricpixels.questy.loading.impl.YMLQuestLoader;
 import com.volumetricpixels.questy.Quest;
 import com.volumetricpixels.questy.objective.Objective;
@@ -23,7 +23,7 @@ public class YAMLQuestLoaderTest {
     @Test
     public void runTest() {
         try {
-            QuestManager mgr = new QuestManager(null);
+            SimpleQuestManager mgr = new SimpleQuestManager(null);
             YMLQuestLoader loader = new YMLQuestLoader(mgr);
             String yaml = generateYamlQuest();
             Yaml yamlObj = new Yaml();

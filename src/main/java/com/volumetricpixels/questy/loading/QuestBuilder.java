@@ -8,11 +8,9 @@ package com.volumetricpixels.questy.loading;
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.Table;
-
 import com.volumetricpixels.questy.Quest;
 import com.volumetricpixels.questy.QuestManager;
+import com.volumetricpixels.questy.QuestManager.QuestLoadHelper;
 import com.volumetricpixels.questy.objective.Objective;
 import com.volumetricpixels.questy.objective.Outcome;
 
@@ -28,14 +26,40 @@ import java.util.Set;
  */
 public final class QuestBuilder {
     /**
+     * Gets a {@link QuestBuilder}, the {@link Quest} built by which will be
+     * assigned to the given {@link QuestManager}, with the given name. If this
+     * method has already been invoked with the same parameters, the same object
+     * will be returned.
+     *
+     * @param manager the {@link QuestManager} for the {@link QuestBuilder} to
+     *        use
+     * @param name the name of the {@link QuestBuilder}, which will also be the
+     *        name assigned to the {@link Quest} built if it is not later
+     *        changed
+     * @return a {@link QuestBuilder} for the given {@link QuestManager} and the
+     *         given {@code name}
+     */
+    public static QuestBuilder begin(QuestManager manager, String name) {
+        QuestLoadHelper helper = manager.getQuestLoadHelper();
+        QuestBuilder result = helper.getBuilder(name);
+        if (result == null) {
+            // create a new builder as there isn't one already
+            result = new QuestBuilder(manager).name(name);
+            // add the new builder to the cache for later
+            helper.addBuilder(name, result);
+        }
+        return result;
+    }
+
+    /**
      * A cache of already created {@link ObjectiveBuilder}s for {@link
      * Objective}s for this quest, where the keys are the names of the
      * {@link Objective}s.
      */
     private final Map<String, ObjectiveBuilder> objectiveBuilders = new THashMap<>();
     /**
-     * The Questy {@link QuestManager} which the {@link Quest} being built
-     * is to be assigned to.
+     * The Questy {@link QuestManager} which the {@link Quest} being built is to
+     * be assigned to.
      */
     private final QuestManager questManager;
     /**
@@ -373,39 +397,6 @@ public final class QuestBuilder {
             return built = new Outcome(name, description, type,
                     next == null ? null : next.build());
         }
-    }
-
-    /**
-     * A {@link Table} of all created {@link QuestBuilder} objects, mapped by
-     * the {@link QuestManager} they are assigned to and the name of the quest
-     * they are building.
-     */
-    private static final Table<QuestManager, String, QuestBuilder> qsts = HashBasedTable
-            .create();
-
-    /**
-     * Gets a {@link QuestBuilder}, the {@link Quest} built by which will be
-     * assigned to the given {@link QuestManager}, with the given name. If this
-     * method has already been invoked with the same parameters, the same object
-     * will be returned.
-     *
-     * @param manager the {@link QuestManager} for the {@link QuestBuilder} to
-     *        use
-     * @param name the name of the {@link QuestBuilder}, which will also be the
-     *        name assigned to the {@link Quest} built if it is not later
-     *        changed
-     * @return a {@link QuestBuilder} for the given {@link QuestManager} and the
-     *         given {@code name}
-     */
-    public static QuestBuilder begin(QuestManager manager, String name) {
-        QuestBuilder result = qsts.get(manager, name);
-        if (result == null) {
-            // create a new builder as there isn't one already
-            result = new QuestBuilder(manager).name(name);
-            // add the new builder to the cache for later
-            qsts.put(manager, name, result);
-        }
-        return result;
     }
 
     /**
