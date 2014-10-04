@@ -17,13 +17,24 @@ public class SimpleProgressStore implements ProgressStore {
     private final File completedStore;
 
     public SimpleProgressStore(File storageDirectory) {
-        this(new File(storageDirectory, "current.xml"),
-                new File(storageDirectory, "completed.xml"));
+        this(new File(storageDirectory, "current"),
+                new File(storageDirectory, "completed"));
     }
 
     public SimpleProgressStore(File currentStore, File completedStore) {
         this.currentStore = currentStore;
         this.completedStore = completedStore;
+
+        try {
+            if (!currentStore.exists()) {
+                currentStore.createNewFile();
+            }
+            if (!completedStore.exists()) {
+                completedStore.createNewFile();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -48,7 +59,6 @@ public class SimpleProgressStore implements ProgressStore {
 
     private void doSaveData(File file, Map<String, Map<String, String>> data) {
         try {
-            file.getParentFile().mkdirs();
             file.delete();
             file.createNewFile();
             SerializationUtil.writeObject(file, data);

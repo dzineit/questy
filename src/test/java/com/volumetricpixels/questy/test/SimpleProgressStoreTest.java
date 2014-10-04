@@ -18,13 +18,11 @@ import java.io.File;
 public class SimpleProgressStoreTest {
     @Test
     public void runTest() {
-        File rootDir = new File(".");
-        File testDir = new File(rootDir, "test");
+        File rootDir = new File(".").getAbsoluteFile();
+        File testDir = new File(rootDir, "test").getAbsoluteFile();
+        testDir.delete();
+        testDir.mkdirs();
         SimpleQuestManager qm = new SimpleQuestManager(new SimpleProgressStore(testDir));
-        boolean existed = testDir.exists();
-        if (!existed) {
-            testDir.mkdirs();
-        }
 
         Quest t = TEST.obtainTestQuest(qm);
         qm.addQuest(t);
@@ -32,17 +30,13 @@ public class SimpleProgressStoreTest {
 
         qm.saveProgression();
 
-        qm = new SimpleQuestManager(new SimpleProgressStore(rootDir));
+        qm = new SimpleQuestManager(new SimpleProgressStore(testDir));
         qm.addQuest(t);
-        qm.loadQuests(new File("."));
+        qm.loadQuests(testDir);
         qm.loadProgression();
 
         QuestInstance i = qm.getQuestInstance(t, "bob");
         Assert.assertNotNull(i);
         Assert.assertNotNull(i.getCurrentObjective());
-
-        if (!existed) {
-            testDir.delete();
-        }
     }
 }
