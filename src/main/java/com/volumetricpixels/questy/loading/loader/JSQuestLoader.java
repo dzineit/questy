@@ -33,10 +33,10 @@ public class JSQuestLoader implements QuestLoader {
                     "Packages.com.volumetricpixels.questy.event.quest," +
                     "Packages.com.volumetricpixels.questy.loading," +
                     "Packages.com.volumetricpixels.questy.objective)) {" +
-            "    var quest = function genQuest() {";
+                    "    var quest = function genQuest() {";
     private static final String SCRIPT_SUFFIX =
             "    }" +
-            "}";
+                    "}";
 
     private final QuestManager questManager;
 
@@ -52,7 +52,7 @@ public class JSQuestLoader implements QuestLoader {
 
         Map<String, Quest> result = new THashMap<>();
         // iterate through all files in the directory which end with .js
-        for (File file : directory.listFiles(fl -> endsWith(fl, ".js"))) {
+        for (File file : directory.listFiles(fl -> checkExtension(fl, ".js"))) {
             try {
                 Quest loaded = loadQuest(new FileReader(file));
                 if (loaded != null) {

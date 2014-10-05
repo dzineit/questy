@@ -36,11 +36,11 @@ public interface QuestLoader {
      * the given {@link String}, ignoring case.
      *
      * @param file the {@link File} to check the extension of
-     * @param content the {@link String} to check the extension for
+     * @param extension the {@link String} to check the extension for
      * @return {@code true} if the given file's name ends with the given string,
      *         ignoring case, otherwise {@code false}
      */
-    default boolean endsWith(File file, String content) {
-        return file.getName().toLowerCase().endsWith(content.toLowerCase());
+    default boolean checkExtension(File file, String extension) {
+        return file.getName().toLowerCase().endsWith(extension.toLowerCase());
     }
 }

@@ -20,9 +20,9 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Used for building {@link Quest}s. Objectives are cached to make it easy
- * to manage the same {@link Objective} instance being required in multiple
- * parts of the loading process.
+ * Used for building {@link Quest}s. Objectives are cached to make it easy to
+ * manage the same {@link Objective} instance being required in multiple parts
+ * of the loading process.
  */
 public final class QuestBuilder {
     /**
@@ -63,8 +63,8 @@ public final class QuestBuilder {
      */
     private final QuestManager questManager;
     /**
-     * A {@link List} of {@link ObjectiveBuilder}s for the {@link
-     * Objective}s for this quest.
+     * A {@link List} of {@link ObjectiveBuilder}s for the {@link Objective}s
+     * for this quest.
      */
     private final List<ObjectiveBuilder> objectives = new ArrayList<>();
     /**
@@ -82,9 +82,9 @@ public final class QuestBuilder {
      */
     private String description;
     /**
-     * Only holds a non-null value if {@link #build()} has been invoked.
-     * Used to allow the same {@link Quest} to be used in multiple places
-     * without creating a new {@link Quest} instance.
+     * Only holds a non-null value if {@link #build()} has been invoked. Used to
+     * allow the same {@link Quest} to be used in multiple places without
+     * creating a new {@link Quest} instance.
      */
     private Quest built;
 
@@ -99,8 +99,8 @@ public final class QuestBuilder {
     }
 
     /**
-     * Sets the name of the {@link Quest} being built to the given {@code
-     * name} parameter.
+     * Sets the name of the {@link Quest} being built to the given {@code name}
+     * parameter.
      *
      * @param name the name for the {@link Quest}
      * @return this {@link QuestBuilder} object
@@ -136,13 +136,11 @@ public final class QuestBuilder {
 
     /**
      * Obtains an {@link ObjectiveBuilder} for an {@link Objective} with the
-     * given {@code name}. A new {@link ObjectiveBuilder} is created if
-     * there isn't already one with the given name, otherwise the old one is
-     * reused.
+     * given {@code name}. A new {@link ObjectiveBuilder} is created if there
+     * isn't already one with the given name, otherwise the old one is reused.
      *
      * The {@link ObjectiveBuilder} returned is added to this {@link
-     * QuestBuilder}'s {@link #objectives} {@link List} if a new one is
-     * created.
+     * QuestBuilder}'s {@link #objectives} {@link List} if a new one is created.
      *
      * @param name the name of the objective to get a builder for
      * @return a builder for an objective with the given name
@@ -160,13 +158,13 @@ public final class QuestBuilder {
 
     /**
      * Builds this {@link Quest}. All of the associated {@link
-     * ObjectiveBuilder}s are also built into {@link Objective}s, and
-     * therefore all of the associated {@link Outcome}s are built as well.
+     * ObjectiveBuilder}s are also built into {@link Objective}s, and therefore
+     * all of the associated {@link Outcome}s are built as well.
      *
-     * If this method has already been invoked, the same object is returned
-     * as the last time it was invoked. This method automatically registers
-     * the {@link Quest} which is built to the {@link QuestManager} which
-     * was provided in {@link QuestBuilder#begin(QuestManager, String)}.
+     * If this method has already been invoked, the same object is returned as
+     * the last time it was invoked. This method automatically registers the
+     * {@link Quest} which is built to the {@link QuestManager} which was
+     * provided in {@link QuestBuilder#begin(QuestManager, String)}.
      *
      * @return a newly built {@link Quest} object created from the details
      *         submitted to this {@link QuestBuilder}
@@ -251,17 +249,16 @@ public final class QuestBuilder {
 
         /**
          * Obtains an {@link OutcomeBuilder} for an {@link Outcome} with the
-         * given {@code name}. A new {@link OutcomeBuilder} is created if
-         * there isn't already one with the given name, otherwise the old
-         * one is reused.
+         * given {@code name}. A new {@link OutcomeBuilder} is created if there
+         * isn't already one with the given name, otherwise the old one is
+         * reused.
          *
          * The {@link OutcomeBuilder} returned is added to this {@link
-         * ObjectiveBuilder}'s {@link #outcomes} {@link List} if a new one
-         * is created.
+         * ObjectiveBuilder}'s {@link #outcomes} {@link List} if a new one is
+         * created.
          *
          * @param name the name of the outcome to get a builder for
-         * @return an {@link OutcomeBuilder} for an outcome with the given
-         *         name
+         * @return an {@link OutcomeBuilder} for an outcome with the given name
          */
         public OutcomeBuilder outcome(String name) {
             OutcomeBuilder temp = outcomeBuilders.get(name);
@@ -275,12 +272,12 @@ public final class QuestBuilder {
         }
 
         /**
-         * Builds an {@link Objective} object from the details submitted to
-         * this {@link ObjectiveBuilder}. If this method has already been
-         * invoked, the same object will be returned.
+         * Builds an {@link Objective} object from the details submitted to this
+         * {@link ObjectiveBuilder}. If this method has already been invoked,
+         * the same object will be returned.
          *
-         * @return an {@link Objective} built from the details submitted to
-         *         this builder
+         * @return an {@link Objective} built from the details submitted to this
+         *         builder
          */
         private Objective build() {
             if (built != null) {
@@ -313,16 +310,14 @@ public final class QuestBuilder {
          */
         private String type;
         /**
-         * The {@link ObjectiveBuilder} for the {@link Objective} which
-         * the {@link Outcome} built from this {@link OutcomeBuilder}
-         * leads to.
+         * The {@link ObjectiveBuilder} for the {@link Objective} which the
+         * {@link Outcome} built from this {@link OutcomeBuilder} leads to.
          */
         private ObjectiveBuilder next;
         /**
-         * Only holds a non-null value if {@link #build()} has been
-         * invoked. Used to allow the same {@link Outcome} to be used
-         * in multiple places without creating a new {@link Outcome}
-         * instance.
+         * Only holds a non-null value if {@link #build()} has been invoked.
+         * Used to allow the same {@link Outcome} to be used in multiple places
+         * without creating a new {@link Outcome} instance.
          */
         private Outcome built;
 
@@ -346,8 +341,8 @@ public final class QuestBuilder {
         }
 
         /**
-         * Sets the description of the {@link Outcome} being built to
-         * the given {@code description} parameter.
+         * Sets the description of the {@link Outcome} being built to the given
+         * {@code description} parameter.
          *
          * @param description the description for the {@link Outcome}
          * @return this {@link OutcomeBuilder} object
@@ -358,8 +353,8 @@ public final class QuestBuilder {
         }
 
         /**
-         * Sets the type of the {@link Outcome} being built to the given
-         * {@code type} parameter.
+         * Sets the type of the {@link Outcome} being built to the given {@code
+         * type} parameter.
          *
          * @param type the type for the {@link Outcome}
          * @return this {@link OutcomeBuilder} object
@@ -382,12 +377,12 @@ public final class QuestBuilder {
         }
 
         /**
-         * Builds an {@link Outcome} object from the details submitted
-         * to this {@link OutcomeBuilder}. If this method has already
-         * been invoked, the same object will be returned.
+         * Builds an {@link Outcome} object from the details submitted to this
+         * {@link OutcomeBuilder}. If this method has already been invoked, the
+         * same object will be returned.
          *
-         * @return an {@link Outcome} built from the details submitted
-         *         to this builder
+         * @return an {@link Outcome} built from the details submitted to this
+         *         builder
          */
         private Outcome build() {
             if (built != null) {
@@ -397,15 +392,5 @@ public final class QuestBuilder {
             return built = new Outcome(name, description, type,
                     next == null ? null : next.build());
         }
-    }
-
-    /**
-     * Do not call
-     *
-     * @deprecated do not call
-     */
-    @Deprecated
-    private QuestBuilder() {
-        throw new UnsupportedOperationException("FFS");
     }
 }

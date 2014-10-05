@@ -7,7 +7,6 @@ package com.volumetricpixels.questy.event;
 
 import gnu.trove.set.hash.THashSet;
 
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
