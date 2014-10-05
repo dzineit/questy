@@ -33,9 +33,9 @@ public class JSQuestLoader implements QuestLoader {
                     "Packages.com.volumetricpixels.questy.event.quest," +
                     "Packages.com.volumetricpixels.questy.loading," +
                     "Packages.com.volumetricpixels.questy.objective)) {" +
-                "var quest = function genQuest() {";
+            "    var quest = function genQuest() {";
     private static final String SCRIPT_SUFFIX =
-                "}" +
+            "    }" +
             "}";
 
     private final QuestManager questManager;
