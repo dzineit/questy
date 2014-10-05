@@ -9,8 +9,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.volumetricpixels.questy.Quest;
-import com.volumetricpixels.questy.impl.SimpleQuestManager;
-import com.volumetricpixels.questy.loading.impl.JSQuestLoader;
+import com.volumetricpixels.questy.SimpleQuestManager;
+import com.volumetricpixels.questy.loading.loader.JSQuestLoader;
 import com.volumetricpixels.questy.objective.Objective;
 import com.volumetricpixels.questy.objective.Outcome;
 
@@ -40,17 +40,15 @@ public class JavaScriptQuestLoaderTest {
     }
 
     private String generateJS() {
-        return "var quest = function genQuest() {" +
-                "    var builder = QuestBuilder.begin(questManager, 'Test');" +
-                "    builder.description('Test Description');" +
-                "    " +
-                "    var obj = builder.objective('banter');" +
-                "    obj.description('Some great banter');" +
-                "    " +
-                "    var outcome = obj.outcome('lols');" +
-                "    outcome.description('lel').type('banter');" +
-                "    " +
-                "    return builder.build();" +
-                "}";
+        return "var builder = QuestBuilder.begin(questManager, 'Test');" +
+                "builder.description('Test Description');" +
+                "" +
+                "var obj = builder.objective('banter');" +
+                "obj.description('Some great banter');" +
+                "" +
+                "var outcome = obj.outcome('lols');" +
+                "outcome.description('lel').type('banter');" +
+                "" +
+                "return builder.build();";
     }
 }

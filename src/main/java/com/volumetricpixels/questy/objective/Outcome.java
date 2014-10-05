@@ -9,8 +9,6 @@ package com.volumetricpixels.questy.objective;
  * Represents a single possible outcome for an {@link Objective}.
  */
 public class Outcome {
-    // TODO: rewards for the outcome / w/e
-    // TODO: the requirement for the outcome - i.e kill two cows
     private final String name;
     private final String description;
     private final String type;

@@ -18,6 +18,8 @@ import java.util.Map;
 
 /**
  * Manages and tracks all active {@link Quest}s and {@link QuestLoader}s.
+ *
+ * @see {@link SimpleQuestManager}
  */
 public interface QuestManager {
     /**
@@ -82,6 +84,11 @@ public interface QuestManager {
      */
     boolean addLoader(QuestLoader loader);
 
+    /**
+     * Gets this {@link QuestManager}'s {@link QuestLoadHelper} object.
+     *
+     * @return the {@link QuestLoadHelper} for this manager
+     */
     QuestLoadHelper getQuestLoadHelper();
 
     /**
@@ -143,6 +150,10 @@ public interface QuestManager {
          */
         private final Map<String, QuestBuilder> builders = new THashMap<>();
 
+        /**
+         * There should always be one (and only one) {@link QuestLoadHelper}
+         * object per {@link QuestManager} object.
+         */
         public QuestLoadHelper() {
         }
 
@@ -198,9 +209,40 @@ public interface QuestManager {
      */
     void saveProgression();
 
+    /**
+     * Should be called whenever a {@link QuestInstance} is started. This calls
+     * the {@link com.volumetricpixels.questy.event.quest.QuestStartEvent} and
+     * deals with general stuff that needs to be done when a quest is started.
+     *
+     * This method is already called by {@link Quest#start(String)} so only
+     * needs to be called if a {@link QuestInstance} is obtained directly via
+     * {@link QuestInstance#QuestInstance(Quest, String)}
+     *
+     * @param quest the {@link QuestInstance} being started
+     * @return whether the quest was successfully started
+     */
     boolean startQuest(QuestInstance quest);
 
+    /**
+     * Should be called whenever a {@link QuestInstance} is abandoned. This
+     * calls {@link com.volumetricpixels.questy.event.quest.QuestAbandonEvent}
+     * and deals with general stuff that needs to be done when a quest is
+     * abandoned.
+     *
+     * @param quest the {@link QuestInstance} being abandoned
+     * @return whether the quest was successfully abandoned
+     */
     boolean abandonQuest(QuestInstance quest);
 
+    /**
+     * Should be called whenever a {@link QuestInstance} is completed. This
+     * calls {@link com.volumetricpixels.questy.event.quest.QuestCompleteEvent}
+     * and deals with general stuff that needs to be done when a quest is
+     * completed.
+     *
+     * @param quest the {@link QuestInstance} being completed
+     * @param outcome the final {@link OutcomeProgress outcome} of the quest
+     * @return whether the quest was successfully completed
+     */
     boolean completeQuest(QuestInstance quest, OutcomeProgress outcome);
 }

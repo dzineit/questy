@@ -9,8 +9,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.yaml.snakeyaml.Yaml;
 
-import com.volumetricpixels.questy.impl.SimpleQuestManager;
-import com.volumetricpixels.questy.loading.impl.YMLQuestLoader;
+import com.volumetricpixels.questy.SimpleQuestManager;
+import com.volumetricpixels.questy.loading.loader.YMLQuestLoader;
 import com.volumetricpixels.questy.Quest;
 import com.volumetricpixels.questy.objective.Objective;
 import com.volumetricpixels.questy.objective.Outcome;

@@ -6,7 +6,7 @@
 package com.volumetricpixels.questy.test;
 
 import com.volumetricpixels.questy.Quest;
-import com.volumetricpixels.questy.impl.SimpleQuestManager;
+import com.volumetricpixels.questy.SimpleQuestManager;
 import com.volumetricpixels.questy.loading.QuestBuilder;
 import com.volumetricpixels.questy.loading.QuestBuilder.ObjectiveBuilder;
 

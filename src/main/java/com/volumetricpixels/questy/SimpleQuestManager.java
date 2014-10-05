@@ -3,14 +3,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package com.volumetricpixels.questy.impl;
+package com.volumetricpixels.questy;
 
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 
-import com.volumetricpixels.questy.Quest;
-import com.volumetricpixels.questy.QuestInstance;
-import com.volumetricpixels.questy.QuestManager;
 import com.volumetricpixels.questy.event.EventManager;
 import com.volumetricpixels.questy.event.quest.QuestAbandonEvent;
 import com.volumetricpixels.questy.event.quest.QuestCompleteEvent;
@@ -27,6 +24,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * A simple {@link QuestManager} implementation which is not threadsafe.
+ */
 public class SimpleQuestManager implements QuestManager {
     /**
      * The {@link ProgressStore} used for progression data storage.
@@ -61,6 +61,11 @@ public class SimpleQuestManager implements QuestManager {
      * Constructs a blank {@link SimpleQuestManager} with no registered {@link
      * QuestLoader}s or loaded {@link Quest}s, with the given {@link
      * ProgressStore} being used for saving / loading progression.
+     *
+     * @param store the {@link ProgressStore} for saving and loading progression
+     *        data - can be null but {@link NullPointerException} will be thrown
+     *        from {@link #loadProgression()} / {@link #saveProgression()} if it
+     *        is
      */
     public SimpleQuestManager(ProgressStore store) {
         this.store = store;
@@ -156,8 +161,8 @@ public class SimpleQuestManager implements QuestManager {
     public boolean startQuest(QuestInstance instance) {
         boolean val = current.add(instance);
         if (val) {
-            QuestStartEvent event = eventManager
-                    .fire(new QuestStartEvent(instance));
+            QuestStartEvent event = eventManager.fire(
+                    new QuestStartEvent(instance));
             eventManager.fire(new ObjectiveStartEvent(instance,
                     instance.getCurrentObjective(), event));
         }

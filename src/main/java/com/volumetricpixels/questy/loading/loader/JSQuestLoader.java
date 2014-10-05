@@ -3,7 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package com.volumetricpixels.questy.loading.impl;
+package com.volumetricpixels.questy.loading.loader;
 
 import gnu.trove.map.hash.THashMap;
 
@@ -32,8 +32,10 @@ public class JSQuestLoader implements QuestLoader {
                     "Packages.com.volumetricpixels.questy.event," +
                     "Packages.com.volumetricpixels.questy.event.quest," +
                     "Packages.com.volumetricpixels.questy.loading," +
-                    "Packages.com.volumetricpixels.questy.objective)) {";
+                    "Packages.com.volumetricpixels.questy.objective)) {" +
+                "var quest = function genQuest() {";
     private static final String SCRIPT_SUFFIX =
+                "}" +
             "}";
 
     private final QuestManager questManager;

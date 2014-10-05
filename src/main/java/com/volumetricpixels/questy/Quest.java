@@ -155,13 +155,16 @@ public final class Quest {
 
     /**
      * Creates a new {@link QuestInstance} for this Quest, for the given {@code
-     * quester}.
+     * quester}. This automatically invokes {@link
+     * QuestManager#startQuest(QuestInstance)}.
      *
      * @param quester the person embarking on the Quest
      * @return a new {@link QuestInstance} for this Quest and the given quester
      */
-    public QuestInstance createInstance(String quester) {
-        return new QuestInstance(this, quester);
+    public QuestInstance start(String quester) {
+        QuestInstance result = new QuestInstance(this, quester);
+        questManager.startQuest(result);
+        return result;
     }
 
     /**

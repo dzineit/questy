@@ -10,8 +10,8 @@ import org.junit.Test;
 
 import com.volumetricpixels.questy.Quest;
 import com.volumetricpixels.questy.QuestInstance;
-import com.volumetricpixels.questy.impl.SimpleQuestManager;
-import com.volumetricpixels.questy.storage.impl.SimpleProgressStore;
+import com.volumetricpixels.questy.SimpleQuestManager;
+import com.volumetricpixels.questy.storage.store.SimpleProgressStore;
 
 import java.io.File;
 
@@ -26,7 +26,7 @@ public class SimpleProgressStoreTest {
 
         Quest t = TEST.obtainTestQuest(qm);
         qm.addQuest(t);
-        qm.startQuest(t.createInstance("bob"));
+        qm.startQuest(t.start("bob"));
 
         qm.saveProgression();
 
