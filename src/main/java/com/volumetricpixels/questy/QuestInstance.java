@@ -80,7 +80,7 @@ public final class QuestInstance {
      */
     public void objectiveComplete(ObjectiveProgress objective,
             OutcomeProgress outcome) {
-        Objective next = outcome.getOutcome().getNext();
+        Objective next = outcome.getInfo().getNext();
         if (next == null) {
             quest.getQuestManager().completeQuest(this, outcome);
             return;
@@ -120,7 +120,7 @@ public final class QuestInstance {
         for (int i = 0; i < objectiveProgresses.length; i++) {
             if (objectiveProgresses[i] == objective) {
                 objectiveProgresses[i] = new ObjectiveProgress(this,
-                        objective.getObjective());
+                        objective.getInfo());
                 quest.getQuestManager().getEventManager().fire(
                         new ObjectiveFailEvent(this, objective));
                 break; // there are no duplicates
@@ -134,7 +134,7 @@ public final class QuestInstance {
      *
      * @return the {@link Quest} this object represents an instance of
      */
-    public Quest getQuest() {
+    public Quest getInfo() {
         return quest;
     }
 
@@ -148,7 +148,7 @@ public final class QuestInstance {
 
     public ObjectiveProgress getProgress(Objective objective) {
         for (ObjectiveProgress cur : objectiveProgresses) {
-            if (cur.getObjective() == objective) {
+            if (cur.getInfo() == objective) {
                 return cur;
             }
         }

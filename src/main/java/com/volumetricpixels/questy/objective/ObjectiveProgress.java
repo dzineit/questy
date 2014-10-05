@@ -24,7 +24,7 @@ public class ObjectiveProgress {
         this.quest = quest;
 
         String[] split = serialized.split("//");
-        Objective obj = quest.getQuest().getObjective(split[0]);
+        Objective obj = quest.getInfo().getObjective(split[0]);
         this.objective = obj;
 
         String[] progresses = split[1].split("&&");
@@ -39,7 +39,7 @@ public class ObjectiveProgress {
         return quest;
     }
 
-    public Objective getObjective() {
+    public Objective getInfo() {
         return objective;
     }
 

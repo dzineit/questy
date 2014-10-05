@@ -39,7 +39,7 @@ public class OutcomeProgress {
         setProgressSilent(SerializationUtil.handleCommonTypes(split[1]));
     }
 
-    public Outcome getOutcome() {
+    public Outcome getInfo() {
         return outcome;
     }
 
@@ -50,8 +50,8 @@ public class OutcomeProgress {
     public void setProgress(Object progress) {
         setProgressSilent(progress);
 
-        quest.getQuest().getQuestManager().getEventManager()
-                .fire(new ProgressUpdateEvent(quest, this));
+        quest.getInfo().getQuestManager().getEventManager().fire(
+                new ProgressUpdateEvent(quest, this));
     }
 
     private void setProgressSilent(Object progress) {

@@ -34,7 +34,7 @@ public class ProgressUpdateEvent extends QuestEvent {
     }
 
     public Outcome getOutcomeInfo() {
-        return getOutcome().getOutcome();
+        return getOutcome().getInfo();
     }
 
     public Object getNewProgress() {

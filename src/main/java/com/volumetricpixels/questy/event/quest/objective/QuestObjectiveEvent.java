@@ -38,12 +38,12 @@ public abstract class QuestObjectiveEvent extends QuestEvent {
     /**
      * Gets the {@link Objective} information for the {@link ObjectiveProgress}
      * this event is related to. Note that this method is equivalent to calling
-     * {@code questObjectiveEvent.getObjective().getObjective()}.
+     * {@code questObjectiveEvent.getObjective().getInfo()}.
      *
      * @return the {@link Objective} information for the objective this event is
      *         related to
      */
     public Objective getObjectiveInfo() {
-        return getObjective().getObjective();
+        return getObjective().getInfo();
     }
 }

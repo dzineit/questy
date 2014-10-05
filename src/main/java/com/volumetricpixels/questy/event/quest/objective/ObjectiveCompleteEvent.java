@@ -41,6 +41,6 @@ public class ObjectiveCompleteEvent extends QuestObjectiveEvent {
      * @return the {@link Outcome} for the outcome this event is related to
      */
     public Outcome getOutcomeInfo() {
-        return getOutcome().getOutcome();
+        return getOutcome().getInfo();
     }
 }

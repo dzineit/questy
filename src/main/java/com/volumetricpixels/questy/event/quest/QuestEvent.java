@@ -36,14 +36,14 @@ public abstract class QuestEvent extends Event {
     /**
      * Gets the {@link Quest} information which is relevant to the {@link
      * QuestInstance} this event is related to. This is equivalent to calling
-     * {@code questEvent.getQuest().getQuest()}.
+     * {@code questEvent.getQuest().getInfo()}.
      *
-     * @return the {@link Quest} information for the relevent
-     *         {@link QuestInstance}
-     * @see {@link QuestInstance#getQuest()}
+     * @return the {@link Quest} information for the relevant {@link
+     *         QuestInstance}
+     * @see {@link QuestInstance#getInfo()}
      */
     public Quest getQuestInfo() {
-        return getQuest().getQuest();
+        return getQuest().getInfo();
     }
 
     /**

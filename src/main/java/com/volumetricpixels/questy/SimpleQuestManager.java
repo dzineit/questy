@@ -104,7 +104,7 @@ public class SimpleQuestManager implements QuestManager {
     @Override
     public QuestInstance getQuestInstance(Quest quest, String quester) {
         for (QuestInstance inst : current) {
-            if (inst.getQuest().equals(quest) && inst.getQuester()
+            if (inst.getInfo().equals(quest) && inst.getQuester()
                     .equals(quester)) {
                 return inst;
             }
@@ -115,8 +115,8 @@ public class SimpleQuestManager implements QuestManager {
     @Override
     public QuestInstance getCompletedQuest(Quest quest, String quester) {
         for (QuestInstance inst : completed) {
-            if (inst.getQuest().equals(quest) && inst.getQuester()
-                    .equals(quester)) {
+            if (inst.getInfo().equals(quest) && inst.getQuester().equals(
+                    quester)) {
                 return inst;
             }
         }
@@ -227,7 +227,7 @@ public class SimpleQuestManager implements QuestManager {
                 result.put(quester, map);
             }
 
-            map.put(questInstance.getQuest().getName(),
+            map.put(questInstance.getInfo().getName(),
                     questInstance.serializeProgression());
         }
 
