@@ -41,6 +41,9 @@ public interface QuestLoader {
      *         ignoring case, otherwise {@code false}
      */
     default boolean checkExtension(File file, String extension) {
+        if (!extension.startsWith(".")) {
+            extension = ".".concat(extension);
+        }
         return file.getName().toLowerCase().endsWith(extension.toLowerCase());
     }
 }

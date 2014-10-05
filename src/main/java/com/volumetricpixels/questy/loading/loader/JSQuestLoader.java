@@ -52,7 +52,7 @@ public class JSQuestLoader implements QuestLoader {
 
         Map<String, Quest> result = new THashMap<>();
         // iterate through all files in the directory which end with .js
-        for (File file : directory.listFiles(fl -> checkExtension(fl, ".js"))) {
+        for (File file : directory.listFiles(fl -> checkExtension(fl, "js"))) {
             try {
                 Quest loaded = loadQuest(new FileReader(file));
                 if (loaded != null) {

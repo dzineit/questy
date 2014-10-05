@@ -41,8 +41,7 @@ public class YMLQuestLoader implements QuestLoader {
         Yaml yaml = new Yaml();
         Map<String, Quest> result = new THashMap<>();
         // iterate through all files in the directory which end with .yml
-        for (File file : directory
-                .listFiles(fl -> checkExtension(fl, ".yml"))) {
+        for (File file : directory.listFiles(fl -> checkExtension(fl, "yml"))) {
             try {
                 Quest loaded = loadQuest(yaml, new FileInputStream(file));
                 if (loaded != null) {
