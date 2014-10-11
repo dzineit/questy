@@ -7,9 +7,23 @@ package com.volumetricpixels.questy.objective;
 
 import com.volumetricpixels.questy.QuestInstance;
 
+/**
+ * Stores progresses for each available {@link Outcome} of one particular
+ * {@link Objective}, in the form of {@link OutcomeProgress} objects.
+ */
 public class ObjectiveProgress {
+    /**
+     * The {@link QuestInstance} which this progress relates to.
+     */
     private final QuestInstance quest;
+    /**
+     * The {@link Objective} which this progress is for.
+     */
     private final Objective objective;
+    /**
+     * All of the {@link OutcomeProgress} objects for the {@link Objective} this
+     * {@link ObjectiveProgress} stores progress for.
+     */
     private OutcomeProgress[] outcomeProgresses;
 
     public ObjectiveProgress(QuestInstance quest, Objective objective) {
@@ -35,14 +49,29 @@ public class ObjectiveProgress {
         }
     }
 
+    /**
+     * Gets the {@link QuestInstance} which this progress relates to.
+     *
+     * @return the related {@link QuestInstance}
+     */
     public QuestInstance getQuest() {
         return quest;
     }
 
+    /**
+     * Gets the {@link Objective} which this object stores progress for.
+     *
+     * @return the {@link Objective} for this progress
+     */
     public Objective getInfo() {
         return objective;
     }
 
+    /**
+     * Serializes this {@link ObjectiveProgress} into a single String.
+     *
+     * @return a serialized form of this {@link ObjectiveProgress}
+     */
     public String serialize() {
         StringBuilder res = new StringBuilder(objective.getName() + "//");
         for (OutcomeProgress progress : outcomeProgresses) {

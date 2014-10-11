@@ -11,9 +11,12 @@ import com.volumetricpixels.questy.storage.SerializationUtil;
 
 public class OutcomeProgress {
     /**
-     * The {@link QuestInstance} this quest is for.
+     * The {@link QuestInstance} this outcome is a part of.
      */
     private final QuestInstance quest;
+    /**
+     * The {@link Outcome} which this object stores progress for.
+     */
     private final Outcome outcome;
 
     /**

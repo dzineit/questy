@@ -129,7 +129,7 @@ public final class QuestBuilder {
      * @param prerequisite the name of the quest to pre-require completion of
      * @return this {@link QuestBuilder} object
      */
-    public QuestBuilder require(String prerequisite) {
+    public QuestBuilder requireCompletion(String prerequisite) {
         prerequisites.add(prerequisite);
         return this;
     }
