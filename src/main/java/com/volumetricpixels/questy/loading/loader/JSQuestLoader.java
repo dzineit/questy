@@ -66,7 +66,7 @@ public class JSQuestLoader implements QuestLoader {
         return result;
     }
 
-    public synchronized Quest loadQuest(Reader reader) {
+    public Quest loadQuest(Reader reader) {
         BufferedReader bufReader;
         if (reader instanceof BufferedReader) {
             bufReader = (BufferedReader) reader;
