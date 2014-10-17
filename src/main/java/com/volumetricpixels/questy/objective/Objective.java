@@ -11,7 +11,7 @@ import com.volumetricpixels.questy.QuestInstance;
 /**
  * Represents a single objective in a {@link Quest}.
  */
-public class Objective {
+public final class Objective {
     /**
      * The name of this {@link Objective}. This should be both human-readable
      * and unique within this Objective's {@link Quest}, i.e there should be no

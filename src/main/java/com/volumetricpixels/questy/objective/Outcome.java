@@ -8,7 +8,7 @@ package com.volumetricpixels.questy.objective;
 /**
  * Represents a single possible outcome for an {@link Objective}.
  */
-public class Outcome {
+public final class Outcome {
     private final String name;
     private final String description;
     private final String type;

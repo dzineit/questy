@@ -9,7 +9,7 @@ import com.volumetricpixels.questy.QuestInstance;
 import com.volumetricpixels.questy.event.quest.ProgressUpdateEvent;
 import com.volumetricpixels.questy.storage.SerializationUtil;
 
-public class OutcomeProgress {
+public final class OutcomeProgress {
     /**
      * The {@link QuestInstance} this outcome is a part of.
      */

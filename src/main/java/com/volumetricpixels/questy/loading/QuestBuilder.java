@@ -24,7 +24,7 @@ import java.util.Set;
  * manage the same {@link Objective} instance being required in multiple parts
  * of the loading process.
  */
-public final class QuestBuilder {
+public class QuestBuilder {
     /**
      * Gets a {@link QuestBuilder}, the {@link Quest} built by which will be
      * assigned to the given {@link QuestManager}, with the given name. If this
@@ -187,7 +187,7 @@ public final class QuestBuilder {
      * Used to build {@link Objective} objects and their {@link Outcome}s
      * (which are built using {@link OutcomeBuilder}).
      */
-    public static final class ObjectiveBuilder {
+    public static class ObjectiveBuilder {
         /**
          * A cache of already created {@link OutcomeBuilder}s for {@link
          * Outcome}s for this quest, where the keys are the names of the
@@ -296,7 +296,7 @@ public final class QuestBuilder {
     /**
      * Used to build {@link Outcome} objects.
      */
-    public static final class OutcomeBuilder {
+    public static class OutcomeBuilder {
         /**
          * The name of the {@link Outcome} being built.
          */

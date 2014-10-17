@@ -11,7 +11,7 @@ import com.volumetricpixels.questy.QuestInstance;
  * Stores progresses for each available {@link Outcome} of one particular
  * {@link Objective}, in the form of {@link OutcomeProgress} objects.
  */
-public class ObjectiveProgress {
+public final class ObjectiveProgress {
     /**
      * The {@link QuestInstance} which this progress relates to.
      */
