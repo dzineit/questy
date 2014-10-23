@@ -6,3 +6,5 @@ obj1.outcome("Outcome2").description("The first objective's second outcome.").ty
 
 var obj2 = builder.objective("Simple2").description("The second simple objective.");
 obj2.outcome("Outcome1").description("The first objective's only outcome.").type("standstill_10_mins");
+
+return builder.build();
