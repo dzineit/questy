@@ -24,7 +24,7 @@ import java.util.Set;
  * manage the same {@link Objective} instance being required in multiple parts
  * of the loading process.
  */
-public class QuestBuilder {
+public final class QuestBuilder {
     /**
      * Gets a {@link QuestBuilder}, the {@link Quest} built by which will be
      * assigned to the given {@link QuestManager}, with the given name. If this
@@ -150,7 +150,7 @@ public class QuestBuilder {
         if (temp != null) {
             return temp;
         }
-        temp = new ObjectiveBuilder().name(name);
+        temp = new ObjectiveBuilder(this).name(name);
         objectiveBuilders.put(name, temp);
         objectives.add(temp);
         return temp;
@@ -187,7 +187,12 @@ public class QuestBuilder {
      * Used to build {@link Objective} objects and their {@link Outcome}s
      * (which are built using {@link OutcomeBuilder}).
      */
-    public static class ObjectiveBuilder {
+    public static final class ObjectiveBuilder {
+        /**
+         * The {@link QuestBuilder} for the quest the {@link Objective} this
+         * builder represents will be a part of.
+         */
+        private final QuestBuilder quest;
         /**
          * A cache of already created {@link OutcomeBuilder}s for {@link
          * Outcome}s for this quest, where the keys are the names of the
@@ -220,7 +225,18 @@ public class QuestBuilder {
          * Do not call. Obtain instances from {@link
          * QuestBuilder#objective(String)}.
          */
-        private ObjectiveBuilder() {
+        private ObjectiveBuilder(QuestBuilder quest) {
+            this.quest = quest;
+        }
+
+        /**
+         * Gets the {@link QuestBuilder} which this {@link ObjectiveBuilder}
+         * builds an objective for.
+         *
+         * @return this ObjectiveBuilder's QuestBuilder
+         */
+        public QuestBuilder quest() {
+            return quest;
         }
 
         /**
@@ -265,7 +281,7 @@ public class QuestBuilder {
             if (temp != null) {
                 return temp;
             }
-            temp = new OutcomeBuilder().name(name);
+            temp = new OutcomeBuilder(this).name(name);
             outcomeBuilders.put(name, temp);
             outcomes.add(temp);
             return temp;
@@ -296,7 +312,12 @@ public class QuestBuilder {
     /**
      * Used to build {@link Outcome} objects.
      */
-    public static class OutcomeBuilder {
+    public static final class OutcomeBuilder {
+        /**
+         * The {@link ObjectiveBuilder} for the objective the {@link Outcome}
+         * this builder represents will be a part of.
+         */
+        private final ObjectiveBuilder obj;
         /**
          * The name of the {@link Outcome} being built.
          */
@@ -325,7 +346,28 @@ public class QuestBuilder {
          * Do not call. Obtain instances from {@link
          * ObjectiveBuilder#outcome(String)}.
          */
-        private OutcomeBuilder() {
+        private OutcomeBuilder(ObjectiveBuilder obj) {
+            this.obj = obj;
+        }
+
+        /**
+         * Gets the {@link QuestBuilder} which this {@link OutcomeBuilder}'s
+         * {@link ObjectiveBuilder} builds an objective for.
+         *
+         * @return this OutcomeBuilder's ObjectiveBuilder's QuestBuilder
+         */
+        public QuestBuilder quest() {
+            return objective().quest();
+        }
+
+        /**
+         * Gets the {@link ObjectiveBuilder} which this {@link OutcomeBuilder}
+         * builds an outcome for.
+         *
+         * @return this OutcomeBuilder's ObjectiveBuilder
+         */
+        public ObjectiveBuilder objective() {
+            return obj;
         }
 
         /**
