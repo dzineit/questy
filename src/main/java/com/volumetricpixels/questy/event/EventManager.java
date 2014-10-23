@@ -5,57 +5,24 @@
  */
 package com.volumetricpixels.questy.event;
 
-import gnu.trove.set.hash.THashSet;
-
-import java.util.Iterator;
-import java.util.Set;
-
 /**
- * A simple {@link EventManager}, which stores {@link ListenerHandle} objects
- * and sends {@link Event}s their way when a relevant {@link Event} is fired via
- * {@link #fire(Event)}.
+ * A manager used to send {@link Event}s to relevant listeners.
  */
-public class EventManager {
+public interface EventManager {
     /**
-     * All registered {@link Object}s, each contained within a {@link
-     * ListenerHandle} object.
-     */
-    private final Set<ListenerHandle> listeners;
-
-    /**
-     * Constructs a new EventManager with no registered {@link Object}s.
-     */
-    public EventManager() {
-        listeners = new THashSet<>();
-    }
-
-    /**
-     * Registers the given {@link Object} to this {@link EventManager}. Logic
-     * for registration of {@code @EventHandler} methods can be found in {@link
-     * ListenerHandle#ListenerHandle(Object)}.
+     * Registers the given {@link Object} to this {@link EventManager}.
      *
      * @param listener the {@link Object} to register
      * @return whether the given {@link Object} was successfully registered
      */
-    public boolean register(Object listener) {
-        return listeners.add(new ListenerHandle(listener));
-    }
+    boolean register(Object listener);
 
     /**
-     * Unregisters all {@link ListenerHandle}s which wrap the given {@link
-     * Object}.
+     * Unregisters the given listener {@link Object}.
      *
      * @param listener the {@link Object} to unregister
      */
-    public void unregister(Object listener) {
-        Iterator<ListenerHandle> it = listeners.iterator();
-        while (it.hasNext()) {
-            ListenerHandle handle = it.next();
-            if (handle.getListener() == listener) {
-                it.remove();
-            }
-        }
-    }
+    void unregister(Object listener);
 
     /**
      * Fires the given {@link Event}, directing it to all registered {@link
@@ -65,8 +32,5 @@ public class EventManager {
      * @param <T> the type of {@link Event} to fire, and therefore return
      * @return the given {@link Event}
      */
-    public <T extends Event> T fire(T event) {
-        listeners.forEach((listener) -> listener.handle(event));
-        return event;
-    }
+    <T extends Event> T fire(T event);
 }

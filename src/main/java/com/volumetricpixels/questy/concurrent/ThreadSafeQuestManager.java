@@ -16,6 +16,7 @@ import com.volumetricpixels.questy.event.quest.QuestAbandonEvent;
 import com.volumetricpixels.questy.event.quest.QuestCompleteEvent;
 import com.volumetricpixels.questy.event.quest.QuestStartEvent;
 import com.volumetricpixels.questy.event.quest.objective.ObjectiveStartEvent;
+import com.volumetricpixels.questy.event.questy.SimpleEventManager;
 import com.volumetricpixels.questy.loading.QuestLoader;
 import com.volumetricpixels.questy.objective.OutcomeProgress;
 import com.volumetricpixels.questy.storage.ProgressStore;
@@ -61,14 +62,33 @@ public class ThreadSafeQuestManager implements QuestManager {
      * {@link QuestLoader}s or loaded {@link Quest}s, with the given {@link
      * ProgressStore} being used for saving / loading progression.
      *
+     * A {@link SimpleEventManager} is used for events.
+     *
      * @param store the {@link ProgressStore} for saving and loading progression
      *        data - can be null but {@link NullPointerException} will be thrown
      *        from {@link #loadProgression()} / {@link #saveProgression()} if it
      *        is
      */
     public ThreadSafeQuestManager(ProgressStore store) {
+        this(store, new SimpleEventManager());
+    }
+
+    /**
+     * Constructs a blank {@link ThreadSafeQuestManager} with no registered
+     * {@link QuestLoader}s or loaded {@link Quest}s, with the given {@link
+     * ProgressStore} being used for saving / loading progression.
+     *
+     * @param store the {@link ProgressStore} for saving and loading progression
+     *        data - can be null but {@link NullPointerException} will be thrown
+     *        from {@link #loadProgression()} / {@link #saveProgression()} if it
+     *        is
+     * @param eventManager the {@link EventManager} implementation to use for
+     *        events
+     */
+    public ThreadSafeQuestManager(ProgressStore store,
+            EventManager eventManager) {
         this.store = store;
-        this.eventManager = new EventManager();
+        this.eventManager = eventManager;
         this.loaders = new THashSet<>();
         this.loaded = new THashMap<>();
         this.current = new THashSet<>();

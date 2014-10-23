@@ -3,10 +3,12 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package com.volumetricpixels.questy.event;
+package com.volumetricpixels.questy.event.questy;
 
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
+
+import com.volumetricpixels.questy.event.Event;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;

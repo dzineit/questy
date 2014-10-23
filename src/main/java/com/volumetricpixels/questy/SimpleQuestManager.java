@@ -13,6 +13,7 @@ import com.volumetricpixels.questy.event.quest.QuestAbandonEvent;
 import com.volumetricpixels.questy.event.quest.QuestCompleteEvent;
 import com.volumetricpixels.questy.event.quest.QuestStartEvent;
 import com.volumetricpixels.questy.event.quest.objective.ObjectiveStartEvent;
+import com.volumetricpixels.questy.event.questy.SimpleEventManager;
 import com.volumetricpixels.questy.loading.QuestBuilder;
 import com.volumetricpixels.questy.loading.QuestLoader;
 import com.volumetricpixels.questy.objective.OutcomeProgress;
@@ -62,14 +63,32 @@ public class SimpleQuestManager implements QuestManager {
      * QuestLoader}s or loaded {@link Quest}s, with the given {@link
      * ProgressStore} being used for saving / loading progression.
      *
+     * A {@link SimpleEventManager} is used for events.
+     *
      * @param store the {@link ProgressStore} for saving and loading progression
      *        data - can be null but {@link NullPointerException} will be thrown
      *        from {@link #loadProgression()} / {@link #saveProgression()} if it
      *        is
      */
     public SimpleQuestManager(ProgressStore store) {
+        this(store, new SimpleEventManager());
+    }
+
+    /**
+     * Constructs a blank {@link SimpleQuestManager} with no registered {@link
+     * QuestLoader}s or loaded {@link Quest}s, with the given {@link
+     * ProgressStore} being used for saving / loading progression.
+     *
+     * @param store the {@link ProgressStore} for saving and loading progression
+     *        data - can be null but {@link NullPointerException} will be thrown
+     *        from {@link #loadProgression()} / {@link #saveProgression()} if it
+     *        is
+     * @param eventManager the {@link EventManager} implementation to use for
+     *        events
+     */
+    public SimpleQuestManager(ProgressStore store, EventManager eventManager) {
         this.store = store;
-        this.eventManager = new EventManager();
+        this.eventManager = eventManager;
         this.loaders = new THashSet<>();
         this.loaded = new THashMap<>();
         this.current = new THashSet<>();

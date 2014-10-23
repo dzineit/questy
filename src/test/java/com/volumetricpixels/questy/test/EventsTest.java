@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import com.volumetricpixels.questy.SimpleQuestManager;
 import com.volumetricpixels.questy.event.EventManager;
-import com.volumetricpixels.questy.event.Listen;
+import com.volumetricpixels.questy.event.questy.Listen;
 import com.volumetricpixels.questy.event.quest.QuestAbandonEvent;
 import com.volumetricpixels.questy.event.quest.QuestStartEvent;
 
