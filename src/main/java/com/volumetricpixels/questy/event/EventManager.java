@@ -12,6 +12,12 @@ public interface EventManager {
     /**
      * Registers the given {@link Object} to this {@link EventManager}.
      *
+     * It is required by any implementation of this method that all methods
+     * within the listener annotated with {@link Listen} are considered for
+     * registration as a listener method, although it is not guaranteed that all
+     * will be registered as there may be other restrictions on the method
+     * signature.
+     *
      * @param listener the {@link Object} to register
      * @return whether the given {@link Object} was successfully registered
      */

@@ -9,6 +9,7 @@ import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 
 import com.volumetricpixels.questy.event.Event;
+import com.volumetricpixels.questy.event.Listen;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
