@@ -15,6 +15,7 @@ import com.volumetricpixels.questy.questy.SimpleQuestManager;
 import com.volumetricpixels.questy.storage.ProgressStore;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -104,7 +105,7 @@ public interface QuestManager {
     /**
      * Gets the {@link QuestInstance} object of the given {@link Quest} for the
      * given {@code quester}. This may be {@code null} if the given quester
-     * isn't currently doing the given quest.
+     * isn't currently doing the given quest.  Quester names are case-sensitive.
      *
      * @param quest the {@link Quest} to get the instance for
      * @param quester the name of the player to get the instance for
@@ -115,7 +116,7 @@ public interface QuestManager {
     /**
      * Gets progression data about the given {@link Quest} for the given player
      * if the given player has completed the {@link Quest}. If the player hasn't
-     * completed the quest, {@code null} is returned.
+     * completed the quest, {@code null} is returned.  Quester names are case-sensitive.
      *
      * @param quest the {@link Quest} to get the progression for
      * @param quester the player to get the completed quest data for
@@ -126,7 +127,7 @@ public interface QuestManager {
 
     /**
      * Checks whether the given {@code quester} has completed the given {@link
-     * Quest}.
+     * Quest}.  Quester names are case-sensitive.
      *
      * @param quest the {@link Quest} to check completion status of
      * @param quester the player to check the completion status for
@@ -138,6 +139,23 @@ public interface QuestManager {
     }
 
     /**
+     * Gets a {@link Collection} of {@link QuestInstance}s currently in progress for the given {@code quester}. If the given quester has no current quests, this method should
+     * return an empty {@link Collection}, not {@code null}. Quester names are case-sensitive.
+     *
+     * @param quester the quester to get in progress quests for
+     * @return a {@link Collection} of {@link QuestInstance}s currently in progress for the given quester
+     */
+    Collection<QuestInstance> getQuestInstances(String quester);
+
+    /**
+     * Gets a {@link Collection} of all currently in progress instances of the given {@link Quest}.
+     *
+     * @param quest the {@link Quest} to get instances of
+     * @return all in progress {@link QuestInstance}s of the given quest
+     */
+    Collection<QuestInstance> getInstances(Quest quest);
+
+    /**
      * A utility for caching {@link QuestBuilder}s and other quest loading
      * things.
      *
@@ -145,7 +163,7 @@ public interface QuestManager {
      * builders or {@link java.util.ConcurrentModificationException}.
      */
     // in a separate class for synchronization purposes and organisation
-    public final class QuestLoadHelper {
+    final class QuestLoadHelper {
         /**
          * A {@link Map} of quest names to {@link QuestBuilder}s.
          */

@@ -157,6 +157,18 @@ public class ThreadSafeQuestManager implements QuestManager {
     }
 
     @Override
+    public Collection<QuestInstance> getQuestInstances(String quester) {
+        // TODO
+        return null;
+    }
+
+    @Override
+    public Collection<QuestInstance> getInstances(Quest quest) {
+        // TODO
+        return null;
+    }
+
+    @Override
     public void loadQuests(File directory) {
         synchronized (loaders) {
             if (loaders.isEmpty()) {

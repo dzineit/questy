@@ -24,6 +24,7 @@ import com.volumetricpixels.questy.storage.ProgressStore;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -148,6 +149,22 @@ public class SimpleQuestManager implements QuestManager {
     @Override
     public boolean hasCompleted(Quest quest, String quester) {
         return getCompletedQuest(quest, quester) != null;
+    }
+
+    @Override
+    public Collection<QuestInstance> getQuestInstances(String quester) {
+        Set<QuestInstance> result = new HashSet<>();
+        for (QuestInstance instance : this.current) {
+            if (instance.getQuester().equals(quester)) {
+                result.add(instance);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public Collection<QuestInstance> getInstances(Quest quest) {
+        return null;
     }
 
     @Override
