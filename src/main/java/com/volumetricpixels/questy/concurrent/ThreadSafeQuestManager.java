@@ -27,6 +27,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Unfinished / untested - currently no guarantee of thread safety
+ */
 public class ThreadSafeQuestManager implements QuestManager {
     /**
      * The {@link ProgressStore} used for progression data storage.

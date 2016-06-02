@@ -23,7 +23,7 @@ import java.util.Set;
 /**
  * Wraps a listener Object to direct {@link Event}s its way.
  */
-public final class ListenerHandle {
+public final class SimpleListenerHandle {
     /**
      * The actual listener {@link Object}.
      */
@@ -34,7 +34,7 @@ public final class ListenerHandle {
      */
     private final Map<Class<? extends Event>, Set<MethodHandle>> eventHandlers;
 
-    public ListenerHandle(Object listener) {
+    public SimpleListenerHandle(Object listener) {
         this.listener = listener;
         this.eventHandlers = new THashMap<>();
 
@@ -112,7 +112,7 @@ public final class ListenerHandle {
 
     @Override
     public boolean equals(Object other) {
-        return other instanceof ListenerHandle
-                && listener == ((ListenerHandle) other).listener;
+        return other instanceof SimpleListenerHandle
+                && listener == ((SimpleListenerHandle) other).listener;
     }
 }

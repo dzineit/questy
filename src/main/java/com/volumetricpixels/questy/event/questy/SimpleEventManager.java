@@ -14,16 +14,16 @@ import java.util.Iterator;
 import java.util.Set;
 
 /**
- * A simple {@link EventManager}, which stores {@link ListenerHandle} objects
+ * A simple {@link EventManager}, which stores {@link SimpleListenerHandle} objects
  * and sends {@link Event}s their way when a relevant {@link Event} is fired via
  * {@link #fire(Event)}.
  */
 public class SimpleEventManager implements EventManager {
     /**
      * All registered {@link Object}s, each contained within a {@link
-     * ListenerHandle} object.
+     * SimpleListenerHandle} object.
      */
-    private final Set<ListenerHandle> listeners;
+    private final Set<SimpleListenerHandle> listeners;
 
     /**
      * Constructs a new EventManager with no registered {@link Object}s.
@@ -36,16 +36,16 @@ public class SimpleEventManager implements EventManager {
      * {@inheritDoc}
      */
     public boolean register(Object listener) {
-        return listeners.add(new ListenerHandle(listener));
+        return listeners.add(new SimpleListenerHandle(listener));
     }
 
     /**
      * {@inheritDoc}
      */
     public void unregister(Object listener) {
-        Iterator<ListenerHandle> it = listeners.iterator();
+        Iterator<SimpleListenerHandle> it = listeners.iterator();
         while (it.hasNext()) {
-            ListenerHandle handle = it.next();
+            SimpleListenerHandle handle = it.next();
             if (handle.getListener() == listener) {
                 it.remove();
             }
