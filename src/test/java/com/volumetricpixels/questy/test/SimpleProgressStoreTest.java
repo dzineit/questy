@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import com.volumetricpixels.questy.Quest;
 import com.volumetricpixels.questy.QuestInstance;
-import com.volumetricpixels.questy.SimpleQuestManager;
+import com.volumetricpixels.questy.questy.SimpleQuestManager;
 import com.volumetricpixels.questy.storage.store.SimpleProgressStore;
 
 import java.io.File;

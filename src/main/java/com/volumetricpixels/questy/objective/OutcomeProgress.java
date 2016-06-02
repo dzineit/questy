@@ -7,7 +7,7 @@ package com.volumetricpixels.questy.objective;
 
 import com.volumetricpixels.questy.QuestInstance;
 import com.volumetricpixels.questy.event.quest.ProgressUpdateEvent;
-import com.volumetricpixels.questy.storage.SerializationUtil;
+import com.volumetricpixels.questy.util.Serialization;
 
 public final class OutcomeProgress {
     /**
@@ -39,7 +39,7 @@ public final class OutcomeProgress {
         String[] split = serialized.split("==");
         this.outcome = objective.getOutcome(split[0]);
 
-        setProgressSilent(SerializationUtil.handleCommonTypes(split[1]));
+        setProgressSilent(Serialization.handleCommonTypes(split[1]));
     }
 
     public Outcome getInfo() {

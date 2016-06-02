@@ -8,7 +8,7 @@ package com.volumetricpixels.questy.test;
 import org.junit.Test;
 
 import com.volumetricpixels.questy.Quest;
-import com.volumetricpixels.questy.concurrent.ThreadSafeQuestManager;
+import com.volumetricpixels.questy.questy.concurrent.ThreadSafeQuestManager;
 import com.volumetricpixels.questy.storage.store.SimpleProgressStore;
 
 import java.io.File;

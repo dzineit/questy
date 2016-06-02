@@ -9,8 +9,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.volumetricpixels.questy.Quest;
-import com.volumetricpixels.questy.SimpleQuestManager;
-import com.volumetricpixels.questy.loading.loader.JSQuestLoader;
+import com.volumetricpixels.questy.questy.SimpleQuestManager;
+import com.volumetricpixels.questy.questy.loader.JSQuestLoader;
 import com.volumetricpixels.questy.objective.Objective;
 import com.volumetricpixels.questy.objective.Outcome;
 

@@ -12,7 +12,7 @@ import com.volumetricpixels.questy.objective.Objective;
 import com.volumetricpixels.questy.objective.ObjectiveProgress;
 import com.volumetricpixels.questy.objective.OutcomeProgress;
 
-import static com.volumetricpixels.questy.storage.SerializationUtil.appendIf;
+import static com.volumetricpixels.questy.util.General.appendIf;
 
 /**
  * Represents an 'instance' of a {@link Quest}. A {@link QuestInstance} holds

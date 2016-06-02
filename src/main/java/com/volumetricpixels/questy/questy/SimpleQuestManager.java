@@ -3,11 +3,14 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package com.volumetricpixels.questy;
+package com.volumetricpixels.questy.questy;
 
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 
+import com.volumetricpixels.questy.Quest;
+import com.volumetricpixels.questy.QuestInstance;
+import com.volumetricpixels.questy.QuestManager;
 import com.volumetricpixels.questy.event.EventManager;
 import com.volumetricpixels.questy.event.quest.QuestAbandonEvent;
 import com.volumetricpixels.questy.event.quest.QuestCompleteEvent;
@@ -207,7 +210,7 @@ public class SimpleQuestManager implements QuestManager {
     @Override
     public boolean addQuest(Quest quest) {
         loaded.put(quest.getName(), quest);
-        return true; // this implementation overwrites quests so always true
+        return true; // this implementation simply overwrites quests which are already present so always true
     }
 
     @Override
@@ -226,10 +229,11 @@ public class SimpleQuestManager implements QuestManager {
     }
 
     // internal
+    // these methods should probably be cleaned up at some point
 
     private void deserialize(Map<String, Map<String, String>> map,
             Set<QuestInstance> set) {
-        for (String key : map.keySet()) {
+        for (String key : map.keySet()) { // loop through map values
             Collection<String> serialized = map.get(key).values();
             set.addAll(serialized.stream().map(serial -> new QuestInstance(
                     this, key, serial)).collect(Collectors.toList()));
@@ -238,7 +242,7 @@ public class SimpleQuestManager implements QuestManager {
 
     private Map<String, Map<String, String>> serialize(Set<QuestInstance> set) {
         Map<String, Map<String, String>> result = new THashMap<>();
-        for (QuestInstance questInstance : set) {
+        for (QuestInstance questInstance : set) { // loop through current quests
             String quester = questInstance.getQuester();
             Map<String, String> map = result.get(quester);
             if (map == null) {

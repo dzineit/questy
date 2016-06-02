@@ -3,7 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package com.volumetricpixels.questy.storage;
+package com.volumetricpixels.questy.util;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,9 +16,12 @@ import java.util.List;
 import java.util.function.Function;
 
 /**
- * Various serialization and deserialization utilities used by Questy.
+ * Various serialization and deserialization utilities used by Questy. Mostly for testing purposes.
  */
-public final class SerializationUtil {
+public final class Serialization {
+    /**
+     * Commonly used conversions from {@link String}s to other {@link Object}s such as integers or characters.
+     */
     private static final List<Function<String, Object>> common = new ArrayList<>();
 
     static {
@@ -68,6 +71,12 @@ public final class SerializationUtil {
         return serialized;
     }
 
+    /**
+     * Uses Java's serialization API to write the {@code object} to the given {@code file}.
+     *
+     * @param file the {@link File} to write the data to
+     * @param object the data to write to the file
+     */
     public static void writeObject(File file, Object object) {
         try {
             FileOutputStream fileOut = new FileOutputStream(file);
@@ -76,10 +85,17 @@ public final class SerializationUtil {
             out.close();
             fileOut.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(); // proper exception handling unnecessary as this will most likely never be used in production
         }
     }
 
+    /**
+     * Reads the data in the given {@code file} and returns it as a Java {@link Object} if it can. Human modifications to the file will cause problems and are the most likely cause
+     * of {@code null} being returned.
+     *
+     * @param file the {@link File} to read the data from
+     * @return a {@link Object} written in the file
+     */
     public static Object readObject(File file) {
         try {
             FileInputStream fileIn = new FileInputStream(file);
@@ -89,24 +105,15 @@ public final class SerializationUtil {
             fileIn.close();
             return result;
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(); // proper exception handling unnecessary as this will most likely never be used in production
             return null;
         }
     }
 
     /**
-     * @deprecated do not call
+     * This class never needs to be instantiated.
      */
-    @Deprecated
-    private SerializationUtil() {
+    private Serialization() {
         throw new UnsupportedOperationException();
-    }
-
-    public static StringBuilder appendIf(boolean check, StringBuilder builder,
-            String append) {
-        if (check) {
-            return builder.append(append);
-        }
-        return builder;
     }
 }

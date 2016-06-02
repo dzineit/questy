@@ -6,13 +6,18 @@
 package com.volumetricpixels.questy.storage.store;
 
 import com.volumetricpixels.questy.storage.ProgressStore;
-import com.volumetricpixels.questy.storage.SerializationUtil;
+import com.volumetricpixels.questy.util.Serialization;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Simple implementation of a {@link ProgressStore} which uses the Java serialization API to write Map objects to files. Not advisable for use in a production environment, this is
+ * simply a way of testing the framework and alternatives will be implemented before release.
+ */
+// this file doesn't really need documenting beyond the above
 public class SimpleProgressStore implements ProgressStore {
     private final File currentStore;
     private final File completedStore;
@@ -52,7 +57,7 @@ public class SimpleProgressStore implements ProgressStore {
             file.getParentFile().mkdirs();
             file.delete();
             file.createNewFile();
-            SerializationUtil.writeObject(file, data);
+            Serialization.writeObject(file, data);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -65,7 +70,7 @@ public class SimpleProgressStore implements ProgressStore {
         }
 
         try {
-            return (Map) SerializationUtil.readObject(file);
+            return (Map) Serialization.readObject(file);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

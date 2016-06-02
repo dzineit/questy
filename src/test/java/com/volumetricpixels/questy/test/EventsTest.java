@@ -8,7 +8,7 @@ package com.volumetricpixels.questy.test;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.volumetricpixels.questy.SimpleQuestManager;
+import com.volumetricpixels.questy.questy.SimpleQuestManager;
 import com.volumetricpixels.questy.event.EventManager;
 import com.volumetricpixels.questy.event.Listen;
 import com.volumetricpixels.questy.event.quest.QuestAbandonEvent;

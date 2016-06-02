@@ -11,6 +11,7 @@ import com.volumetricpixels.questy.event.EventManager;
 import com.volumetricpixels.questy.loading.QuestBuilder;
 import com.volumetricpixels.questy.loading.QuestLoader;
 import com.volumetricpixels.questy.objective.OutcomeProgress;
+import com.volumetricpixels.questy.questy.SimpleQuestManager;
 import com.volumetricpixels.questy.storage.ProgressStore;
 
 import java.io.File;
