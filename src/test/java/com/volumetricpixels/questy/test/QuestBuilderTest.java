@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import com.volumetricpixels.questy.questy.SimpleQuestManager;
 import com.volumetricpixels.questy.loading.QuestBuilder;
+import com.volumetricpixels.questy.loading.QuestBuilder.ObjectiveBuilder.OutcomeBuilder;
 import com.volumetricpixels.questy.Quest;
 import com.volumetricpixels.questy.objective.Objective;
 import com.volumetricpixels.questy.objective.Outcome;
@@ -30,8 +31,8 @@ public class QuestBuilderTest {
 
         objOne.description("The first objective!");
 
-        QuestBuilder.OutcomeBuilder outcome1 = objOne.outcome("Nope");
-        QuestBuilder.OutcomeBuilder outcome2 = objOne.outcome("Yep");
+        OutcomeBuilder outcome1 = objOne.outcome("Nope");
+        OutcomeBuilder outcome2 = objOne.outcome("Yep");
 
         Quest result = builder.build();
         Assert.assertEquals(result.getAmtObjectives(), 1);

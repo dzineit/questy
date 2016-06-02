@@ -12,7 +12,7 @@ import com.volumetricpixels.questy.Quest;
 import com.volumetricpixels.questy.QuestManager;
 import com.volumetricpixels.questy.loading.QuestBuilder;
 import com.volumetricpixels.questy.loading.QuestBuilder.ObjectiveBuilder;
-import com.volumetricpixels.questy.loading.QuestBuilder.OutcomeBuilder;
+import com.volumetricpixels.questy.loading.QuestBuilder.ObjectiveBuilder.OutcomeBuilder;
 import com.volumetricpixels.questy.loading.QuestLoader;
 
 import java.io.File;
