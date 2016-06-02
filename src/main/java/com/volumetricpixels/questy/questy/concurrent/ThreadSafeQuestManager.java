@@ -16,7 +16,7 @@ import com.volumetricpixels.questy.event.quest.QuestAbandonEvent;
 import com.volumetricpixels.questy.event.quest.QuestCompleteEvent;
 import com.volumetricpixels.questy.event.quest.QuestStartEvent;
 import com.volumetricpixels.questy.event.quest.objective.ObjectiveStartEvent;
-import com.volumetricpixels.questy.event.questy.SimpleEventManager;
+import com.volumetricpixels.questy.questy.event.SimpleEventManager;
 import com.volumetricpixels.questy.loading.QuestLoader;
 import com.volumetricpixels.questy.objective.OutcomeProgress;
 import com.volumetricpixels.questy.storage.ProgressStore;
