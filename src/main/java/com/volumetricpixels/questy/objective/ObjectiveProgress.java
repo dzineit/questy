@@ -7,6 +7,10 @@ package com.volumetricpixels.questy.objective;
 
 import com.volumetricpixels.questy.QuestInstance;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Stores progresses for each available {@link Outcome} of one particular
  * {@link Objective}, in the form of {@link OutcomeProgress} objects.
@@ -65,6 +69,10 @@ public final class ObjectiveProgress {
      */
     public Objective getInfo() {
         return objective;
+    }
+
+    public Set<OutcomeProgress> getOutcomeProgresses() {
+        return new HashSet<>(Arrays.asList(this.outcomeProgresses));
     }
 
     /**
