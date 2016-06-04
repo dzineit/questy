@@ -5,9 +5,6 @@
  */
 package com.volumetricpixels.questy.loading;
 
-import gnu.trove.map.hash.THashMap;
-import gnu.trove.set.hash.THashSet;
-
 import com.volumetricpixels.questy.Quest;
 import com.volumetricpixels.questy.QuestManager;
 import com.volumetricpixels.questy.QuestManager.QuestLoadHelper;
@@ -15,6 +12,8 @@ import com.volumetricpixels.questy.objective.Objective;
 import com.volumetricpixels.questy.objective.Outcome;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -56,7 +55,7 @@ public final class QuestBuilder {
      * Objective}s for this quest, where the keys are the names of the
      * {@link Objective}s.
      */
-    private final Map<String, ObjectiveBuilder> objectiveBuilders = new THashMap<>();
+    private final Map<String, ObjectiveBuilder> objectiveBuilders = new HashMap<>();
     /**
      * The Questy {@link QuestManager} which the {@link Quest} being built is to
      * be assigned to.
@@ -71,7 +70,11 @@ public final class QuestBuilder {
      * A {@link Set} of the names of {@link Quest}s which are required to start
      * this {@link Quest}.
      */
-    private final Set<String> prerequisites = new THashSet<>();
+    private final Set<String> prerequisites = new HashSet<>();
+    /**
+     * A {@link List} of rewards given for completing this {@link Quest}.
+     */
+    private final List<String> rewards = new ArrayList<>();
 
     /**
      * The name of the {@link Quest} to be built.
@@ -119,6 +122,17 @@ public final class QuestBuilder {
      */
     public QuestBuilder description(String description) {
         this.description = description;
+        return this;
+    }
+
+    /**
+     * Adds the given reward to this builder's {@link List} of quest rewards.
+     *
+     * @param reward the reward to add
+     * @return this {@link QuestBuilder} object
+     */
+    public QuestBuilder reward(String reward) {
+        rewards.add(reward);
         return this;
     }
 
@@ -180,7 +194,8 @@ public final class QuestBuilder {
             objs[i] = objectives.get(i).build();
         }
         return built = new Quest(questManager, name, description, objs,
-                prerequisites.toArray(new String[prerequisites.size()]));
+                prerequisites.toArray(new String[prerequisites.size()]),
+                rewards.toArray(new String[rewards.size()]));
     }
 
     /**
@@ -193,7 +208,7 @@ public final class QuestBuilder {
          * Outcome}s for this quest, where the keys are the names of the
          * {@link Outcome}s.
          */
-        private final Map<String, OutcomeBuilder> outcomeBuilders = new THashMap<>();
+        private final Map<String, OutcomeBuilder> outcomeBuilders = new HashMap<>();
         /**
          * A {@link List} of the {@link OutcomeBuilder}s for the possible
          * {@link Outcome}s for the {@link Objective} being built from this
