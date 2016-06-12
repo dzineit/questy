@@ -33,10 +33,16 @@ public final class SimpleListenerHandle {
      * which listen for the event type they are mapped from.
      */
     private final Map<Class<? extends Event>, Set<MethodHandle>> eventHandlers;
+    /**
+     * A {@link Map} of {@link Event} subclasses to {@link Set}s of monitor
+     * methods listening for the type of event they're mapped from.
+     */
+    private final Map<Class<? extends Event>, Set<MethodHandle>> monitorEventHandlers;
 
     public SimpleListenerHandle(Object listener) {
         this.listener = listener;
         this.eventHandlers = new THashMap<>();
+        this.monitorEventHandlers = new THashMap<>();
 
         // check every method in the given Listener
         for (Method meth : listener.getClass().getDeclaredMethods()) {
@@ -57,16 +63,30 @@ public final class SimpleListenerHandle {
             try {
                 // use MethodHandle over Method for actual calls as it is faster
                 MethodHandle handle = MethodHandles.lookup().unreflect(meth);
-                Set<MethodHandle> handlers = eventHandlers.get(evtClass);
-                if (handlers == null) {
-                    // this is the first handler for that event type - in
-                    // practice this will be most of the time
-                    handlers = new THashSet<>();
-                    eventHandlers.put(evtClass, handlers);
-                }
+                if (eh.monitor()) {
+                    Set<MethodHandle> handlers = monitorEventHandlers
+                            .get(evtClass);
+                    if (handlers == null) {
+                        // this is the first handler for that event type - in
+                        // practice this will be most of the time
+                        handlers = new THashSet<>();
+                        monitorEventHandlers.put(evtClass, handlers);
+                    }
 
-                // add the MethodHandle to the Set of them
-                handlers.add(handle);
+                    // add the MethodHandle to the Set of them
+                    handlers.add(handle);
+                } else {
+                    Set<MethodHandle> handlers = eventHandlers.get(evtClass);
+                    if (handlers == null) {
+                        // this is the first handler for that event type - in
+                        // practice this will be most of the time
+                        handlers = new THashSet<>();
+                        eventHandlers.put(evtClass, handlers);
+                    }
+
+                    // add the MethodHandle to the Set of them
+                    handlers.add(handle);
+                }
             } catch (IllegalAccessException e) {
                 // in theory shouldn't happen unless someone is dumb enough to
                 // implement Listener really badly
@@ -80,30 +100,27 @@ public final class SimpleListenerHandle {
      * Object} which has an {@link Listen}-annotated method which handles the
      * given {@link Event}'s type.
      *
-     * The {@link List} contained by the returned {@link Optional} will contain
-     * all {@link Throwable}s thrown by {@link MethodHandle#invoke(Object...)}.
-     * In most cases, this will simply be {@link Optional#empty()}, unless a
-     * {@link Throwable}(s) is actually thrown.
-     *
      * @param event the {@link Event} to call
-     * @return all {@link Throwable}s thrown while calling the {@link Event}
+     * @return all monitor status methods
      */
-    public Optional<List<Throwable>> handle(Event event) {
-        Set<MethodHandle> handles = eventHandlers.get(event.getClass());
-        if (handles == null || handles.isEmpty()) {
-            return Optional.empty();
-        }
+    public Optional<Set<MethodHandle>> handle(Event event) {
+        final Set<MethodHandle> handles = eventHandlers.get(event.getClass());
+        final Set<MethodHandle> monitorHandles = monitorEventHandlers
+                .get(event.getClass());
 
-        List<Throwable> problems = new ArrayList<>();
         for (MethodHandle handle : handles) {
             try {
                 handle.invoke(listener, event);
             } catch (Throwable throwable) {
-                problems.add(throwable);
+                throwable.printStackTrace(); // TODO: determine better way
             }
         }
 
-        return problems.isEmpty() ? Optional.empty() : Optional.of(problems);
+        if (monitorHandles == null || monitorHandles.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return Optional.of(monitorHandles);
+        }
     }
 
     public Object getListener() {

@@ -10,7 +10,9 @@ import gnu.trove.set.hash.THashSet;
 import com.volumetricpixels.questy.event.Event;
 import com.volumetricpixels.questy.event.EventManager;
 
+import java.lang.invoke.MethodHandle;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -56,7 +58,22 @@ public class SimpleEventManager implements EventManager {
      * {@inheritDoc}
      */
     public <T extends Event> T fire(T event) {
-        listeners.forEach((listener) -> listener.handle(event));
+        final Set<MethodHandle> monitor = new THashSet<>();
+        listeners.forEach((listener) -> {
+            final Optional<Set<MethodHandle>> monitors = listener.handle(event);
+            if (monitors.isPresent() && monitors.get().size() > 0) {
+                monitor.addAll(monitors.get());
+            }
+        });
+
+        monitor.forEach((listener) -> {
+            try {
+                listener.invoke(event);
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+            }
+        });
+
         return event;
     }
 }
