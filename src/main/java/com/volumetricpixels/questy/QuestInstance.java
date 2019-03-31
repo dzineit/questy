@@ -12,7 +12,7 @@ import com.volumetricpixels.questy.objective.Objective;
 import com.volumetricpixels.questy.objective.ObjectiveProgress;
 import com.volumetricpixels.questy.objective.OutcomeProgress;
 
-import static com.volumetricpixels.questy.util.General.appendIf;
+import static com.volumetricpixels.questy.util.Util.appendIf;
 
 /**
  * Represents an 'instance' of a {@link Quest}. A {@link QuestInstance} holds
@@ -32,15 +32,20 @@ public final class QuestInstance {
      * The progress for all of the {@link Quest}'s {@link Objective}s.
      */
     private final ObjectiveProgress[] objectiveProgresses;
+    /**
+     * The number of times the quester has previously completed this {@link Quest}.
+     */
+    private final int previousCompletions;
 
     /**
      * The array index of the current {@link ObjectiveProgress}.
      */
     private int current;
 
-    public QuestInstance(Quest quest, String quester) {
+    public QuestInstance(Quest quest, String quester, int previousCompletions) {
         this.quest = quest;
         this.quester = quester;
+        this.previousCompletions = previousCompletions;
 
         objectiveProgresses = new ObjectiveProgress[quest.getAmtObjectives()];
         quest.populateObjectiveProgresses(this, objectiveProgresses);
@@ -62,6 +67,7 @@ public final class QuestInstance {
                 current = i;
             }
         }
+        this.previousCompletions = Integer.parseInt(split[2]);
     }
 
     /**
@@ -142,6 +148,10 @@ public final class QuestInstance {
         return quester;
     }
 
+    public int getPreviousCompletions() {
+        return previousCompletions;
+    }
+
     public ObjectiveProgress[] getObjectiveProgresses() {
         return objectiveProgresses.clone();
     }
@@ -173,6 +183,7 @@ public final class QuestInstance {
                     progress.serialize()), "<c>").append("%");
         }
         result.setLength(result.length() - 1);
+        result.append("_").append(previousCompletions);
         return result.toString();
     }
 

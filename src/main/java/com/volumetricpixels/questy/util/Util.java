@@ -3,7 +3,7 @@ package com.volumetricpixels.questy.util;
 /**
  * General utility methods which are used throughout the Questy framework. More specific utilities can be found in other classes in the util package.
  */
-public final class General {
+public final class Util {
     /**
      * Appends the given {@link String}, {@code append}, to the given {@link StringBuilder}, {@code builder}, only if {@code check == true}.
      *
@@ -22,7 +22,7 @@ public final class General {
     /**
      * This class never needs to be instantiated.
      */
-    private General() {
+    private Util() {
         throw new UnsupportedOperationException();
     }
 }

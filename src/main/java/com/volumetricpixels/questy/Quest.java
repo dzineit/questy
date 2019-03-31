@@ -46,6 +46,10 @@ public final class Quest {
      */
     private final String[] rewards;
     /**
+     * Number of times the quest is allowed to be completed.
+     */
+    private final int maxCompletions;
+    /**
      * A {@link Predicate} specifying the test for whether a quester can embark
      * on this Quest by checking the requirements.
      */
@@ -64,21 +68,25 @@ public final class Quest {
      * @param description the human-readable description of the Quest
      * @param objectives the {@link Objective}s present in the Quest
      * @param prerequisites quests which must be completed to start the Quest
+     * @param rewards rewards for the quest
+     * @param maxCompletions whether the quest can be repeated
+     * @param
      */
     public Quest(QuestManager questManager, String name, String description,
             String beginMessage, String finishMessage, Objective[] objectives,
-            String[] prerequisites, String[] rewards) {
+            String[] prerequisites, String[] rewards, int maxCompletions) {
         this.questManager = questManager;
         this.name = name;
         this.description = description;
         this.beginMessage = beginMessage;
         this.finishMessage = finishMessage;
         this.objectives = objectives;
+        this.maxCompletions = maxCompletions;
         this.rewards = rewards;
 
         predicate = quester -> {
-            if (questManager.hasCompleted(this, quester)) {
-                return false; // TODO: repeatable quests
+            if (questManager.getNumCompletions(this, quester) > maxCompletions && maxCompletions > -1) {
+                return false;
             }
 
             if (prerequisites != null && prerequisites.length > 0) {
@@ -212,13 +220,13 @@ public final class Quest {
      * @return a new {@link QuestInstance} for this Quest and the given quester
      */
     public QuestInstance start(String quester) {
-        QuestInstance result = new QuestInstance(this, quester);
+        QuestInstance result = new QuestInstance(this, quester, questManager.getNumCompletions(this, quester));
         questManager.startQuest(result);
         return result;
     }
 
     /**
-     * Don't call outside of {@link QuestInstance#QuestInstance(Quest, String)}
+     * Don't call outside of {@link QuestInstance#QuestInstance(Quest, String, int)}
      */
     void populateObjectiveProgresses(QuestInstance instance,
             ObjectiveProgress[] progresses) {

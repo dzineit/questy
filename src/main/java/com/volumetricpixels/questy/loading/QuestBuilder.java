@@ -94,6 +94,12 @@ public final class QuestBuilder {
      */
     private String finishMessage;
     /**
+     * The maximum amount of times the quest can be completed.
+     *
+     * Defaults to a value of 1.
+     */
+    private int maxCompletions = 1;
+    /**
      * Only holds a non-null value if {@link #build()} has been invoked. Used to
      * allow the same {@link Quest} to be used in multiple places without
      * creating a new {@link Quest} instance.
@@ -153,6 +159,11 @@ public final class QuestBuilder {
      */
     public QuestBuilder finishMessage(String finishMessage) {
         this.finishMessage = finishMessage;
+        return this;
+    }
+
+    public QuestBuilder maxCompletions(int maxCompletions) {
+        this.maxCompletions = maxCompletions;
         return this;
     }
 
@@ -226,8 +237,8 @@ public final class QuestBuilder {
         }
         return built = new Quest(questManager, name, description, beginMessage,
                 finishMessage, objs,
-                prerequisites.toArray(new String[prerequisites.size()]),
-                rewards.toArray(new String[rewards.size()]));
+                prerequisites.toArray(new String[0]),
+                rewards.toArray(new String[0]), maxCompletions);
     }
 
     /**

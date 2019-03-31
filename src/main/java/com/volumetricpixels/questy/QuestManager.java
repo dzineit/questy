@@ -126,6 +126,19 @@ public interface QuestManager {
     QuestInstance getCompletedQuest(Quest quest, String quester);
 
     /**
+     * Gets the number of times the given player has completed the given {@link
+     * Quest}.
+     *
+     * @param quest the {@link Quest} to query completion count of
+     * @param quester the player to get completion number for
+     * @return number of times the given player has completed the given quest
+     */
+    default int getNumCompletions(Quest quest, String quester) {
+        QuestInstance lastCompletion = getCompletedQuest(quest, quester);
+        return lastCompletion == null ? 0 : lastCompletion.getPreviousCompletions();
+    }
+
+    /**
      * Checks whether the given {@code quester} has completed the given {@link
      * Quest}.  Quester names are case-sensitive.
      *
@@ -139,7 +152,8 @@ public interface QuestManager {
     }
 
     /**
-     * Gets a {@link Collection} of {@link QuestInstance}s currently in progress for the given {@code quester}. If the given quester has no current quests, this method should
+     * Gets a {@link Collection} of {@link QuestInstance}s currently in progress for the
+     * given {@code quester}. If the given quester has no current quests, this method should
      * return an empty {@link Collection}, not {@code null}. Quester names are case-sensitive.
      *
      * @param quester the quester to get in progress quests for
@@ -235,7 +249,7 @@ public interface QuestManager {
      *
      * This method is already called by {@link Quest#start(String)} so only
      * needs to be called if a {@link QuestInstance} is obtained directly via
-     * {@link QuestInstance#QuestInstance(Quest, String)}
+     * {@link QuestInstance#QuestInstance(Quest, String, int)}
      *
      * @param quest the {@link QuestInstance} being started
      * @return whether the quest was successfully started
