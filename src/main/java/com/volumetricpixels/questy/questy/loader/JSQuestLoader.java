@@ -33,7 +33,7 @@ public class JSQuestLoader implements QuestLoader {
                     "Packages.com.volumetricpixels.questy.event.quest," +
                     "Packages.com.volumetricpixels.questy.loading," +
                     "Packages.com.volumetricpixels.questy.objective)) {" +
-                    "    var quest = function genQuest() {";
+                    "    var q = function genQuest() {";
     private static final String SCRIPT_SUFFIX =
             "    }" +
                     "}";
@@ -76,7 +76,7 @@ public class JSQuestLoader implements QuestLoader {
 
         ScriptEngine nashorn = new ScriptEngineManager()
                 .getEngineByName("nashorn");
-        nashorn.put("questManager", questManager);
+        nashorn.put("manager", questManager);
 
         StringBuilder script = new StringBuilder();
         try {
@@ -90,7 +90,7 @@ public class JSQuestLoader implements QuestLoader {
 
         try {
             nashorn.eval(SCRIPT_PREFIX + script.toString() + SCRIPT_SUFFIX);
-            return (Quest) ((Invocable) nashorn).invokeFunction("quest");
+            return (Quest) ((Invocable) nashorn).invokeFunction("q");
         } catch (Exception e) {
             e.printStackTrace();
             return null;

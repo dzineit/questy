@@ -40,7 +40,7 @@ public class JavaScriptQuestLoaderTest {
     }
 
     private String generateJS() {
-        return "var builder = QuestBuilder.begin(questManager, 'Test');" +
+        return "var builder = QuestBuilder.begin(manager, 'Test');" +
                 "builder.description('Test Description');" +
                 "" +
                 "var obj = builder.objective('banter');" +
