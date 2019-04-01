@@ -128,26 +128,20 @@ public class ThreadSafeQuestManager implements QuestManager {
     @Override
     public QuestInstance getQuestInstance(Quest quest, String quester) {
         synchronized (current) {
-            for (QuestInstance inst : current) {
-                if (inst.getInfo().equals(quest) && inst.getQuester()
-                        .equals(quester)) {
-                    return inst;
-                }
-            }
+            return current.stream()
+                    .filter(inst -> inst.getInfo().equals(quest))
+                    .filter(inst -> inst.getQuester().equals(quester))
+                    .findFirst().orElse(null);
         }
-        return null;
     }
 
     @Override
     public QuestInstance getCompletedQuest(Quest quest, String quester) {
         synchronized (completed) {
-            for (QuestInstance inst : completed) {
-                if (inst.getInfo().equals(quest) && inst.getQuester().equals(
-                        quester)) {
-                    return inst;
-                }
-            }
-            return null;
+            return completed.stream()
+                    .filter(inst -> inst.getInfo().equals(quest))
+                    .filter(inst -> inst.getQuester().equals(quester))
+                    .findFirst().orElse(null);
         }
     }
 
@@ -158,14 +152,20 @@ public class ThreadSafeQuestManager implements QuestManager {
 
     @Override
     public Collection<QuestInstance> getQuestInstances(String quester) {
-        // TODO
-        return null;
+        synchronized (current) {
+            return current.stream()
+                    .filter(instance -> instance.getQuester().equals(quester))
+                    .collect(Collectors.toSet());
+        }
     }
 
     @Override
     public Collection<QuestInstance> getInstances(Quest quest) {
-        // TODO
-        return null;
+        synchronized (current) {
+            return current.stream()
+                    .filter(instance -> instance.getInfo().equals(quest))
+                    .collect(Collectors.toSet());
+        }
     }
 
     @Override
@@ -176,8 +176,7 @@ public class ThreadSafeQuestManager implements QuestManager {
             }
 
             synchronized (loaded) {
-                loaders.forEach(
-                        (ql) -> loaded.putAll(ql.loadQuests(directory)));
+                loaders.forEach(ql -> loaded.putAll(ql.loadQuests(directory)));
             }
         }
     }

@@ -6,9 +6,9 @@
 package com.volumetricpixels.questy.objective;
 
 import com.volumetricpixels.questy.QuestInstance;
+import gnu.trove.set.hash.THashSet;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -72,7 +72,7 @@ public final class ObjectiveProgress {
     }
 
     public Set<OutcomeProgress> getOutcomeProgresses() {
-        return new HashSet<>(Arrays.asList(this.outcomeProgresses));
+        return new THashSet<>(Arrays.asList(this.outcomeProgresses));
     }
 
     /**

@@ -24,7 +24,6 @@ import com.volumetricpixels.questy.storage.ProgressStore;
 
 import java.io.File;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -126,24 +125,18 @@ public class SimpleQuestManager implements QuestManager {
 
     @Override
     public QuestInstance getQuestInstance(Quest quest, String quester) {
-        for (QuestInstance inst : current) {
-            if (inst.getInfo().equals(quest) && inst.getQuester()
-                    .equals(quester)) {
-                return inst;
-            }
-        }
-        return null;
+        return current.stream()
+                .filter(inst -> inst.getInfo().equals(quest))
+                .filter(inst -> inst.getQuester().equals(quester))
+                .findFirst().orElse(null);
     }
 
     @Override
     public QuestInstance getCompletedQuest(Quest quest, String quester) {
-        for (QuestInstance inst : completed) {
-            if (inst.getInfo().equals(quest) && inst.getQuester().equals(
-                    quester)) {
-                return inst;
-            }
-        }
-        return null;
+        return completed.stream()
+                .filter(inst -> inst.getInfo().equals(quest))
+                .filter(inst -> inst.getQuester().equals(quester))
+                .findFirst().orElse(null);
     }
 
     @Override
@@ -153,18 +146,16 @@ public class SimpleQuestManager implements QuestManager {
 
     @Override
     public Collection<QuestInstance> getQuestInstances(String quester) {
-        Set<QuestInstance> result = new HashSet<>();
-        for (QuestInstance instance : this.current) {
-            if (instance.getQuester().equals(quester)) {
-                result.add(instance);
-            }
-        }
-        return result;
+        return current.stream()
+                .filter(instance -> instance.getQuester().equals(quester))
+                .collect(Collectors.toSet());
     }
 
     @Override
     public Collection<QuestInstance> getInstances(Quest quest) {
-        return null;
+        return current.stream()
+                .filter(instance -> instance.getInfo().equals(quest))
+                .collect(Collectors.toSet());
     }
 
     @Override

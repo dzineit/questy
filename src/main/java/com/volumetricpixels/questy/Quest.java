@@ -8,7 +8,6 @@ package com.volumetricpixels.questy;
 import com.volumetricpixels.questy.objective.Objective;
 import com.volumetricpixels.questy.objective.ObjectiveProgress;
 
-import java.util.List;
 import java.util.function.Predicate;
 
 /**

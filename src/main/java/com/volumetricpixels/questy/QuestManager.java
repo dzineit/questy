@@ -11,7 +11,6 @@ import com.volumetricpixels.questy.event.EventManager;
 import com.volumetricpixels.questy.loading.QuestBuilder;
 import com.volumetricpixels.questy.loading.QuestLoader;
 import com.volumetricpixels.questy.objective.OutcomeProgress;
-import com.volumetricpixels.questy.questy.SimpleQuestManager;
 import com.volumetricpixels.questy.storage.ProgressStore;
 
 import java.io.File;
@@ -21,7 +20,9 @@ import java.util.Map;
 /**
  * Manages and tracks all active {@link Quest}s and {@link QuestLoader}s.
  *
- * @see {@link SimpleQuestManager}
+ * @see {@link com.volumetricpixels.questy.questy.SimpleQuestManager} or
+ *      {@link com.volumetricpixels.questy.questy.concurrent.ThreadSafeQuestManager}
+ *      for implementations
  */
 public interface QuestManager {
     /**
