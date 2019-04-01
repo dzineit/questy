@@ -1,6 +1,8 @@
 *.class
 *.iml
 .idea/
+test/completed
+test/current
 
 bin/
 target/
