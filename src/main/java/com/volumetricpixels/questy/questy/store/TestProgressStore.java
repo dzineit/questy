@@ -3,14 +3,14 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package com.volumetricpixels.questy.storage.store;
+package com.volumetricpixels.questy.questy.store;
 
 import com.volumetricpixels.questy.storage.ProgressStore;
 import com.volumetricpixels.questy.util.Serialization;
+import gnu.trove.map.hash.THashMap;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -18,16 +18,16 @@ import java.util.Map;
  * simply a way of testing the framework and alternatives will be implemented before release.
  */
 // this file doesn't really need documenting beyond the above
-public class SimpleProgressStore implements ProgressStore {
+public class TestProgressStore implements ProgressStore {
     private final File currentStore;
     private final File completedStore;
 
-    public SimpleProgressStore(File storageDirectory) {
+    public TestProgressStore(File storageDirectory) {
         this(new File(storageDirectory, "current"),
                 new File(storageDirectory, "completed"));
     }
 
-    public SimpleProgressStore(File currentStore, File completedStore) {
+    public TestProgressStore(File currentStore, File completedStore) {
         this.currentStore = currentStore;
         this.completedStore = completedStore;
     }
@@ -66,7 +66,7 @@ public class SimpleProgressStore implements ProgressStore {
     private Map<String, Map<String, String>> doLoadData(File file) {
         if (!file.exists()) {
             // account for load being called before the first save
-            return new HashMap<>();
+            return new THashMap<>();
         }
 
         try {

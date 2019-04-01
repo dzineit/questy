@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import com.volumetricpixels.questy.Quest;
 import com.volumetricpixels.questy.questy.concurrent.ThreadSafeQuestManager;
-import com.volumetricpixels.questy.storage.store.SimpleProgressStore;
+import com.volumetricpixels.questy.questy.store.TestProgressStore;
 
 import java.io.File;
 
@@ -19,7 +19,7 @@ public class ConcurrentTest {
         File rootDir = new File(".").getAbsoluteFile();
         File testDir = new File(rootDir, "test").getAbsoluteFile();
         questManager = new ThreadSafeQuestManager(
-                new SimpleProgressStore(testDir));
+                new TestProgressStore(testDir));
 
         Thread threadOne = new ThreadOne();
         Thread threadTwo = new ThreadTwo();
