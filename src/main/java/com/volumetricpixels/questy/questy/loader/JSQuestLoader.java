@@ -67,11 +67,11 @@ public class JSQuestLoader implements QuestLoader {
     }
 
     public Quest loadQuest(Reader reader) {
-        BufferedReader bufReader;
+        BufferedReader buffered;
         if (reader instanceof BufferedReader) {
-            bufReader = (BufferedReader) reader;
+            buffered = (BufferedReader) reader;
         } else {
-            bufReader = new BufferedReader(reader);
+            buffered = new BufferedReader(reader);
         }
 
         ScriptEngine nashorn = new ScriptEngineManager()
@@ -80,9 +80,9 @@ public class JSQuestLoader implements QuestLoader {
 
         StringBuilder script = new StringBuilder();
         try {
-            String curLine;
-            while ((curLine = bufReader.readLine()) != null) {
-                script.append(curLine);
+            String line;
+            while ((line = buffered.readLine()) != null) {
+                script.append(line);
             }
         } catch (IOException e) {
             e.printStackTrace();

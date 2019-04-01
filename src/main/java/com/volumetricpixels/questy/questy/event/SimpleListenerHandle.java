@@ -112,7 +112,7 @@ public final class SimpleListenerHandle {
             try {
                 handle.invoke(listener, event);
             } catch (Throwable throwable) {
-                throwable.printStackTrace(); // TODO: determine better way
+                throwable.printStackTrace();
             }
         }
 
