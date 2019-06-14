@@ -5,8 +5,16 @@
  */
 package com.volumetricpixels.questy.questy.store;
 
-import com.volumetricpixels.questy.storage.ProgressStore;
 import gnu.trove.map.hash.THashMap;
+
+import com.volumetricpixels.questy.storage.ProgressStore;
+
+import org.bson.BSONDecoder;
+import org.bson.BSONEncoder;
+import org.bson.BSONObject;
+import org.bson.BasicBSONDecoder;
+import org.bson.BasicBSONEncoder;
+import org.bson.BasicBSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,8 +27,7 @@ public class BSONFileProgressStore implements ProgressStore {
     private final File completedStore;
 
     public BSONFileProgressStore(File storageDirectory) {
-        this(new File(storageDirectory, "current.bson"),
-                new File(storageDirectory, "completed.bson"));
+        this(new File(storageDirectory, "current.bson"), new File(storageDirectory, "completed.bson"));
     }
 
     private BSONFileProgressStore(File currentStore, File completedStore) {
@@ -63,7 +70,17 @@ public class BSONFileProgressStore implements ProgressStore {
 
             file.createNewFile();
 
-            // todo write bson data to file
+            BSONEncoder encoder = new BasicBSONEncoder();
+            BSONObject bson = new BasicBSONObject();
+
+            data.forEach((key, val) -> {
+                BSONObject subObj = new BasicBSONObject();
+                val.forEach(subObj::put);
+                bson.put(key, subObj);
+            });
+
+            byte[] raw = encoder.encode(bson);
+            Files.write(file.toPath(), raw);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -77,7 +94,22 @@ public class BSONFileProgressStore implements ProgressStore {
             return result;
         }
 
-        // todo read bson data from file
+        try {
+            BSONDecoder decoder = new BasicBSONDecoder();
+            byte[] raw = Files.readAllBytes(file.toPath());
+            BSONObject bson = decoder.readObject(raw);
+
+            bson.keySet().forEach(key -> {
+                Map<String, String> vals = new THashMap<>();
+                result.put(key, vals);
+
+                BSONObject subObj = (BSONObject) bson.get(key);
+                subObj.keySet().forEach(key2 -> vals.put(key2, subObj.get(key2).toString()));
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         return result;
     }
 }

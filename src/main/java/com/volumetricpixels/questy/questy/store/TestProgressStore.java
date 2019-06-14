@@ -14,10 +14,12 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
- * Simple implementation of a {@link ProgressStore} which uses the Java serialization API to write Map objects to files. Not advisable for use in a production environment, this is
- * simply a way of testing the framework and alternatives will be implemented before release.
+ * Simple implementation of a {@link ProgressStore} which uses the Java serialization API to write Map objects to files.
+ * Not advisable for use in a production environment, this is simply a way of testing the framework and alternatives
+ * will be implemented before release.
  */
 // this file doesn't really need documenting beyond the above
+// (because it's trash and nobody should use it)
 public class TestProgressStore implements ProgressStore {
     private final File currentStore;
     private final File completedStore;

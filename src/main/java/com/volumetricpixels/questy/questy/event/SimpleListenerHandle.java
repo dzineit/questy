@@ -105,8 +105,7 @@ public final class SimpleListenerHandle {
      */
     public Optional<Set<MethodHandle>> handle(Event event) {
         final Set<MethodHandle> handles = eventHandlers.get(event.getClass());
-        final Set<MethodHandle> monitorHandles = monitorEventHandlers
-                .get(event.getClass());
+        final Set<MethodHandle> monitorHandles = monitorEventHandlers.get(event.getClass());
 
         for (MethodHandle handle : handles) {
             try {
@@ -129,7 +128,6 @@ public final class SimpleListenerHandle {
 
     @Override
     public boolean equals(Object other) {
-        return other instanceof SimpleListenerHandle
-                && listener == ((SimpleListenerHandle) other).listener;
+        return other instanceof SimpleListenerHandle && listener == ((SimpleListenerHandle) other).listener;
     }
 }

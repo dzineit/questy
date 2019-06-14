@@ -88,8 +88,7 @@ public class ThreadSafeQuestManager implements QuestManager {
      * @param eventManager the {@link EventManager} implementation to use for
      *        events
      */
-    public ThreadSafeQuestManager(ProgressStore store,
-            EventManager eventManager) {
+    public ThreadSafeQuestManager(ProgressStore store, EventManager eventManager) {
         this.store = store;
         this.eventManager = eventManager;
         this.loaders = new THashSet<>();
@@ -210,10 +209,8 @@ public class ThreadSafeQuestManager implements QuestManager {
         synchronized (current) {
             if (current.add(instance)) {
                 synchronized (eventManager) {
-                    QuestStartEvent event = eventManager.fire(
-                            new QuestStartEvent(instance));
-                    eventManager.fire(new ObjectiveStartEvent(instance,
-                            instance.getCurrentObjective(), event));
+                    QuestStartEvent event = eventManager.fire(new QuestStartEvent(instance));
+                    eventManager.fire(new ObjectiveStartEvent(instance, instance.getCurrentObjective(), event));
                 }
                 return true;
             }
@@ -224,19 +221,16 @@ public class ThreadSafeQuestManager implements QuestManager {
     @Override
     public boolean abandonQuest(QuestInstance instance) {
         synchronized (current) {
-            return !eventManager.fire(new QuestAbandonEvent(instance))
-                    .isCancelled() && current.remove(instance);
+            return !eventManager.fire(new QuestAbandonEvent(instance)).isCancelled() && current.remove(instance);
         }
     }
 
     @Override
-    public boolean completeQuest(QuestInstance instance,
-            OutcomeProgress outcome) {
+    public boolean completeQuest(QuestInstance instance, OutcomeProgress outcome) {
         synchronized (current) {
             synchronized (completed) {
                 if (current.remove(instance) && completed.add(instance)) {
-                    eventManager
-                            .fire(new QuestCompleteEvent(instance, outcome));
+                    eventManager.fire(new QuestCompleteEvent(instance, outcome));
                     return true;
                 }
                 return false;
@@ -279,8 +273,7 @@ public class ThreadSafeQuestManager implements QuestManager {
             Set<QuestInstance> set) {
         for (String key : map.keySet()) {
             Collection<String> serialized = map.get(key).values();
-            set.addAll(serialized.stream().map(serial -> new QuestInstance(
-                    this, key, serial)).collect(Collectors.toList()));
+            set.addAll(serialized.stream().map(serial -> new QuestInstance(this, key, serial)).collect(Collectors.toList()));
         }
     }
 
@@ -294,8 +287,7 @@ public class ThreadSafeQuestManager implements QuestManager {
                 result.put(quester, map);
             }
 
-            map.put(questInstance.getInfo().getName(),
-                    questInstance.serializeProgression());
+            map.put(questInstance.getInfo().getName(), questInstance.serializeProgression());
         }
 
         return result;

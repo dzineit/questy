@@ -9,9 +9,8 @@ import gnu.trove.set.hash.THashSet;
 
 import com.volumetricpixels.questy.event.Event;
 import com.volumetricpixels.questy.event.EventManager;
+import com.volumetricpixels.questy.util.Util;
 
-import java.lang.invoke.MethodHandle;
-import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
 
@@ -45,34 +44,26 @@ public class SimpleEventManager implements EventManager {
      * {@inheritDoc}
      */
     public void unregister(Object listener) {
-        Iterator<SimpleListenerHandle> it = listeners.iterator();
-        while (it.hasNext()) {
-            SimpleListenerHandle handle = it.next();
-            if (handle.getListener() == listener) {
-                it.remove();
-            }
-        }
+        listeners.removeIf(handle -> handle.getListener() == listener);
     }
 
     /**
      * {@inheritDoc}
      */
     public <T extends Event> T fire(T event) {
-        final Set<MethodHandle> monitor = new THashSet<>();
-        listeners.forEach((listener) -> {
-            final Optional<Set<MethodHandle>> monitors = listener.handle(event);
-            if (monitors.isPresent() && monitors.get().size() > 0) {
-                monitor.addAll(monitors.get());
-            }
-        });
-
-        monitor.forEach((listener) -> {
-            try {
-                listener.invoke(event);
-            } catch (Throwable throwable) {
-                throwable.printStackTrace();
-            }
-        });
+        listeners.stream()
+                .map(l -> l.handle(event))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .filter(Util::notEmpty)
+                .forEach(listenerSet ->
+                        listenerSet.forEach(listener -> {
+                            try {
+                                listener.invoke(event);
+                            } catch (Throwable throwable) {
+                                throw new RuntimeException(throwable);
+                            }
+                        }));
 
         return event;
     }
